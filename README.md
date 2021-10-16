@@ -1,6 +1,6 @@
 # KUIZ
 
-A quiz web application for making a quiz and taking a quiz at [Kasetsart University](https://www.ku.ac.th).
+KUIZ is a web application quiz where you can create/take a quiz for learning and sharing knowledge from various subjects, questions and answers. The target of KUIZ is to help educational personnel (Teachers, Professors, Students) or people who want to enhance the knowledge both general and non at [Kasetsart University](https://www.ku.ac.th).
 
 ## Background
 
