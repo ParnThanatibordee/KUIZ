@@ -10,7 +10,7 @@ class Quiz(models.Model):
     detail = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published', default=timezone.now())
     end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=1))
-    exam_duration = models.IntegerField(default=None)
+    exam_duration = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
 
     def __str__(self):
