@@ -15,8 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-
+from KUIZ.views import (
+index
+)
+from account.views import (
+registration_view,
+)
 urlpatterns = [
     path('kuiz/', include('KUIZ.urls')),
     path('admin/', admin.site.urls),
+    path('',index,name = "index"),
+    path('register/',registration_view,name='register')
 ]
