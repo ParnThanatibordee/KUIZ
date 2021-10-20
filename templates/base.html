@@ -4,9 +4,18 @@
     <meta charset="UTF-8">
     <title>Title</title>
     {% if request.user.is_authenticated %}
-        <p>Hello,{{ request.user.first_name }} | <a href="{% url 'logout' %}">Logout</a> </p>
-        {% else %}
-        <p><a href="{% url 'register' %}">Register</a> | <a href="#">Login</a> </p>
+        <p>
+            <a href="{% url 'index' %}">Home</a> |
+            <a href="{% url 'logout' %}">Logout</a>
+        </p>
+        <p>Hello,{{ request.user.first_name }} </p>
+    {% else %}
+        <p>
+            <a href="{% url 'index' %}">Home</a> |
+            <a href="{% url 'register' %}">Register</a> |
+            <a href="{% url 'login' %}">Login</a>
+        </p>
+
     {% endif %}
 </head>
 <body>

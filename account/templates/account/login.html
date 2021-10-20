@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <h2>Login</h2>
+    <form method="post">{% csrf_token %}
+        {% for field in login_form %}
+            <p>
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <small style="color:gray">{{ field.help_text }}</small>
+                {% endif %}
+
+
+
+                </small>
+            </p>
+
+        {% endfor %}
+
+        {% for field in login_form %}
+            {% for error in field.errors %}
+                <p style="color:red">{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+
+
+        {% if login_form.non_field_errors %}
+            <div style="color:red">
+                <p>{{ login_form.non_field_errors }}</p>
+            </div>
+
+        {% endif %}
+        <button type="submit">Login</button>
+    </form>
+
+{% endblock content %}
