@@ -18,7 +18,4 @@ As the era changes, Technology keeps developing themself little bit per second t
 
 [Iteration1](../../wiki/Iteration-1)
 
-Iteration2
-
-Iteration3
-
+[Iteration2](../../wiki/Iteration-2)
