@@ -1,19 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from KUIZ.models import Quiz
+from KUIZ.models import Quiz, Question
 
 
 def index(request):
     """Index homepage."""
-    return HttpResponse("Hello, world. You're at the KUIZ index.")
+    return render(request, 'KUIZ/index.html')
 
 
 def detail(request):
     """List of exam view."""
-    all_quiz = Quiz.objects.all()
-    output = '\n'.join([q.quiz_topic for q in all_quiz])
-    return HttpResponse(output)
+    all_question = Question.objects.all()
+    return render(request, 'KUIZ/detail.html', {'questions': all_question})
 
 
 def exam(request, pk):
