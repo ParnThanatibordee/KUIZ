@@ -24,9 +24,10 @@ def exam(request, pk):
 def question(request, pk, question_id):
     """Question view."""
     quiz = Quiz.objects.get(pk=pk)
+    all_question = quiz.question_set.all()
     this_question = Question.objects.get(pk=question_id)
-    num_of_question = 1
-    return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question, 'num': num_of_question})
+    num_of_question = question_id
+    return render(request, 'KUIZ/question.html', {'quiz': quiz, 'questions': all_question, 'question': this_question, 'num': num_of_question})
 
 
 def answer(request):

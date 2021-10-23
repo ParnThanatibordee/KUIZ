@@ -1,4 +1,4 @@
 <h1>KUIZ : {{quiz.quiz_topic}}</h1>
 <p>{{quiz.detail}}</p>
 
-<button type="button" class="btn btn-primary"><a href="{%url 'question' %}">Start quiz</a></button>
+<button type="button" class="btn btn-primary"><a href="{%url 'question' quiz.id 1 %}">Start quiz</a></button>
