@@ -49,3 +49,6 @@ def login_view(request):
         form = AccountAuthenticationForm()
     context['login_form'] = form
     return render(request, 'account/login.html',context)
+
+def profile_view(request):
+    return render(request, 'account/profile.html')

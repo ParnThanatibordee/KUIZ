@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'KUIZ.apps.KuizConfig',
-    'account',
+    'account.apps.AccountConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
