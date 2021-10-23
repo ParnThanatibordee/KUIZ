@@ -15,9 +15,10 @@ def detail(request):
     return render(request, 'KUIZ/detail.html', {'questions': all_question})
 
 
-def exam(request):
+def exam(request, pk):
     """Exam view."""
-    pass
+    quiz = Quiz.objects.get(pk=pk)
+    return render(request, 'KUIZ/exam.html', {'quiz': quiz})
 
 
 def question(request):
