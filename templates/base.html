@@ -8,7 +8,11 @@
             <a href="{% url 'index' %}">Home</a> |
             <a href="{% url 'logout' %}">Logout</a>
         </p>
-        <p>Hello,{{ request.user.first_name }} </p>
+        <p>Hello,{{ request.user.first_name }}</p>
+         {% if request.user.is_teacher == True %}<p>You are a teacher</p>
+             {% else %}
+             <p>You are a student</p>
+         {% endif %}
     {% else %}
         <p>
             <a href="{% url 'index' %}">Home</a> |
