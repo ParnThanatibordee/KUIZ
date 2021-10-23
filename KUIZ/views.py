@@ -6,6 +6,11 @@ from KUIZ.models import Quiz
 
 def index(request):
     """Index homepage."""
+    return HttpResponse("Hello, world. You're at the KUIZ index.")
+
+
+def detail(request):
+    """List of exam view."""
     all_quiz = Quiz.objects.all()
     output = '\n'.join([q.quiz_topic for q in all_quiz])
     return HttpResponse(output)
@@ -23,6 +28,11 @@ def question(request):
 
 def answer(request):
     """Answer for choice or type."""
+    pass
+
+
+def score(request):
+    """Report of score of user."""
     pass
 
 
