@@ -14,6 +14,10 @@ def detail(request):
     all_question = Question.objects.all()
     return render(request, 'KUIZ/detail.html', {'questions': all_question})
 
+def detail_by_section(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    questions = quiz.question_set.all()
+    return HttpResponse(questions)
 
 def exam(request, pk):
     """Exam view."""
