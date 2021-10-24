@@ -1,3 +1,13 @@
 <h1>Question{{num}} : {{question.question_text}}</h1>
+# เลือก choice
+<br>
+{% for choice in choices %}
+    <INPUT TYPE="Radio" Name="Choice" Value="{{ choice.correct }}">{{ choice.choice_text }}<br>
+{% endfor %}
+# ใส่ if ถ้าเป็นข้อสุดท้ายใน เป็น summit
+# else ปุ่ม next   ***ต้องไปใส่ condition check จำนวนคำถามใน model
+<br>
+<button type="button" class="btn btn-primary"><a href="{%url 'question' quiz.id next_question.id%}">Next</a></button>
+<br>
+# หาทาง update num
 
-<button type="button" class="btn btn-primary"><a href="{%url 'question' %}">Next</a></button>
