@@ -13,6 +13,23 @@ class Quiz(models.Model):
     exam_duration = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
 
+    def was_published_recently(self):
+        """Check that the question was published recently."""
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
+
+    def is_published(self):
+        """Check that the question was already published."""
+        now = timezone.now()
+        if now >= self.pub_date:
+            return True
+        return False
+
+    def can_vote(self):
+        """Check that the question can vote."""
+        now = timezone.now()
+        return self.end_date >= now >= self.pub_date
+
     def __str__(self):
         """Display quiz_topic and detail."""
         return f"{self.quiz_topic} : {self.detail}"
