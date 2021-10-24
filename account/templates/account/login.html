@@ -1,8 +1,12 @@
-{% extends 'base.html' %}
-
+{% extends 'account/base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'account/login.css' %}">
+{% endblock css %}
+{% block title %}
+    <title>KUIZ | Login</title>
+{% endblock title %}
 {% block content %}
-    <!DOCTYPE html>
-    <html lang="en">
 
     <h2>Login</h2>
     <form method="post">{% csrf_token %}
@@ -13,12 +17,7 @@
                 {% if field.help_text %}
                     <small style="color:gray">{{ field.help_text }}</small>
                 {% endif %}
-
-
-
-                </small>
             </p>
-
         {% endfor %}
 
         {% for field in login_form %}
@@ -27,12 +26,10 @@
             {% endfor %}
         {% endfor %}
 
-
         {% if login_form.non_field_errors %}
             <div style="color:red">
                 <p>{{ login_form.non_field_errors }}</p>
             </div>
-
         {% endif %}
         <button type="submit">Login</button>
     </form>
