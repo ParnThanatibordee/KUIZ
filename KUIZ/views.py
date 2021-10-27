@@ -25,7 +25,7 @@ def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
     all_question = quiz.question_set.all()
-    # add suffle ถ้าจะ random order คำถาม
+    # add shuffle ถ้าจะ random order คำถาม
     question1 = all_question[0]
     return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1})
 
@@ -33,13 +33,20 @@ def exam(request, pk):
 def question(request, pk, question_id):
     """Question view."""
     quiz = Quiz.objects.get(pk=pk)
-    all_question = quiz.question_set.all()
-    num_of_question = 1  # ต้องหาทาง update
-    this_question = Question.objects.get(pk=question_id)
-    next_question = Question.objects.get(pk=question_id+1)
+    all_question = list(quiz.question_set.all())
+    num_of_question = all_question.index(Question.objects.get(pk=question_id))
+    this_question = all_question[num_of_question]
     all_choice = this_question.choice_set.all()
-    return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question, 'choices': all_choice})
-    # ค่อยเพิ่ม if ใน question.html
+    text = 'Next'
+    # link = "{%url 'question' quiz.id next_question.id%}"
+    try:
+        next_question = all_question[num_of_question+1]
+        link = next_question.id
+    except:
+        next_question = this_question  # กัน error
+        text = 'Summit'
+        link = 'score'  # หาทางส่งไปที่ score รอสร้างหน้า score
+    return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1, 'choices': all_choice, 'text': text, 'link': link})
 
 
 def answer(request, pk, question_id):
