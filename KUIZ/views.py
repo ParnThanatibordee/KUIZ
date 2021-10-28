@@ -11,8 +11,8 @@ def index(request):
 
 def detail(request):
     """List of exam view."""
-    all_question = Question.objects.all()
-    return render(request, 'KUIZ/detail.html', {'questions': all_question})
+    all_quiz = Quiz.objects.all()
+    return render(request, 'KUIZ/detail.html', {'quizs': all_quiz})
 
 
 def detail_by_section(request, pk):
@@ -24,8 +24,8 @@ def detail_by_section(request, pk):
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
+    # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
     all_question = quiz.question_set.all()
-    # add shuffle ถ้าจะ random order คำถาม
     question1 = all_question[0]
     return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1})
 
@@ -56,6 +56,7 @@ def answer(request, pk, question_id):
 
 def score(request):
     """Report of score of user."""
+    # automate or hand-check
     pass
 
 
