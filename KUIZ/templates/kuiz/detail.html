@@ -1,5 +1,5 @@
 <h1>All Quiz</h1>
 
 {% for quiz in quizs %}
-    <h4>{{ quiz.quiz_topic }}</h4>
+    <a href="{%url 'exam' quiz.id %}">{{ quiz.quiz_topic }}</a><br>
 {% endfor %}
