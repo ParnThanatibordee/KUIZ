@@ -40,3 +40,12 @@ class Choice(models.Model):
     def __str__(self):
         """Display choice_text."""
         return self.choice_text
+
+
+class Feedback(models.Model):
+    """Feedback model."""
+    feedback_text = models.CharField(max_length=5000)
+
+    def __str__(self):
+        """Display feedback_text"""
+        return self.feedback_text
