@@ -27,5 +27,4 @@ def get_feedback(request):
             return redirect('index')
     else:
         form = FeedbackForm()
-    return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback})
-
+    return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
