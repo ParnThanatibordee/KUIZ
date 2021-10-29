@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from account.models import Account
 import datetime
 
 
@@ -8,7 +9,7 @@ class Quiz(models.Model):
 
     quiz_topic = models.CharField(max_length=200)
     detail = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published', default=timezone.now())
+    pub_date = models.DateTimeField('date published', default=timezone.now)
     end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=1))
     exam_duration = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
@@ -45,6 +46,14 @@ class Choice(models.Model):
 class Feedback(models.Model):
     """Feedback model."""
     feedback_text = models.CharField(max_length=5000)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, default=0)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, default=0)
+
+    def quiz_name(self):
+        return self.quiz.quiz_topic
+
+    def username(self):
+        return self.user.username
 
     def __str__(self):
         """Display feedback_text"""
