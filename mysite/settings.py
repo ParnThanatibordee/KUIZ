@@ -33,8 +33,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-
-    'KUIZ',
     'account',
     'KUIZ.apps.KuizConfig',
 
