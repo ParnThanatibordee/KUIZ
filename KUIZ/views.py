@@ -54,10 +54,24 @@ def answer(request, pk, question_id):
     pass
 
 
-def score(request):
+def score(request, pk):
     """Report of score of user."""
     # automate or hand-check
-    pass
+    automate = True  # for test
+    user = request.user
+    quiz = Quiz.objects.get(pk=pk)
+    all_question = list(quiz.question_set.all())
+    max_score = 0  # should in model
+    if automate:
+        for question in all_question:
+            # must add in user
+            # if user.selected_choice.correct:
+            #     quiz.score += question.point
+            max_score += question.point
+        return render(request, 'KUIZ/score.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
+    else:
+        #  will implement later
+        return render(request, 'KUIZ/score.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
 
 
 def result(request):
