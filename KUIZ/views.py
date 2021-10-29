@@ -74,9 +74,10 @@ def score(request, pk):
         return render(request, 'KUIZ/score.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
 
 
-def result(request):
+def result(request, pk):
     """Result of the exam page."""
-    pass
+    quiz = Quiz.objects.get(pk=pk)
+    return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score})
 
 
 def feedback(request):
