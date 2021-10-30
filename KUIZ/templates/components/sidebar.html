@@ -1,0 +1,15 @@
+<div class="card p-3">
+        <h3 class="mb-3">Topic</h3>
+        <div class="list-group" style="display: flex; flex-direction: column">
+            <a href="{% url 'detail' %}">All Quiz</a>
+            <a href="{% url 'detail_by_topic' 'programming' %}">Programming</a>
+            <a href="{% url 'detail_by_topic' 'mathematics' %}">Mathematics</a>
+            <a href="{% url 'detail_by_topic' 'physics' %}">Physics</a>
+            <a href="{% url 'detail_by_topic' 'chemistry' %}">Chemistry</a>
+            <a href="{% url 'detail_by_topic' 'biology' %}">Biology</a>
+            <a href="{% url 'detail_by_topic' 'astronomy' %}">Astronomy</a>
+            <a href="{% url 'detail_by_topic' 'social' %}">Social</a>
+            <a href="{% url 'detail_by_topic' 'sport' %}">Sport</a>
+            <a href="{% url 'detail_by_topic' 'others' %}">Others</a>
+        </div>
+</div>
