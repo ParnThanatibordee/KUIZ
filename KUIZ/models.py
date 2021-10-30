@@ -45,9 +45,10 @@ class Choice(models.Model):
 
 class Feedback(models.Model):
     """Feedback model."""
-    feedback_text = models.TextField(max_length=5000)
-    user = models.ForeignKey(Account, on_delete=models.CASCADE, default=0)
+
+    user = models.OneToOneField(Account, on_delete=models.CASCADE, default=0)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, default=0)
+    feedback_text = models.TextField(max_length=5000)
 
     def quiz_name(self):
         return self.quiz.quiz_topic
