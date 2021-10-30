@@ -15,10 +15,9 @@ def detail(request):
     return render(request, 'KUIZ/detail.html', {'quizs': all_quiz})
 
 
-def detail_by_section(request, pk):
-    quiz = Quiz.objects.get(pk=pk)
-    questions = quiz.question_set.all()
-    return HttpResponse(questions)
+def detail_by_topic(request, topic):
+    quiz_in_topic = Quiz.objects.filter(topic=topic)
+    return render(request, 'KUIZ/detail_by_topic.html', {'quiz_in_topic': quiz_in_topic, 'topic': topic})
 
 
 def exam(request, pk):
