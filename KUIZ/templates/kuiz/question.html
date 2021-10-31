@@ -1,0 +1,12 @@
+<h1>Question{{num}} : {{question.question_text}}</h1>
+# เลือก choice
+<br>
+{% for choice in choices %}
+    <INPUT TYPE="Radio" Name="Choice" Value="{{ choice.correct }}">{{ choice.choice_text }}<br>
+{% endfor %}
+<br>
+{% if back_link != None %}
+<button type="button" class="btn btn-primary"><a href={{back_link}}>Back</a></button>
+{% endif %}
+<button type="button" class="btn btn-primary"><a href={{link}}>{{text}}</a></button>
+<br>

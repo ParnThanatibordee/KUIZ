@@ -1,0 +1,15 @@
+<div class="card p-3">
+        <h3 class="mb-3">Topics</h3>
+        <div class="list-group">
+            <a href="{% url 'detail' %}" class="list-group-item list-group-item-action {% if quizzes %}topic-active{% endif %}">All Quiz</a>
+            <a href="{% url 'detail_by_topic' 'programming' %}" class="list-group-item list-group-item-action {% if topic == 'Programming' %}topic-active{% endif %}">Programming</a>
+            <a href="{% url 'detail_by_topic' 'mathematics' %}" class="list-group-item list-group-item-action {% if topic == 'Mathematics' %}topic-active{% endif %}">Mathematics</a>
+            <a href="{% url 'detail_by_topic' 'physics' %}" class="list-group-item list-group-item-action {% if topic == 'Physics' %}topic-active{% endif %}">Physics</a>
+            <a href="{% url 'detail_by_topic' 'chemistry' %}" class="list-group-item list-group-item-action {% if topic == 'Chemistry' %}topic-active{% endif %}">Chemistry</a>
+            <a href="{% url 'detail_by_topic' 'biology' %}" class="list-group-item list-group-item-action {% if topic == 'Biology' %}topic-active{% endif %}">Biology</a>
+            <a href="{% url 'detail_by_topic' 'astronomy' %}" class="list-group-item list-group-item-action {% if topic == 'Astronomy' %}topic-active{% endif %}">Astronomy</a>
+            <a href="{% url 'detail_by_topic' 'social' %}" class="list-group-item list-group-item-action {% if topic == 'Social' %}topic-active{% endif %}">Social</a>
+            <a href="{% url 'detail_by_topic' 'sport' %}" class="list-group-item list-group-item-action {% if topic == 'Sport' %}topic-active{% endif %}">Sport</a>
+            <a href="{% url 'detail_by_topic' 'others' %}" class="list-group-item list-group-item-action {% if topic == 'Others' %}topic-active{% endif %}">Others</a>
+        </div>
+</div>
