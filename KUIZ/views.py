@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
-from KUIZ.models import Quiz, Question
-
+from .forms import FeedbackForm
+from KUIZ.models import Quiz, Feedback,Question
 
 def index(request):
     """Index homepage."""
@@ -10,7 +9,8 @@ def index(request):
 
 
 def home(request):
-    return render(request,"KUIZ/home.html",{})
+    return render(request, "KUIZ/home.html")
+
 
   
 def detail(request):
@@ -87,6 +87,15 @@ def result(request, pk):
     return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score})
 
 
-def feedback(request, pk):
-    """Feedback page for discuss with teacher."""
-    return HttpResponse("FEEDBACK")
+
+def get_feedback(request):
+    feedback = Feedback.objects.all()
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = FeedbackForm()
+    return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
+
