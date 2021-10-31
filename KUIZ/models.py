@@ -2,14 +2,27 @@ from django.db import models
 from django.utils import timezone
 import datetime
 
+TOPIC = [
+    ('', '----------'),
+    ('programming', 'Programming'),
+    ('mathematics', 'Mathematics'),
+    ('physics', 'Physics'),
+    ('chemistry', 'Chemistry'),
+    ('biology', 'Biology'),
+    ('astronomy', 'Astronomy'),
+    ('social', 'Social'),
+    ('sport', 'Sport'),
+    ('others', 'Others')
+]
 
 class Quiz(models.Model):
     """Quiz model."""
 
     quiz_topic = models.CharField(max_length=200)
     detail = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published', default=timezone.now())
+    pub_date = models.DateTimeField('date published', default=timezone.now)
     end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=1))
+    topic = models.CharField(max_length=20, choices=TOPIC, default='others')
     exam_duration = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
 
