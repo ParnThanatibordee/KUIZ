@@ -1,0 +1,34 @@
+{% extends 'KUIZ/main.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/sidebar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/card_quiz.css' %}">
+{% endblock css %}
+{% block title %}<title>Quiz | {{ topic }}</title>{% endblock %}
+{% block nav %}
+    {% include 'components/navbar.html' %}
+    <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
+{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3 col-12">
+            {% include 'components/sidebar.html' %}
+        </div>
+        <div class="col-md-9 col-12">
+            <h1 class="d-inline">{{ topic }}</h1>
+            <div class="row mt-4">
+                {% if quiz_in_topic %}
+                    {% for quiz in quiz_in_topic %}
+                        {% include 'components/card_quiz.html' %}
+                    {% endfor %}
+                {% else %}
+                    <p>No quiz in this topic.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

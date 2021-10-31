@@ -1,0 +1,8 @@
+<h1>KUIZ : {{quiz.quiz_topic}}</h1>
+<p>{{quiz.detail}}</p>
+<p>score: {{score}} pts<p>
+
+<br>
+<button type="button" class="btn btn-primary"><a href="{%url 'detail'%}">Back to KUIZ!</a></button>
+<button type="button" class="btn btn-primary"><a href="{%url 'feedback' quiz.id%}">Feedback</a></button>
+<br>
