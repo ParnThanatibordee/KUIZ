@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from KUIZ.models import Quiz, Question
@@ -9,6 +9,10 @@ def index(request):
     return render(request, 'KUIZ/index.html')
 
 
+def home(request):
+    return render(request,"KUIZ/home.html",{})
+
+  
 def detail(request):
     """List of exam view."""
     all_quiz = Quiz.objects.all()
@@ -48,7 +52,7 @@ def question(request, pk, question_id):
     except:
         next_question = this_question  # กัน error
         text = 'Submit'
-        link = 'score'  # หาทางส่งไปที่ score รอสร้างหน้า score
+        link = 'score' 
     return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1, 'choices': all_choice, 'text': text, 'link': link, 'back_link': back_link})
 
 
