@@ -38,15 +38,19 @@ def question(request, pk, question_id):
     this_question = all_question[num_of_question]
     all_choice = this_question.choice_set.all()
     text = 'Next'
+    back_link = None
+    if num_of_question > 0:
+        back_question = all_question[num_of_question-1]
+        back_link = back_question.id
     # link = "{%url 'question' quiz.id next_question.id%}"
     try:
         next_question = all_question[num_of_question+1]
         link = next_question.id
     except:
         next_question = this_question  # กัน error
-        text = 'Summit'
+        text = 'Submit'
         link = 'score'  # หาทางส่งไปที่ score รอสร้างหน้า score
-    return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1, 'choices': all_choice, 'text': text, 'link': link})
+    return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1, 'choices': all_choice, 'text': text, 'link': link, 'back_link': back_link})
 
 
 def answer(request, pk, question_id):
@@ -80,6 +84,6 @@ def result(request, pk):
     return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score})
 
 
-def feedback(request):
+def feedback(request, pk):
     """Feedback page for discuss with teacher."""
-    pass
+    return HttpResponse("FEEDBACK")
