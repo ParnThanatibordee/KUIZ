@@ -36,20 +36,21 @@ def question(request, pk, question_id):
     num_of_question = all_question.index(Question.objects.get(pk=question_id))
     this_question = all_question[num_of_question]
     all_choice = this_question.choice_set.all()
-    text = 'Next'
-    back_link = None
+    back_question = ""
+    next_question = ""
+    back_link = False
     if num_of_question > 0:
         back_question = all_question[num_of_question-1]
-        back_link = back_question.id
-    # link = "{%url 'question' quiz.id next_question.id%}"
+        back_link = True
     try:
         next_question = all_question[num_of_question+1]
-        link = next_question.id
+        next_link = True
     except:
-        next_question = this_question  # กัน error
-        text = 'Submit'
-        link = 'score'  # หาทางส่งไปที่ score รอสร้างหน้า score
-    return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1, 'choices': all_choice, 'text': text, 'link': link, 'back_link': back_link})
+        next_link = False
+    return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
+                                                  'num': num_of_question + 1, 'choices': all_choice,
+                                                  'next_link': next_link, 'next_question': next_question,
+                                                  'back_link': back_link, 'back_question': back_question})
 
 
 def answer(request, pk, question_id):

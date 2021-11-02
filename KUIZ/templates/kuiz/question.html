@@ -5,8 +5,12 @@
     <INPUT TYPE="Radio" Name="Choice" Value="{{ choice.correct }}">{{ choice.choice_text }}<br>
 {% endfor %}
 <br>
-{% if back_link != None %}
-<button type="button" class="btn btn-primary"><a href={{back_link}}>Back</a></button>
+{% if back_link %}
+<button type="button" class="btn btn-primary"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
 {% endif %}
-<button type="button" class="btn btn-primary"><a href={{link}}>{{text}}</a></button>
+{% if next_link %}
+<button type="button" class="btn btn-primary"><a href="{%url 'question' quiz.id next_question.id%}">Next</a></button>
+{% else %}
+<button type="button" class="btn btn-primary"><a href="{%url 'score' quiz.id %}">Submit</a></button>
+{% endif %}
 <br>
