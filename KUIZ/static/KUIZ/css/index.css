@@ -1,0 +1,82 @@
+.body {
+  width: 100vw !important;
+  height: calc(100vh - 100px);
+  background-color: rgb(182, 216, 207);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.jumbotron {
+  width: 70%;
+  height: 60%;
+}
+
+.container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+.container h1 {
+  flex: 2;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 64px;
+  font-weight: 700;
+}
+
+.container p {
+  flex: 3;
+  width: 80%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.question-mark {
+  position: absolute;
+  width: 79px;
+  height: 154px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 180px;
+}
+
+.mark1 {
+  color: #828282;
+  transform: rotate(-7.45deg);
+  right: 15%;
+  bottom: 20%;
+}
+
+.mark2 {
+  color: #333333;
+  transform: rotate(20.51deg);
+  right: 12%;
+  bottom: 20%;
+}
+
+.btn-quiz {
+  position: absolute;
+  bottom: 25%;
+  background-color: #3AB1BE;
+  padding: 15px 30px;
+}
+
+.btn-quiz a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 375px) {
+  .mark1, .mark2 {
+    display: none;
+  }
+}
