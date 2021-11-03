@@ -245,13 +245,17 @@ input[type=text]:placeholder {
   bottom: -10px;
   width: 0;
   height: 2px;
-  background-color: #56baed;
+  background-color: #FF7373;
+
   content: "";
   transition: width 0.2s;
 }
 
 .underlineHover:hover {
-  color: #0d0d0d;
+  color: #FF7373;
+}
+.underlineHover{
+  color: #FF7373;
 }
 
 .underlineHover:hover:after{
