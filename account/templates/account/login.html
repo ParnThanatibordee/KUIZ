@@ -15,7 +15,7 @@
     <!-- Login Form -->
  <form method="post">{% csrf_token %}
      <h3>Username</h3>
- {{ login_form.username}}<br>
+ {{ login_form.email}}<br>
  <h3 >Password</h3>
   {{ login_form.password}}
 {#        {% for field in login_form %}#}
