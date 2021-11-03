@@ -1,29 +1,55 @@
-{%  extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
+    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/register_index.css' %}">
+    <div class="wrapper fadeInDown">
+  <div id="formContent">
+    <h1 style="text-align: center">Register</h1>
+    <form method="post">{% csrf_token %}
+        {% for field in registration_form %}
+            <p>
+                {% for error in field.errors %}
+                    <p style="color:red;">{{ error }}</p>
+                {% endfor %}
+            </p>
+        {% endfor %}
+        <table class="table table-borderless">
 
-<h2>Register</h2>
-<form method="post">{% csrf_token %}
-    {% for field in registration_form %}
-        <p>
-            {{ field.label_tag }}
-            {{ field }}
-            {% if field.help_text %}
-                <small style="color:gray;">{{ field.help_text }}</small>
-            {% endif %}
+            <tbody>
+            <tr>
 
-            {% for error in field.errors %}
-                <p style="color:red;">{{ error }}</p>
-            {% endfor %}
+                <td><label-tag>Email</label-tag><br>
 
-        </small>
-        </p>
+                    {{ registration_form.email }}<br>
+                </td>
+                <td><label-tag>Username</label-tag><br>
+                    {{ registration_form.username }}<br></td>
 
-    {% endfor %}
+            </tr>
+            <tr>
 
-    <button type="submit">Register</button>
-</form>
+                <td><label-tag>First Name</label-tag><br>
+                    {{ registration_form.first_name }}<br>
+                </td>
+                <td><label-tag>Last Name</label-tag><br>
+                    {{ registration_form.last_name }}<br></td>
 
+            </tr>
+            <tr>
+
+                <td><label-tag>Password</label-tag><br>
+                    {{ registration_form.password1 }}
+                </td>
+                <td><label-tag>Confirm Password</label-tag><br>
+                    {{ registration_form.password2 }}<br>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" style="background-color: #3AB1BE;color:white">Register </button>
+    </form>
+    <p>Already have an account? <a href="{% url 'login' %}" style="text-decoration: none;color: red">LOGIN HERE!</a></p>
+  </div>
+    </div>
 {% endblock content %}
