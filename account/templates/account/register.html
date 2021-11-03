@@ -1,55 +1,63 @@
 {% load static %}
-{% block content %}
-    <!DOCTYPE html>
-    <html lang="en">
-    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/register_index.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/register_index.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+    html, body {
+        margin: 0;
+        font-family: 'Rubik', sans-serif;
+    }
+</style>
+<title>Register</title>
+<body>
     <div class="wrapper fadeInDown">
-  <div id="formContent">
-    <h1 style="text-align: center">Register</h1>
-    <form method="post">{% csrf_token %}
-        {% for field in registration_form %}
-            <p>
-                {% for error in field.errors %}
+        <div id="formContent">
+            <h1 style="text-align: center">Register</h1>
+            <form method="post">{% csrf_token %}
+                {% for field in registration_form %}
+                <p>
+                    {% for error in field.errors %}
                     <p style="color:red;">{{ error }}</p>
+                    {% endfor %}
+                </p>
                 {% endfor %}
-            </p>
-        {% endfor %}
-        <table class="table table-borderless">
-
-            <tbody>
-            <tr>
-
-                <td><label-tag>Email</label-tag><br>
-
-                    {{ registration_form.email }}<br>
-                </td>
-                <td><label-tag>Username</label-tag><br>
-                    {{ registration_form.username }}<br></td>
-
-            </tr>
-            <tr>
-
-                <td><label-tag>First Name</label-tag><br>
-                    {{ registration_form.first_name }}<br>
-                </td>
-                <td><label-tag>Last Name</label-tag><br>
-                    {{ registration_form.last_name }}<br></td>
-
-            </tr>
-            <tr>
-
-                <td><label-tag>Password</label-tag><br>
-                    {{ registration_form.password1 }}
-                </td>
-                <td><label-tag>Confirm Password</label-tag><br>
-                    {{ registration_form.password2 }}<br>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <button type="submit" style="background-color: #3AB1BE;color:white">Register </button>
-    </form>
-    <p>Already have an account? <a href="{% url 'login' %}" style="text-decoration: none;color: red">LOGIN HERE!</a></p>
-  </div>
-    </div>
-{% endblock content %}
+                <table class="table table-borderless">
+                    
+                    <tbody>
+                        <tr>
+                            
+                            <td><label-tag>Email</label-tag><br>
+                                
+                                {{ registration_form.email }}<br>
+                            </td>
+                            <td><label-tag>Username</label-tag><br>
+                                {{ registration_form.username }}<br></td>
+                                
+                            </tr>
+                            <tr>
+                                
+                                <td><label-tag>First Name</label-tag><br>
+                                    {{ registration_form.first_name }}<br>
+                                </td>
+                                <td><label-tag>Last Name</label-tag><br>
+                                    {{ registration_form.last_name }}<br></td>
+                                    
+                                </tr>
+                                <tr>
+                                    
+                                    <td><label-tag>Password</label-tag><br>
+                                        {{ registration_form.password1 }}
+                                    </td>
+                                    <td><label-tag>Confirm Password</label-tag><br>
+                                        {{ registration_form.password2 }}<br>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="submit" style="background-color: #3AB1BE;color:white">Register </button>
+                    </form>
+                    <p>Already have an account? <a href="{% url 'login' %}" style="text-decoration: none;color: red">LOGIN HERE!</a></p>
+                </div>
+            </div>
+            
+        </body>
