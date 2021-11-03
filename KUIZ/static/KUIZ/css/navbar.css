@@ -32,14 +32,14 @@ li {
     margin: 0 22px;
     display: inline-block;
     position: relative;
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .navbar button {
     margin: 0 30px 0 10px;
     border-radius: 25px;
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 500;
     border: 1px solid #000;
 }
 
