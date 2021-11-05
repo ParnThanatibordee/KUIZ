@@ -2,29 +2,33 @@
 {% load static %} 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/sidebar_question_page.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/left_sidebar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/right_sidebar.css' %}">
 {% endblock css %} 
 {% block title %}
 <title>KUIZ</title>
 {% endblock %}
-    {% block nav %} 
-        {% include 'components/sidebar_question_page.html' %} 
+    {% block nav %}
+        {% include 'components/left_sidebar.html' %} 
     {% endblock %} 
     {% block content %}
-    <h1>Question{{num}} : {{question.question_text}}</h1>
-    # เลือก choice
-    <br />
-    {% for choice in choices %}
-    <input type="Radio" name="Choice" value="{{ choice.correct }}" />{{choice.choice_text }}<br />
-    {% endfor %}
-    <br />
-    {% if back_link != None %}
-    <button type="button" class="btn btn-primary">
-        <a href="{{back_link}}">Back</a>
-    </button>
-    {% endif %}
-    <button type="button" class="btn btn-primary">
-        <a href="{{link}}">{{text}}</a>
-    </button>
-    <br />
+    <div class="content" style="width: calc(100vw - 580px); margin: 0 auto;">
+        <h1>Question{{num}} : {{question.question_text}}</h1>
+        # เลือก choice
+        <br />
+        {% for choice in choices %}
+        <input type="Radio" name="Choice" value="{{ choice.correct }}" />{{choice.choice_text }}<br />
+        {% endfor %}
+        <br />
+        {% if back_link != None %}
+        <button type="button" class="btn btn-primary">
+            <a href="{{back_link}}">Back</a>
+        </button>
+        {% endif %}
+        <button type="button" class="btn btn-primary">
+            <a href="{{link}}">{{text}}</a>
+        </button>
+        <br />
+    </div>
+    {% include 'components/right_sidebar.html' %} 
 {% endblock %}
