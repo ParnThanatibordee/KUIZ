@@ -1,0 +1,45 @@
+.right-sidebar {
+    position: absolute;
+    background-color: #92CABB !important;
+    width: 280px;
+    height: 100vh;
+    right: 0;
+    top: 0;
+    padding: 0 !important;
+}
+
+.right-sidebar div:first-child {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.right-sidebar div:first-child h1 {
+    font-size: 56px;
+    font-weight: 400;
+}
+
+.right-sidebar div:first-child span {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.right-sidebar div:last-child {
+    flex: 7;
+    background-color: #B5D8CF;
+}
+
+li {
+    margin-bottom: 20px;
+}
+
+i {
+    color: rgba(0, 0, 0, 0.5);
+    margin-right: 10px;
+}
+
+li .nav-link:hover, div .nav-link:hover {
+    background-color: #B5D8CF;
+}
