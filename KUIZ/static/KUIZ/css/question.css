@@ -1,0 +1,50 @@
+.content {
+    width: calc(100vw - 560px);
+    height: 100vh;
+    margin: 0 auto;
+}
+
+.content div:first-child {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    border-bottom: 2px solid #A7A7A7;
+}
+
+.content div:first-child h1 {
+    font-size: 3rem;
+}
+
+.content div:last-child {
+    padding-left: 30px;
+    flex: 9;
+    background-color: whitesmoke;
+    position: relative;
+}
+
+.content div:last-child h1 {
+    margin-top: 30px;
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+.btn {
+    position: absolute;
+    width: 150px;
+    right: 2%;
+    margin-top: 30px;
+    background-color: #2890A3;
+    text-align: right;
+}
+
+.btn a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.btn a i {
+    padding-left: 10px;
+    color: white;
+}
