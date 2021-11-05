@@ -1,0 +1,26 @@
+.card {
+    width: 98%;
+    margin-top: 50px;
+}
+
+.list-group-item {
+    margin: 0;
+    padding: 30px;
+    cursor: pointer;
+}
+
+.active-choice {
+    background-color: #F5F5F5;
+    color: #677EFC;
+}
+
+.active-choice span {
+    border: 2px solid #677EFC;
+}
+
+.choice-index {
+    margin-right: 30px;
+    padding: 10px 14px;
+    border: 2px solid black;
+    border-radius: 50%;
+}
