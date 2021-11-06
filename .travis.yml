@@ -1,0 +1,23 @@
+language: python
+
+# you can use a different version of Python 
+python: "3.6"
+
+# don't clone more than necessary
+git:
+  depth: 1
+
+# Install dependencies
+install:
+  - pip install -r requirements.txt
+  - pip install codecov
+
+before_script:
+  - python manage.py migrate
+    
+# script to run tests. Script can have many commands, one per line.
+script: 
+  - coverage run manage.py test
+
+after_script:
+  - bash <(curl -s https://codecov.io/bash)
