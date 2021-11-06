@@ -41,11 +41,32 @@
         <button type="submit" style="background-color: #3AB1BE;color:white">Submit</button>
 
     {% else %}
-        {% if not feedback %}
+        {% if feedback %}
+            <div class="accordion" id="accordion1">
             {% for text in feedback %}
                 {% if text.user.username == user.username %}
-                    {{ text.quiz.quiz_topic }}
-                    {{ text }}
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button type="button" data-toggle="collapse"
+                                        data-target="#collapse{{ forloop.counter }}"
+                                        aria-expanded="false" aria-controls="{{ forloop.counter }}"
+                                        style="color: black;font-size: 25px;text-decoration: none;background-color: #f7f7f7;width: auto;margin: margin: auto; ">
+                                    {{ text.quiz.quiz_topic }}:<h2>{{ text.quiz.detail }}</h2>
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="headingOne"
+                             data-parent="#accordion1">
+                            <div class="card-body" style="font-size: 13px;margin-left: 2%">
+
+                                {{ text }}
+                            </div>
+                        </div>
+                    </div>
+
+
 
                 {% endif %}
 
@@ -56,6 +77,7 @@
         {% endif %}
 
     {% endif %}
+
     </body>
     </html>
 {% endblock content %}
