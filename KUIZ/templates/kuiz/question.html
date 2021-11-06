@@ -1,16 +1,22 @@
+<form action="{% url 'answer' quiz.pk question.id %}" method="post">
+{% csrf_token %}
 <h1>Question{{num}} : {{question.question_text}}</h1>
+<fieldset>
 # เลือก choice
 <br>
 {% for choice in choices %}
-    <INPUT TYPE="Radio" Name="Choice" Value="{{ choice.correct }}">{{ choice.choice_text }}<br>
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
 {% endfor %}
+</fieldset>
 <br>
 {% if back_link %}
 <button type="button" class="btn btn-primary"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
 {% endif %}
 {% if next_link %}
-<button type="button" class="btn btn-primary"><a href="{%url 'question' quiz.id next_question.id%}">Next</a></button>
+<input type="submit" value="Next">
 {% else %}
-<button type="button" class="btn btn-primary"><a href="{%url 'score' quiz.id %}">Submit</a></button>
+<input type="submit" value="Submit">
 {% endif %}
 <br>
+</form>
