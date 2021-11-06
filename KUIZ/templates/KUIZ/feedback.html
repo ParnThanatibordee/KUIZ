@@ -9,7 +9,7 @@
         <button type="submit">Submit Feedback</button>
     </form>
 {% else %}
-    {% if notfeedback %}
+    {% if not feedback %}
         {% for text in feedback %}
             {% if text.user.username == user.username %}
                 {{ text.quiz.quiz_topic }}
