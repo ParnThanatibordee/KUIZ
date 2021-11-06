@@ -67,9 +67,10 @@ def question(request, pk, question_id):
         except:
             next_link = False
         return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
-                                                      'num': num_of_question + 1, 'choices': all_choice,
-                                                      'next_link': next_link, 'next_question': next_question,
-                                                      'back_link': back_link, 'back_question': back_question})
+                                                      'num': num_of_question + 1, 'max_num': len(all_question),
+                                                      'choices': all_choice, 'next_link': next_link,
+                                                      'next_question': next_question, 'back_link': back_link,
+                                                      'back_question': back_question})
     else:
         error_message = "quiz is not allow to at this time."
         return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'error_message': error_message})

@@ -1,6 +1,6 @@
 <form action="{% url 'answer' quiz.pk question.id %}" method="post">
 {% csrf_token %}
-<h1>Question{{num}} : {{question.question_text}}</h1>
+<h1>Question{{num}}/{{max_num}} : {{question.question_text}}</h1>
 <fieldset>
 # เลือก choice
 <br>
