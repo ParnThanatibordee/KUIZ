@@ -30,7 +30,7 @@ def exam(request, pk):
     # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
     all_question = quiz.question_set.all()
     question1 = all_question[0]
-    return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1})
+    return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question)})
 
 
 def question(request, pk, question_id):
