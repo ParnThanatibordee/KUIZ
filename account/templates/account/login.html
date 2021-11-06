@@ -1,54 +1,58 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/register_index.css' %}">
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-    html, body {
-        margin: 0;
-        font-family: 'Rubik', sans-serif;
-    }
-</style>
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-    <!-- Tabs Titles -->
-    <h1>LOGIN</h1>
-    <!-- Login Form -->
- <form method="post">{% csrf_token %}
-     <h3>Username</h3>
- {{ login_form.username}}<br>
- <h3 >Password</h3>
-  {{ login_form.password}}
-{#        {% for field in login_form %}#}
-{#            <p>#}
-{#                {{ field.label_tag }}#}
-{#                {{ field }}#}
-{#                </small>#}
-{#            </p>#}
-{##}
-{#        {% endfor %}#}
-
-        {% for field in login_form %}
-            {% for error in field.errors %}
-                <p style="color:red">{{ error }}</p>
-            {% endfor %}
-        {% endfor %}
-
-
-        {% if login_form.non_field_errors %}
-            <div style="color:red">
-                <p>{{ login_form.non_field_errors }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/account.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            font-family: 'Rubik', sans-serif;
+        }
+        </style>
+</head>
+<body>
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+            <h1>Login</h1>
+            <!-- Login Form -->
+            <form method="post">{% csrf_token %}
+                <h3>Username</h3>
+                {{ login_form.username}}<br>
+                <h3 >Password</h3>
+                {{ login_form.password}}
+                    
+                    {% for field in login_form %}
+                    {% for error in field.errors %}
+                    <p style="color:red">{{ error }}</p>
+                    {% endfor %}
+                    {% endfor %}
+                    
+                    
+                    {% if login_form.non_field_errors %}
+                    <div style="color:red">
+                        <p>{{ login_form.non_field_errors }}</p>
+                    </div>
+                    
+                    {% endif %}
+                    <button type="submit">Login</button>
+                </form>
+                
+                <!-- Remind Passowrd -->
+                <div id="formFooter">
+                    <span>Doesn't have an account ?
+                        <a class="underlineHover" href="{% url 'register' %}"> SIGN UP HERE</a>
+                    </span>
+                </div>
             </div>
+        </div>
+</body>
+</html>
 
-        {% endif %}
-        <button type="submit">Login</button>
-    </form>
 
-    <!-- Remind Passowrd -->
-    <div id="formFooter">
-        <span>Doesn't have an account ?
-      <a class="underlineHover" href={% url "register" %} > SIGN UP HERE</a>
-            </span>
-    </div>
-
-  </div>
-</div>

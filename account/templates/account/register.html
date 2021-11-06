@@ -1,8 +1,13 @@
-{% extends 'KUIZ/main.html' %}
 {% load static %}
 
-{% block content %}
-    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/register_index.css' %}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/account.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         html, body {
@@ -11,10 +16,11 @@
         }
     </style>
     <title>Register</title>
-    <body>
+</head>
+<body>
     <div class="wrapper fadeInDown">
         <div id="formContent">
-            <h1 style="text-align: center">Register</h1>
+            <h1>Register</h1>
             <form method="post">{% csrf_token %}
                 {% for field in registration_form %}
                     <p>
@@ -69,19 +75,22 @@
                     </tbody>
                 </table>
 
-
-                <h2>Student</h2>
-                <label class="switch">
-                    {{ registration_form.is_teacher }}
-                    <span class="slider round"></span>
-                </label>
-                <h2>Teacher</h2><br>
+                <div class="role">
+                    <h2>Student</h2>
+                    <label class="switch">
+                        {{ registration_form.is_teacher }}
+                        <span class="slider round"></span>
+                    </label>
+                    <h2>Teacher</h2><br>
+                </div>
                 <button type="submit" style="background-color: #3AB1BE;color:white">Register</button>
             </form>
-            <p>Already have an account? <a href="{% url 'login' %}" style="text-decoration: none;color: red">LOGIN
-                HERE!</a></p>
+            <div id="formFooter">
+                <span>Already have an account ? 
+                    <a class="underlineHover" href="{% url 'login' %}">LOGIN HERE!</a>
+                </span>
+            </div>
         </div>
     </div>
-
-    </body>
-{% endblock content %}
+</body>
+</html>

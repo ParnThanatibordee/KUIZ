@@ -1,5 +1,11 @@
 
 /* BASIC */
+h1 {
+  margin-top: 20px;
+  font-weight: 500;
+  font-size: 2.5rem;
+}
+
 label-tag{
   margin-left: 10px;
 }
@@ -25,7 +31,13 @@ h2 {
   color: #cccccc;
 }
 
+h3 {
+  font-weight: 400;
+}
 
+p {
+  margin-bottom: 2rem;
+}
 
 /* STRUCTURE */
 
@@ -117,15 +129,17 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active ,
 button {
   cursor: pointer;
   padding: 15px 25px;
-  margin: 40px 0 20px 0;
+  margin: 20px 0 20px 0;
   width: 35%;
   border: none;
   border-radius: 10px;
   font-size: 20px;
+  background-color: #3AB1BE;
+  color: white;
 }
 
 input {
-  background-color: #f6f6f6;
+  background-color: #f6f6f6 !important;
   border: none;
   color: #0d0d0d;
   padding: 15px 32px;
@@ -134,7 +148,7 @@ input {
   display: inline-block;
   font-size: 16px;
   margin: 5px;
-  width: 85%;
+  width: 70%;
   border: 2px solid #f6f6f6;
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -334,4 +348,15 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.role {
+  display: flex;
+  margin: 20px auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.role h2 {
+  margin: 0 20px;
 }
