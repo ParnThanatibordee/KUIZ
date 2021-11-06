@@ -29,10 +29,21 @@
                     <a href="{{back_link}}">Back</a>
                 </button>
             {% endif %}
-            <button type="button" class="btn">
+            <button type="button" class="btn" id="next-btn">
                 <a href="{{link}}">{{text}} <i class="fas fa-long-arrow-alt-right"></i></a>
             </button>
         </div>
     </div>
-    {% include 'components/right_sidebar.html' %} 
+    {% include 'components/right_sidebar.html' %}
+    <script>
+        const content = document.querySelector(".content");
+        const nextButton = document.querySelector("#next-btn");
+        const timer = document.getElementById("timer");
+        var intervalId = window.setInterval(() => {
+            if (timer.innerHTML == "00:00") {
+                content.style.opacity = 0.3;
+                nextButton.disabled = true;
+            }
+        }, 1000);
+    </script>
 {% endblock %}
