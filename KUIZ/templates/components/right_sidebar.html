@@ -1,8 +1,45 @@
 <div class="d-flex flex-column flex-shrink-0 p-3 bg-light right-sidebar">
     <div>
-        <h1>58 s</h1>
+        <h1 id="timer">00:03</h1>
         <span>TIME REMAINING</span>
     </div>
-    <div></div>
-    
-  </div>
+    <div>
+        
+    </div>
+</div>
+<div class="alert alert-secondary" role="alert">
+    <h4 class="alert-heading">Time's up!</h4>
+    <p>Aww yeah, now the time is up. Let's have fun next time.</p>
+    <hr>
+    <button class="btn"><a href="{% url 'score' quiz.id %}">Score</a></button>
+</div>
+
+<script>
+    const alertBox =  document.querySelector(".alert");
+    const startTimer = (duration, display) => {
+        let timer = duration, minutes, seconds;
+        setInterval(() => {
+            minutes = parseInt(timer / 60, 10)
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                timer = 0;
+                alertBox.style.display = "block";
+            }
+        }, 1000);
+    }
+
+    window.onload = function () {
+        const timer = document.getElementById("timer");
+        const minutes = parseInt(timer.innerHTML.split(":")[0]);
+        const seconds = parseInt(timer.innerHTML.split(":")[1]);
+        const time = (60 * minutes) + seconds;
+        const display = document.getElementById("timer");
+        startTimer(time, display);
+    };
+</script>

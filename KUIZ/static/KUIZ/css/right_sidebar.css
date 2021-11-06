@@ -43,3 +43,21 @@ i {
 li .nav-link:hover, div .nav-link:hover {
     background-color: #B5D8CF;
 }
+
+.alert {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    display: none;
+}
+
+.alert .btn {
+    background-color: #2890A3 !important;
+}
+
+.alert .btn a {
+    color: white;
+    text-decoration: none;
+}
