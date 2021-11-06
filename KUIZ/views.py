@@ -58,7 +58,7 @@ def question(request, pk, question_id):
         link = 'result'
     return render(request, 'KUIZ/question.html',
                   {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1,
-                   'choices': choices, 'text': text, 'link': link, 'back_link': back_link})
+                   'choices': choices, 'text': text, 'link': link, 'back_link': back_link, 'max_num': len(all_question)})
 
 
 def answer(request, pk, question_id):
