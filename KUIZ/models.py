@@ -12,8 +12,14 @@ TOPIC = [
     ('astronomy', 'Astronomy'),
     ('social', 'Social'),
     ('sport', 'Sport'),
-    ('others', 'Others')
+    ('others', 'Others'),
 ]
+
+RANDOM_OR_NOT = [
+    (True, 'Yes'),
+    (False, 'No'),
+]
+
 
 class Quiz(models.Model):
     """Quiz model."""
@@ -25,6 +31,8 @@ class Quiz(models.Model):
     topic = models.CharField(max_length=20, choices=TOPIC, default='others')
     exam_duration = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
+    random_order = models.BooleanField(choices=RANDOM_OR_NOT, default='No')
+    # automate or hand-check
 
     def was_published_recently(self):
         """Check that the question was published recently."""

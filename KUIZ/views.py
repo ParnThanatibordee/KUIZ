@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+import random
 
 from KUIZ.models import Quiz, Question, Choice
 
@@ -32,7 +33,10 @@ def exam(request, pk):
         quiz.score = 0  # for test the real web app should record per user
         quiz.save()  # for test
         # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
-        all_question = quiz.question_set.all()
+        global all_question
+        all_question = list(quiz.question_set.all())
+        if quiz.random_order:
+            random.shuffle(all_question)
         try:
             question1 = all_question[0]
         except:
@@ -48,7 +52,6 @@ def question(request, pk, question_id):
     # เพิ่มปุ่ม clear choice กับ mark
     quiz = Quiz.objects.get(pk=pk)
     if quiz.can_vote():
-        all_question = list(quiz.question_set.all())
         num_of_question = all_question.index(Question.objects.get(pk=question_id))
         this_question = all_question[num_of_question]
         all_choice = this_question.choice_set.all()
@@ -86,7 +89,6 @@ def answer(request, pk, question_id):
         if selected_choice.correct:
             quiz.score += question.point
             quiz.save()
-        all_question = list(quiz.question_set.all())
         num_of_question = all_question.index(Question.objects.get(pk=question_id))
         try:
             next_question = all_question[num_of_question + 1].id
@@ -105,7 +107,6 @@ def score(request, pk):
     automate = True  # for test
     user = request.user  # เก็บ quiz score ไว้เป็น dict {user:score}
     quiz = Quiz.objects.get(pk=pk)
-    all_question = list(quiz.question_set.all())
     max_score = 0  # should in model
     if automate:
         for question in all_question:
