@@ -32,19 +32,30 @@
 .content .btn {
     position: absolute;
     width: 150px;
-    right: 2%;
     margin-top: 30px;
     background-color: #2890A3;
     text-align: right;
+}
+
+.content .back-btn {
+    left: 2%;
+}
+
+.content .next-btn {
+    right: 2%;
 }
 
 .content .btn a {
     text-decoration: none;
     color: white;
     font-size: 1.25rem;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
 }
 
 .content .btn a i {
     padding-left: 10px;
     color: white;
 }
+

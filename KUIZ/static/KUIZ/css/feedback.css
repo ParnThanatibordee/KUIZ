@@ -1,16 +1,14 @@
 
 /* BASIC */
 table,th, td{
-  /*border: 1px solid black;*/
   text-align: center;
-
 }
 label{
   font-size: 30px;
 }
 select{
   padding: 20px;
-  width: 30%;
+  width: 70%;
   margin-bottom: 20px;
   margin:20px;
 }
@@ -21,6 +19,10 @@ table{
   color: gray;
   width: 80%;
   margin: 0 auto;
+}
+textarea {
+  resize: both;
+  width: 70%;
 }
 
 a {
@@ -50,7 +52,7 @@ h2 {
   flex-direction: column;
   justify-content: center;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 100px);
   margin: 0;
   background-color: #b6d8cf;
 }

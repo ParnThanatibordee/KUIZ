@@ -16,7 +16,7 @@
     {% block content %}
     <div class="content d-flex flex-column">
         <div>
-            <h1>Question: {{ num }} / </h1>
+            <h1>Question: {{ num }} / {{ max_num }}</h1>
         </div>
         <div>
             <h1>{{question.question_text}}</h1>
@@ -25,11 +25,11 @@
             <input type="Radio" name="Choice" value="{{ choice.correct }}" />{{choice.choice_text }}<br />
             {% endfor %} -->
             {% if back_link != None %}
-                <button type="button" class="btn btn-primary">
-                    <a href="{{back_link}}">Back</a>
+                <button type="button" class="btn back-btn">
+                    <a href="{{back_link}}"><i class="fas fa-long-arrow-alt-left"></i>Previous</a>
                 </button>
             {% endif %}
-            <button type="button" class="btn" id="next-btn">
+            <button type="button" class="btn next-btn">
                 <a href="{{link}}">{{text}} <i class="fas fa-long-arrow-alt-right"></i></a>
             </button>
         </div>
@@ -37,10 +37,11 @@
     {% include 'components/right_sidebar.html' %}
     <script>
         const content = document.querySelector(".content");
-        const nextButton = document.querySelector("#next-btn");
+        const nextButton = document.querySelector(".next-btn");
         const timer = document.getElementById("timer");
         var intervalId = window.setInterval(() => {
             if (timer.innerHTML == "00:00") {
+                timer.innerHTML = "Time's Up!"
                 content.style.opacity = 0.3;
                 nextButton.disabled = true;
                 clearInterval(intervalId);
