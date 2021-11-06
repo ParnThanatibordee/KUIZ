@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
-from KUIZ.models import Quiz, Question
+from .forms import FeedbackForm
+from KUIZ.models import Quiz, Feedback, Question
 
 
 def index(request):
@@ -10,9 +10,9 @@ def index(request):
 
 
 def home(request):
-    return render(request,"KUIZ/home.html",{})
+    return render(request, "KUIZ/home.html")
 
-  
+
 def detail(request):
     """List of exam view."""
     all_quiz = Quiz.objects.all()
@@ -42,21 +42,23 @@ def question(request, pk, question_id):
     all_choice = this_question.choice_set.all()
     choices = {}
     for i in range(len(all_choice)):
-        choices[chr(i + 65)] = all_choice[i] 
+        choices[chr(i + 65)] = all_choice[i]
     text = 'Next'
     back_link = None
     if num_of_question > 0:
-        back_question = all_question[num_of_question-1]
+        back_question = all_question[num_of_question - 1]
         back_link = back_question.id
     # link = "{%url 'question' quiz.id next_question.id%}"
     try:
-        next_question = all_question[num_of_question+1]
+        next_question = all_question[num_of_question + 1]
         link = next_question.id
     except:
         next_question = this_question  # กัน error
         text = 'Submit'
-        link = 'result' 
-    return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1, 'choices': choices, 'text': text, 'link': link, 'back_link': back_link})
+        link = 'result'
+    return render(request, 'KUIZ/question.html',
+                  {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1,
+                   'choices': choices, 'text': text, 'link': link, 'back_link': back_link})
 
 
 def answer(request, pk, question_id):
@@ -83,6 +85,14 @@ def result(request, pk):
         #  will implement later
         return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
 
-def feedback(request, pk):
-    """Feedback page for discuss with teacher."""
-    return HttpResponse("FEEDBACK")
+
+def get_feedback(request):
+    feedback = Feedback.objects.all()
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = FeedbackForm()
+    return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})

@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from account.models import Account
 import datetime
 
 TOPIC = [
@@ -70,3 +71,21 @@ class Choice(models.Model):
     def __str__(self):
         """Display choice_text."""
         return self.choice_text
+
+
+class Feedback(models.Model):
+    """Feedback model."""
+
+    user = models.OneToOneField(Account, on_delete=models.CASCADE, default=0)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, default=0)
+    feedback_text = models.TextField(max_length=5000)
+
+    def quiz_name(self):
+        return self.quiz.quiz_topic
+
+    def username(self):
+        return self.user.username
+
+    def __str__(self):
+        """Display feedback_text"""
+        return self.feedback_text
