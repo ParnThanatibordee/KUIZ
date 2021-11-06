@@ -43,6 +43,7 @@
             if (timer.innerHTML == "00:00") {
                 content.style.opacity = 0.3;
                 nextButton.disabled = true;
+                clearInterval(intervalId);
             }
         }, 1000);
     </script>

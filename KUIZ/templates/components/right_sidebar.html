@@ -1,7 +1,7 @@
 <div class="d-flex flex-column flex-shrink-0 p-3 bg-light right-sidebar">
     <div>
         <h1 id="timer">00:03</h1>
-        <span>TIME REMAINING</span>
+        <span id="time-remaining">TIME REMAINING</span>
     </div>
     <div>
         
@@ -18,18 +18,20 @@
     const alertBox =  document.querySelector(".alert");
     const startTimer = (duration, display) => {
         let timer = duration, minutes, seconds;
-        setInterval(() => {
-            minutes = parseInt(timer / 60, 10)
+        const countdown = setInterval(() => {
+            minutes = parseInt(timer / 60, 10);
             seconds = parseInt(timer % 60, 10);
 
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
+            if (Number.isNaN(minutes) || Number.isNaN(seconds)) return;
 
             display.textContent = minutes + ":" + seconds;
 
             if (--timer < 0) {
                 timer = 0;
                 alertBox.style.display = "block";
+                clearInterval(countdown);
             }
         }, 1000);
     }
