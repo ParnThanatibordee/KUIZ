@@ -16,36 +16,30 @@
     <html>
     <body>
     {% if user.is_teacher %}
-        {#    <form method="post">#}
-        {#        <table style="margin-top: 50px;border-radius: 20px;">#}
-        {#            {{ form }}#}
-        {#        </table>#}
-        {#        {% csrf_token %}#}
-        {#        <button type="submit">Submit Feedback</button>#}
-        {#    </form>#}
+
         <div class="wrapper ">
-            <div id="formContent">
-                <h3 style="text-align: center;margin-top: 20px">Send Feedback</h3>
-                <form method="post">{% csrf_token %}
+        <div id="formContent">
+        <h3 style="text-align: center;margin-top: 20px">Send Feedback</h3>
+        <form method="post">{% csrf_token %}
 
-                    <table class="table table-borderless">
+        <table class="table table-borderless">
 
-                        <tbody>
-                        <tr >
-                            {{ form.user }}
-                        </tr>
-                        <tr>
+            <tbody>
+            <tr>
+                {{ form.user }}
+            </tr>
+            <tr>
 
-                            {{ form.quiz }}<br>
-                        </tr>
+                {{ form.quiz }}<br>
+            </tr>
 
-                        </tbody>
-                    </table>
-                    <div>{{ form.feedback_text }}</div>
+            </tbody>
+        </table>
+        <div>{{ form.feedback_text }}</div>
 
 
 
-                    <button type="submit" style="background-color: #3AB1BE;color:white">Submit</button>
+        <button type="submit" style="background-color: #3AB1BE;color:white">Submit</button>
 
     {% else %}
         {% if not feedback %}
