@@ -3,11 +3,11 @@
     background-color: rgb(182, 216, 207)!important;
 }
 
-ul {
+.navbar-collapse ul {
     height: 100px;
 }
 
-li {
+.navbar-nav li {
     height: 100%;
     display: flex;
     align-items: center;
@@ -27,7 +27,7 @@ li {
     margin: 0 30px;
 }
 
-.navbar a {
+.nav-item a, .right-menu a {
     font-size: 20px;
     margin: 0 22px;
     display: inline-block;
@@ -50,4 +50,56 @@ li {
 
 .navbar li:hover {
     color: #000;
+}
+
+.right-menu {
+    align-items: center;
+}
+
+.profile {
+    margin-right: 100px;
+    cursor: pointer;
+}
+
+.options {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    right: 70px;
+    background-color: rgb(73, 73, 73);
+    border-radius: 5px;
+}
+
+.options span {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.options span:hover {
+    background-color: rgb(100, 100, 100);
+}
+
+.options span:first-child:hover {
+    border-radius: 5px 5px 0 0;
+}
+
+.options span:last-child:hover {
+    border-radius: 0 0 5px 5px;
+}
+
+.options span a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 10px;
+}
+
+.profile:hover .options {
+    display: flex;
+}
+
+.fa-caret-down {
+    margin-top: 5px;
+    font-size: 20px;
 }
