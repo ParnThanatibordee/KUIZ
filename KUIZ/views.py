@@ -28,40 +28,48 @@ def detail_by_topic(request, topic):
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
-    quiz.score = 0  # for test the real web app should record per user
-    quiz.save()  # for test
-    # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
-    all_question = quiz.question_set.all()
-    try:
-        question1 = all_question[0]
-    except:
-        return HttpResponse("There no question here.")
-    return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1})
+    if quiz.can_vote():
+        quiz.score = 0  # for test the real web app should record per user
+        quiz.save()  # for test
+        # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
+        all_question = quiz.question_set.all()
+        try:
+            question1 = all_question[0]
+        except:
+            return HttpResponse("There no question here.")
+        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1})
+    else:
+        error_message = "quiz is not allow to at this time."
+        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'error_message': error_message})
 
 
 def question(request, pk, question_id):
     """Question view."""
     # เพิ่มปุ่ม clear choice กับ mark
     quiz = Quiz.objects.get(pk=pk)
-    all_question = list(quiz.question_set.all())
-    num_of_question = all_question.index(Question.objects.get(pk=question_id))
-    this_question = all_question[num_of_question]
-    all_choice = this_question.choice_set.all()
-    back_question = ""
-    next_question = ""
-    back_link = False
-    if num_of_question > 0:
-        back_question = all_question[num_of_question - 1]
-        back_link = True
-    try:
-        next_question = all_question[num_of_question + 1]
-        next_link = True
-    except:
-        next_link = False
-    return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
-                                                  'num': num_of_question + 1, 'choices': all_choice,
-                                                  'next_link': next_link, 'next_question': next_question,
-                                                  'back_link': back_link, 'back_question': back_question})
+    if quiz.can_vote():
+        all_question = list(quiz.question_set.all())
+        num_of_question = all_question.index(Question.objects.get(pk=question_id))
+        this_question = all_question[num_of_question]
+        all_choice = this_question.choice_set.all()
+        back_question = ""
+        next_question = ""
+        back_link = False
+        if num_of_question > 0:
+            back_question = all_question[num_of_question - 1]
+            back_link = True
+        try:
+            next_question = all_question[num_of_question + 1]
+            next_link = True
+        except:
+            next_link = False
+        return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
+                                                      'num': num_of_question + 1, 'choices': all_choice,
+                                                      'next_link': next_link, 'next_question': next_question,
+                                                      'back_link': back_link, 'back_question': back_question})
+    else:
+        error_message = "quiz is not allow to at this time."
+        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'error_message': error_message})
 
 
 def answer(request, pk, question_id):
