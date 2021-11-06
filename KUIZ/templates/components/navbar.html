@@ -22,6 +22,11 @@
         <li class="nav-item  {% if quizzes or quiz_in_topic or topic == 'Others' %}navbar-active{% endif %}">
           <a class="nav-link active" aria-current="page" href="{% url 'detail' %}">QUIZ</a>
         </li>
+      {% if request.user.is_teacher %}
+      <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'feedback' %}">Send Feedback</a>
+        </li>
+      {% endif %}
       </ul>
       <div class="navbar-nav ml-auto right-menu">
         {% if user.is_authenticated %}
