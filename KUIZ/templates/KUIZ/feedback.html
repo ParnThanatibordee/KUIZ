@@ -13,34 +13,25 @@
     {% include 'components/navbar.html' %}
 {% endblock %}
 {% block content %}
-    <html>
-    <body>
     {% if user.is_teacher %}
-
         <div class="wrapper ">
-        <div id="formContent">
-        <h3 style="text-align: center;margin-top: 20px">Send Feedback</h3>
-        <form method="post">{% csrf_token %}
-
-        <table class="table table-borderless">
-
-            <tbody>
-            <tr>
-                {{ form.user }}
-            </tr>
-            <tr>
-
-                {{ form.quiz }}<br>
-            </tr>
-
-            </tbody>
-        </table>
-        <div>{{ form.feedback_text }}</div>
-
-
-
-        <button type="submit" style="background-color: #3AB1BE;color:white">Submit</button>
-
+            <div id="formContent">
+                <h3 style="text-align: center;margin-top: 20px">Send Feedback</h3>
+                <form method="post">{% csrf_token %}
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            {{ form.user }}
+                        </tr>
+                        <tr>
+                            {{ form.quiz }}<br>
+                        </tr>
+                    </tbody>
+                </table>
+            <div>{{ form.feedback_text }}</div>
+            <button type="submit" style="background-color: #3AB1BE;color:white">Submit</button>
+            </div>
+        </div>
     {% else %}
         {% if not feedback %}
             {% for text in feedback %}
@@ -57,6 +48,5 @@
         {% endif %}
 
     {% endif %}
-    </body>
-    </html>
-{% endblock content %}
+
+{% endblock %}
