@@ -1,17 +1,48 @@
 from django.db import models
 from django.utils import timezone
+from account.models import Account
 import datetime
 
+TOPIC = [
+    ('', '----------'),
+    ('programming', 'Programming'),
+    ('mathematics', 'Mathematics'),
+    ('physics', 'Physics'),
+    ('chemistry', 'Chemistry'),
+    ('biology', 'Biology'),
+    ('astronomy', 'Astronomy'),
+    ('social', 'Social'),
+    ('sport', 'Sport'),
+    ('others', 'Others')
+]
 
 class Quiz(models.Model):
     """Quiz model."""
 
     quiz_topic = models.CharField(max_length=200)
     detail = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published', default=timezone.now())
+    pub_date = models.DateTimeField('date published', default=timezone.now)
     end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=1))
+    topic = models.CharField(max_length=20, choices=TOPIC, default='others')
     exam_duration = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
+
+    def was_published_recently(self):
+        """Check that the question was published recently."""
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
+
+    def is_published(self):
+        """Check that the question was already published."""
+        now = timezone.now()
+        if now >= self.pub_date:
+            return True
+        return False
+
+    def can_vote(self):
+        """Check that the question can vote."""
+        now = timezone.now()
+        return self.end_date >= now >= self.pub_date
 
     def __str__(self):
         """Display quiz_topic and detail."""
@@ -40,3 +71,21 @@ class Choice(models.Model):
     def __str__(self):
         """Display choice_text."""
         return self.choice_text
+
+
+class Feedback(models.Model):
+    """Feedback model."""
+
+    user = models.OneToOneField(Account, on_delete=models.CASCADE, default=0)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, default=0)
+    feedback_text = models.TextField(max_length=5000)
+
+    def quiz_name(self):
+        return self.quiz.quiz_topic
+
+    def username(self):
+        return self.user.username
+
+    def __str__(self):
+        """Display feedback_text"""
+        return self.feedback_text
