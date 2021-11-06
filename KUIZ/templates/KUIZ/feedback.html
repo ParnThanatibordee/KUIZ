@@ -16,12 +16,11 @@
     <html>
     <body>
     {% if user.is_teacher %}
-
         <div class="wrapper ">
         <div id="formContent">
         <h3 style="text-align: center;margin-top: 20px">Send Feedback</h3>
         <form method="post">{% csrf_token %}
-
+        {% csrf_token %}
         <table class="table table-borderless">
 
             <tbody>
