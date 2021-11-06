@@ -38,9 +38,9 @@ def login_view(request):
     if request.POST:
         form = AccountAuthenticationForm(request.POST)
         if form.is_valid():
-            email = request.POST['email']
+            username = request.POST['username']
             password = request.POST['password']
-            user = authenticate(email=email, password=password)
+            user = authenticate(username=username, password=password)
 
             if user:
                 login(request, user)
