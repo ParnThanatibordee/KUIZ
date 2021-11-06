@@ -55,7 +55,7 @@ def question(request, pk, question_id):
     except:
         next_question = this_question  # กัน error
         text = 'Submit'
-        link = 'score' 
+        link = 'result' 
     return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1, 'choices': choices, 'text': text, 'link': link, 'back_link': back_link})
 
 
