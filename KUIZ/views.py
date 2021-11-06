@@ -86,8 +86,9 @@ def answer(request, pk, question_id):
         # next iteration for collect ERROR
         return HttpResponse(f'ERROR {question_id}')
     else:
-        if selected_choice.correct:
-            quiz.score += question.point
+        if quiz.automate:
+            if selected_choice.correct:
+                quiz.score += question.point
             quiz.save()
         num_of_question = all_question.index(Question.objects.get(pk=question_id))
         try:
