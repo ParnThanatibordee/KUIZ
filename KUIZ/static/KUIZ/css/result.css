@@ -54,24 +54,38 @@
     border-radius: 25px;
 }
 
-.content .body div .card-score button {
+.content .body div .card-score .btn {
     position: absolute;
     bottom: 20%;
-    right: 0;
     border: 1px solid #2890A3;
 }
 
-.content .body div .card-score button a {
-    color: #2890A3;
-    text-decoration: none;
+.content .body div .card-score .btn i {
     font-size: 24px;
-    padding: 0 20px;
+    padding-left: 10px;
 }
 
-.content .body div .card-score button:hover {
+.content .body div .card-score .btn-feeback {
+    right: 0;
     background-color: #2890A3;
 }
 
-.content .body div .card-score button:hover a {
-    color: white;
+.content .body div .card-score .btn-home {
+    right: 200px;
 }
+
+.content .body div .card-score .btn a {
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.content .body div .card-score .btn-feeback a {
+    color: white;
+    padding: 0 20px;
+}
+
+.content .body div .card-score .btn-home a {
+    color: #2890A3;
+    padding-right: 10px;
+}
+
