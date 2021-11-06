@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/ParnThanatibordee/KUIZ.svg?branch=master)](https://travis-ci.com/ParnThanatibordee/KUIZ)
 # KUIZ
 
 KUIZ is a web application quiz where you can create/take a quiz for learning and sharing knowledge from various subjects, questions and answers. The target of KUIZ is to help educational personnel (Teachers, Professors, Students) or people who want to enhance the knowledge both general and non at [Kasetsart University](https://www.ku.ac.th).
