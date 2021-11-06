@@ -64,7 +64,7 @@ def answer(request, pk, question_id):
     pass
 
 
-def score(request, pk):
+def result(request, pk):
     """Report of score of user."""
     # automate or hand-check
     automate = True  # for test
@@ -78,17 +78,10 @@ def score(request, pk):
             # if user.selected_choice.correct:
             #     quiz.score += question.point
             max_score += question.point
-        return render(request, 'KUIZ/score.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
+        return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
     else:
         #  will implement later
-        return render(request, 'KUIZ/score.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
-
-
-def result(request, pk):
-    """Result of the exam page."""
-    quiz = Quiz.objects.get(pk=pk)
-    return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score})
-
+        return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
 
 def feedback(request, pk):
     """Feedback page for discuss with teacher."""
