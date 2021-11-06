@@ -56,7 +56,7 @@ class Account(AbstractBaseUser):
     last_name = models.CharField(max_length=30)
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'password']
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'password', 'is_teacher']
     objects = MyAccountManager()
 
     def __str__(self):
