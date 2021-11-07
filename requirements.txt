@@ -1,2 +1,4 @@
+
+# required packages
 coverage
-Django
+Django==3.2.7
