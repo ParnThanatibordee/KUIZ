@@ -14,6 +14,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 import KUIZ.apps
+import account.apps
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -33,9 +34,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'account',
     'KUIZ.apps.KuizConfig',
-
+    'account.apps.AccountConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

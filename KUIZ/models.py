@@ -13,8 +13,14 @@ TOPIC = [
     ('astronomy', 'Astronomy'),
     ('social', 'Social'),
     ('sport', 'Sport'),
-    ('others', 'Others')
+    ('others', 'Others'),
 ]
+
+YES_OR_NO = [
+    (True, 'Yes'),
+    (False, 'No'),
+]
+
 
 class Quiz(models.Model):
     """Quiz model."""
@@ -26,6 +32,8 @@ class Quiz(models.Model):
     topic = models.CharField(max_length=20, choices=TOPIC, default='others')
     exam_duration = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
+    random_order = models.BooleanField(choices=YES_OR_NO, default='No')
+    automate = models.BooleanField(choices=YES_OR_NO, default='Yes')
 
     def was_published_recently(self):
         """Check that the question was published recently."""
