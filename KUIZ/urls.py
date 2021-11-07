@@ -11,5 +11,4 @@ urlpatterns = [
     path('exam/<int:pk>/question/<int:question_id>/answer', views.answer, name='answer'),
     path('exam/<int:pk>/question/score', views.score, name='score'),
     path('exam/<int:pk>/question/result', views.result, name='result'),
-    path('exam/<int:pk>/question/feedback', views.feedback, name='feedback'),
 ]
