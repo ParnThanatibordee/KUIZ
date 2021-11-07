@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.shortcuts import redirect
 from KUIZ.views import (
     index, home, get_feedback
 )
@@ -25,7 +26,7 @@ from account.views import (
 urlpatterns = [
     path('kuiz/', include('KUIZ.urls')),
     path('admin/', admin.site.urls),
-    path('', home, name="index"),
+    path('', lambda request: redirect('kuiz/')),
     path('register/', registration_view, name='register'),
     path('logout/', logout_view, name='logout'),
     path('login/', login_view, name='login'),

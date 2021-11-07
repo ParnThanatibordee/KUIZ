@@ -1,0 +1,16 @@
+<div class="card">
+    <ul class="list-group list-group-flush">
+      {% for index, choice in choices.items %}
+      <li class="list-group-item" onclick="selectedChoice(this)"><span class="choice-index">{{ index }}</span>{{choice.choice_text }}</li>
+      {% endfor %}
+  </ul>
+</div>
+
+<script>
+  const choices = document.querySelectorAll(".list-group-item");
+
+  const selectedChoice = (element) => {
+    choices.forEach(choice => choice.classList.remove("active-choice"));
+    element.classList.add("active-choice");
+  }
+</script>

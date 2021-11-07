@@ -3,7 +3,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
 
-from KUIZ.models import Quiz, Question, Choice
+from KUIZ.models import Quiz, Question, Choice, Feedback
+from .forms import FeedbackForm
 
 
 def index(request):
@@ -41,7 +42,7 @@ def exam(request, pk):
             question1 = all_question[0]
         except:
             return HttpResponse("There no question here.")
-        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1})
+        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question)})
     else:
         error_message = "quiz is not allow to at this time."
         return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'error_message': error_message})
@@ -52,7 +53,8 @@ def question(request, pk, question_id):
     # เพิ่มปุ่ม clear choice กับ mark
     quiz = Quiz.objects.get(pk=pk)
     if quiz.can_vote():
-        num_of_question = all_question.index(Question.objects.get(pk=question_id))
+        num_of_question = all_question.index(
+            Question.objects.get(pk=question_id))
         this_question = all_question[num_of_question]
         all_choice = this_question.choice_set.all()
         back_question = ""
@@ -91,7 +93,8 @@ def answer(request, pk, question_id):
             if selected_choice.correct:
                 quiz.score += question.point
             quiz.save()
-        num_of_question = all_question.index(Question.objects.get(pk=question_id))
+        num_of_question = all_question.index(
+            Question.objects.get(pk=question_id))
         try:
             next_question = all_question[num_of_question + 1].id
             next_link = True
@@ -103,7 +106,7 @@ def answer(request, pk, question_id):
             return HttpResponseRedirect(reverse('score', args=(pk,)))
 
 
-def score(request, pk):
+def result(request, pk):
     """Report of score of user."""
     # automate or hand-check
     automate = True  # for test
@@ -116,17 +119,10 @@ def score(request, pk):
             # if user.selected_choice.correct:
             #     quiz.score += question.point
             max_score += question.point
-        return render(request, 'KUIZ/score.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
+        return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
     else:
         #  will implement later
-        return render(request, 'KUIZ/score.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
-
-
-def result(request, pk):
-    """Result of the exam page."""
-    quiz = Quiz.objects.get(pk=pk)
-    return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score})  # quiz.score user
-
+        pass
 
 
 def get_feedback(request):
@@ -139,4 +135,3 @@ def get_feedback(request):
     else:
         form = FeedbackForm()
     return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
-

@@ -1,7 +1,36 @@
-<h1>KUIZ : {{quiz.quiz_topic}}</h1>
-<p>{{quiz.detail}}</p>
-{% if error_message %}
-<p><strong>{{ error_message }}</strong></p>
-{% else %}
-<button type="button" class="btn btn-primary"><a href="{%url 'question' quiz.id q1.id %}">Start quiz</a></button>
-{% endif %}
+{% extends 'KUIZ/main.html' %}
+{% block content %}
+<style>
+    .exam {
+        width: 100vw;
+        height: 100vh;
+        background-color: #B6D8CF;
+        overflow: hidden;
+    }
+
+    .btn {
+        background-color: transparent;
+        border: 2px solid #B6D8CF;
+    }
+
+    .btn:hover {
+        background-color: #90bdb1;
+        color: white;
+        border: 2px solid #90bdb1;
+    }
+</style>
+<div class="exam">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <div class="card mt-5 p-3" style="background-color: #f7f7f7;">
+                <div class="card-body d-flex flex-column">
+                    <h1>KUIZ : {{quiz.quiz_topic}}</h1>
+                    <p>{{quiz.detail}}</p>
+                    <span>This quiz contains {{ num_of_question }} questions with {{ quiz.exam_duration }} minutes.</span>
+                    <a href="{%url 'question' quiz.id q1.id %}" class="btn">Start quiz</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

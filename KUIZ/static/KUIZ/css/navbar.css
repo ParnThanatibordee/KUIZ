@@ -1,29 +1,45 @@
 .navbar {
     height: 100px;
     background-color: rgb(182, 216, 207)!important;
-    box-shadow: 0px 8px 5px -8px rgba(110, 110, 110, 0.56);
+}
+
+.navbar-collapse ul {
+    height: 100px;
+}
+
+.navbar-nav li {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-active  {
+    border-bottom: 3px solid #66A695;
+}
+
+.navbar-active a {
+    color: #000 !important;
 }
 
 .navbar img {
     width: 135px;
     height: 75px;
-    margin-left: 20px;
+    margin: 0 30px;
 }
 
-.navbar a {
+.nav-item a, .right-menu a {
     font-size: 20px;
     margin: 0 22px;
     display: inline-block;
     position: relative;
-    font-weight: 700;
-    color: #000;
+    font-weight: 500;
 }
 
 .navbar button {
-    margin-right: 30px;
+    margin: 0 30px 0 10px;
     border-radius: 25px;
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 500;
     border: 1px solid #000;
 }
 
@@ -32,25 +48,58 @@
     color: #fff;
 }
 
-.navbar a:hover {
+.navbar li:hover {
     color: #000;
 }
 
-.navbar a::after {
-    content: "";
+.right-menu {
+    align-items: center;
+}
+
+.profile {
+    margin-right: 100px;
+    cursor: pointer;
+}
+
+.options {
+    display: none;
+    flex-direction: column;
     position: absolute;
-    width: 100%;
-    transform: scaleX(0);
-    height: 3px;
-    bottom: 0;
-    left: 0;
-    background-color: #66A695;
-    transform-origin: center;
-    transition: transform 0.25s ease-out;
+    right: 70px;
+    background-color: rgb(73, 73, 73);
+    border-radius: 5px;
 }
 
-.navbar a:hover::after {
-    transform: scaleX(1);
-    transform-origin: center;
+.options span {
+    padding: 10px;
+    cursor: pointer;
 }
 
+.options span:hover {
+    background-color: rgb(100, 100, 100);
+}
+
+.options span:first-child:hover {
+    border-radius: 5px 5px 0 0;
+}
+
+.options span:last-child:hover {
+    border-radius: 0 0 5px 5px;
+}
+
+.options span a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 10px;
+}
+
+.profile:hover .options {
+    display: flex;
+}
+
+.fa-caret-down {
+    margin-top: 5px;
+    font-size: 20px;
+}

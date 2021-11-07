@@ -10,11 +10,11 @@ def registration_view(request):
     if request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            email = form.cleaned_data.get('email')
-            raw_password = form.cleaned_data.get('password1')
-            account = authenticate(email=email, password=raw_password)
-            login(request, account)
+            user = form.save()
+            # email = form.cleaned_data.get('email')
+            # raw_password = form.cleaned_data.get('password1')
+            # account = authenticate(email=email, password=raw_password)
+            login(request, user)
             return redirect('index')
         else:
             context['registration_form'] = form
@@ -38,9 +38,9 @@ def login_view(request):
     if request.POST:
         form = AccountAuthenticationForm(request.POST)
         if form.is_valid():
-            email = request.POST['email']
+            username = request.POST['username']
             password = request.POST['password']
-            user = authenticate(email=email, password=password)
+            user = authenticate(username=username, password=password)
 
             if user:
                 login(request, user)

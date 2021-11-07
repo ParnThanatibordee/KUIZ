@@ -1,8 +1,41 @@
-<h1>KUIZ : {{quiz.quiz_topic}}</h1>
-<p>{{quiz.detail}}</p>
-<p>score: {{score}} pts<p>
-
-<br>
-<button type="button" class="btn btn-primary"><a href="{%url 'detail'%}">Back to KUIZ!</a></button>
-<button type="button" class="btn btn-primary"><a href="{%url 'feedback' quiz.id%}">Feedback</a></button>
-<br>
+{% extends 'KUIZ/main.html' %} 
+{% load static %} 
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/left_sidebar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/right_sidebar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/result.css' %}">
+{% endblock css %} 
+{% block title %}
+<title>Score | {{ quiz.quiz_topic }}</title>
+{% endblock %}
+{% block nav %}
+    {% include 'components/left_sidebar.html' %} 
+{% endblock %} 
+{% block content %}
+    <div class="content d-flex flex-column">
+        <div class="header">
+            <h1>{{ quiz.quiz_topic }}</h1>
+        </div>
+        <div class="body">
+            <div>
+                <h1>{{ quiz.detail }}</h1>
+                <div class="card-score">
+                    <span>Your score: {{ score }}/{{ max }}</span>
+                    <div class="buttons">
+                        <button type="button" class="btn btn-home"><i class="fas fa-home"></i><a href="{% url 'index' %}">Home</a></button>
+                        <button type="button" class="btn btn-feeback"><a href="{% url 'feedback' %}">Feedback</a></button>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+    {% include 'components/right_sidebar.html' %}
+    <script>
+        const timer = document.getElementById("timer");
+        const timeRemaining = document.getElementById("time-remaining");
+        timer.innerHTML = "DONE";
+        timeRemaining.style.display = "none";
+    </script>
+{% endblock %}

@@ -9,7 +9,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = Account
-        fields = ('email', 'username', 'first_name', 'last_name', 'password1', 'password2')
+        fields = ('email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'is_teacher')
 
 
 class AccountAuthenticationForm(forms.ModelForm):
@@ -17,12 +17,12 @@ class AccountAuthenticationForm(forms.ModelForm):
 
     class Meta:
         model = Account
-        fields = ('email', 'password')
+        fields = ('username', 'password')
 
     def clean(self):
         if self.is_valid():
 
-            email = self.cleaned_data['email']
+            username = self.cleaned_data['username']
             password = self.cleaned_data['password']
-            if not authenticate(email=email, password=password):
+            if not authenticate(username=username, password=password):
                 raise forms.ValidationError("Invalid login")

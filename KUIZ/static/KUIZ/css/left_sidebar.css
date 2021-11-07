@@ -1,0 +1,19 @@
+.left-sidebar {
+    position: absolute;
+    background-color: #92CABB !important;
+    width: 280px;
+    height: 100vh;
+}
+
+li {
+    margin-bottom: 20px;
+}
+
+i {
+    color: rgba(0, 0, 0, 0.5);
+    margin-right: 10px;
+}
+
+li .nav-link:hover, div .nav-link:hover {
+    background-color: #B5D8CF;
+}
