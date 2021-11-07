@@ -26,7 +26,7 @@
                 <div class="card-body d-flex flex-column">
                     <h1>KUIZ : {{quiz.quiz_topic}}</h1>
                     <p>{{quiz.detail}}</p>
-                    <span>This quiz contains {{ num_of_question }} questions with {{ quiz.exam_duration }} minutes.</span>
+                    <span>This quiz contains {{ num_of_question }} questions with {{ time }} minutes.</span>
                     <a href="{%url 'question' quiz.id q1.id %}" class="btn">Start quiz</a>
                 </div>
             </div>

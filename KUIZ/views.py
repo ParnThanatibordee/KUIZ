@@ -42,10 +42,11 @@ def exam(request, pk):
             question1 = all_question[0]
         except:
             return HttpResponse("There no question here.")
-        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question)})
+        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question),
+                                                  'time': quiz.exam_duration})
     else:
         error_message = "quiz is not allow to at this time."
-        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'error_message': error_message})
+        return HttpResponse(error_message)
 
 
 def question(request, pk, question_id):
@@ -72,10 +73,10 @@ def question(request, pk, question_id):
                                                       'num': num_of_question + 1, 'max_num': len(all_question),
                                                       'choices': all_choice, 'next_link': next_link,
                                                       'next_question': next_question, 'back_link': back_link,
-                                                      'back_question': back_question})
+                                                      'back_question': back_question, 'time': quiz.exam_duration})
     else:
         error_message = "quiz is not allow to at this time."
-        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'error_message': error_message})
+        return HttpResponse(error_message)
 
 
 def answer(request, pk, question_id):
@@ -122,7 +123,7 @@ def result(request, pk):
         return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
     else:
         #  will implement later
-        pass
+        return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
 
 
 def get_feedback(request):
