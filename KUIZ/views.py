@@ -128,6 +128,15 @@ def result(request, pk):
     return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score})  # quiz.score user
 
 
-def feedback(request, pk):
-    """Feedback page for discuss with teacher."""
-    return HttpResponse("FEEDBACK")
+
+def get_feedback(request):
+    feedback = Feedback.objects.all()
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = FeedbackForm()
+    return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
+
