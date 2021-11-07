@@ -33,8 +33,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-
-    'KUIZ',
     'account',
     'KUIZ.apps.KuizConfig',
 
@@ -44,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_static_fontawesome',
 ]
 
 MIDDLEWARE = [

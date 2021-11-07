@@ -1,0 +1,24 @@
+<html>
+<body>
+{% if user.is_teacher == True %}
+<form method="post">
+    <table>
+        {{ form }}
+    </table>
+    {% csrf_token %}
+    <button type="submit">Submit Feedback</button>
+</form>
+    {% else %}
+    {% for text in feedback %}
+        {% if text.user.username == user.username %}
+            {{ text.quiz.quiz_topic }}
+            {{ text }}
+        {% endif%}
+
+
+    {% endfor %}
+
+
+{% endif %}
+</body>
+</html>

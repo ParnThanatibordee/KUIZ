@@ -1,7 +1,7 @@
 language: python
 
 # you can use a different version of Python 
-python: "3.6"
+python: "3.7"
 
 # don't clone more than necessary
 git:
@@ -21,3 +21,4 @@ script:
 
 after_script:
   - bash <(curl -s https://codecov.io/bash)
+

@@ -89,3 +89,4 @@ class Feedback(models.Model):
     def __str__(self):
         """Display feedback_text"""
         return self.feedback_text
+
