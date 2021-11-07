@@ -24,14 +24,20 @@
             <!-- {% for choice in choices %}
             <input type="Radio" name="Choice" value="{{ choice.correct }}" />{{choice.choice_text }}<br />
             {% endfor %} -->
-            {% if back_link != None %}
+            {% if back_link %}
                 <button type="button" class="btn back-btn">
-                    <a href="{{back_link}}"><i class="fas fa-long-arrow-alt-left"></i>Previous</a>
+                    <a href="{%url 'question' quiz.id back_question.id %}"><i class="fas fa-long-arrow-alt-left"></i>Previous</a>
                 </button>
             {% endif %}
+            {% if next_link %}
             <button type="button" class="btn next-btn">
-                <a href="{{link}}">{{text}} <i class="fas fa-long-arrow-alt-right"></i></a>
+                <a href="{%url 'question' quiz.id next_question.id %}">Next<i class="fas fa-long-arrow-alt-right"></i></a>
             </button>
+            {% else %}
+            <button type="button" class="btn next-btn">
+                <a href="{%url 'result' quiz.id %}">Next<i class="fas fa-long-arrow-alt-right"></i></a>
+            </button>
+            {% endif %}
         </div>
     </div>
     {% include 'components/right_sidebar.html' %}

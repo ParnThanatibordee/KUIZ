@@ -58,6 +58,9 @@ def question(request, pk, question_id):
             Question.objects.get(pk=question_id))
         this_question = all_question[num_of_question]
         all_choice = this_question.choice_set.all()
+        choices = {}
+        for i in range(len(all_choice)):
+            choices[chr(i + 65)] = all_choice[i]
         back_question = ""
         next_question = ""
         back_link = False
@@ -71,7 +74,7 @@ def question(request, pk, question_id):
             next_link = False
         return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
                                                       'num': num_of_question + 1, 'max_num': len(all_question),
-                                                      'choices': all_choice, 'next_link': next_link,
+                                                      'choices': choices, 'next_link': next_link,
                                                       'next_question': next_question, 'back_link': back_link,
                                                       'back_question': back_question, 'time': quiz.exam_duration})
     else:
