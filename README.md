@@ -14,7 +14,7 @@ As the era changes, Technology keeps developing themself little bit per second t
 
 [Vision Statement](../../wiki/Vision%20Statement)
 
-[Features list](../../wiki/Features%20list)
+[Features list](../../wiki/Requirements)
 
 ## Iterations
 
