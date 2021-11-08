@@ -18,7 +18,12 @@
             {% include 'components/sidebar.html' %}
         </div>
         <div class="col-md-9 col-12">
-            <h1 class="d-inline">All Quizzes</h1>
+            <div class="d-flex align-items-center justify-content-between">
+                <h1 class="d-inline">All Quizzes</h1>
+                {% if user.is_teacher %}
+                <a href="#" class="btn btn-secondary active" role="button" aria-pressed="true">Add Quiz</a>
+                {% endif %}
+            </div>
             <div class="row mt-4">
                 {% if quizzes %}
                     {% for quiz in quizzes %}
