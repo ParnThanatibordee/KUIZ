@@ -91,7 +91,18 @@ def answer(request, pk, question_id):
         selected_choice = question.choice_set.get(pk=choice_id)
     except (KeyError, Choice.DoesNotExist):
         # next iteration for collect ERROR
-        return HttpResponse(f'ERROR {question_id}')
+        # return HttpResponse(f'ERROR {question_id}')
+        num_of_question = all_question.index(
+            Question.objects.get(pk=question_id))
+        try:
+            next_question = all_question[num_of_question + 1].id
+            next_link = True
+        except:
+            next_link = False
+        if next_link:
+            return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+        else:
+            return HttpResponseRedirect(reverse('result', args=(pk,)))
     else:
         if quiz.automate:
             if selected_choice.correct:
