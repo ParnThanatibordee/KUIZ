@@ -107,7 +107,7 @@ def answer(request, pk, question_id):
         if next_link:
             return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
         else:
-            return HttpResponseRedirect(reverse('score', args=(pk,)))
+            return HttpResponseRedirect(reverse('result', args=(pk,)))
 
 
 def result(request, pk):
