@@ -4,7 +4,7 @@
     margin: 0 auto;
 }
 
-.content div:first-child {
+.content .header {
     flex: 1;
     display: flex;
     align-items: center;
@@ -12,18 +12,18 @@
     border-bottom: 2px solid #A7A7A7;
 }
 
-.content div:first-child h1 {
+.content .header h1 {
     font-size: 3rem;
 }
 
-.content div:last-child {
+.content .body {
     padding-left: 30px;
     flex: 9;
     background-color: whitesmoke;
     position: relative;
 }
 
-.content div:last-child h1 {
+.content .body h1 {
     margin-top: 30px;
     font-size: 2rem;
     font-weight: 400;
