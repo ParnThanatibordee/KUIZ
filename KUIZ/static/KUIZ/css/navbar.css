@@ -59,6 +59,7 @@
 .profile {
     margin-right: 100px;
     cursor: pointer;
+    z-index: 1;
 }
 
 .options {
