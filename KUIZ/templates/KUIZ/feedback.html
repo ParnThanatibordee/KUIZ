@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}"/>
 {% endblock css %}
 {% block title %}
-    <title>KUIZ</title>
+    <title>KUIZ | Feedback</title>
 {% endblock %}
 {% block nav %}
     {% include 'components/navbar.html' %}
@@ -22,24 +22,15 @@
         <form method="post">{% csrf_token %}
         {% csrf_token %}
         <table class="table table-borderless">
-
             <tbody>
-            <tr>
-                {{ form.user }}
-            </tr>
-            <tr>
-
-                {{ form.quiz }}<br>
-            </tr>
-
+                <tr>{{ form.user }}</tr>
+                <tr>{{ form.quiz }}</tr>
             </tbody>
         </table>
-        <div>{{ form.feedback_text }}</div>
-
-
-
-        <button type="submit" style="background-color: #3AB1BE;color:white">Submit</button>
-
+        <div>
+            {{ form.feedback_text }}
+        </div>
+        <button type="submit">Submit</button>
     {% else %}
         {% if feedback %}
             <div class="accordion" id="accordion1">
@@ -51,33 +42,24 @@
                                 <button type="button" data-toggle="collapse"
                                         data-target="#collapse{{ forloop.counter }}"
                                         aria-expanded="false" aria-controls="{{ forloop.counter }}"
-                                        style="color: black;font-size: 25px;text-decoration: none;background-color: #f7f7f7;width: auto;margin: auto; ">
+                                >
                                     {{ text.quiz.quiz_topic }}:<h2>{{ text.quiz.detail }}</h2>
                                 </button>
                             </h5>
                         </div>
-
                         <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="headingOne"
                              data-parent="#accordion1">
-                            <div class="card-body" style="font-size: 13px;margin-left: 2%">
-
+                            <div class="card-body">
                                 {{ text }}
                             </div>
                         </div>
                     </div>
-
-
-
                 {% endif %}
-
-
             {% endfor %}
         {% else %}
             <h1 style="text-align: center">No Feedback Right now</h1>
         {% endif %}
-
     {% endif %}
-
     </body>
     </html>
-{% endblock content %}
+{% endblock %}
