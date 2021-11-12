@@ -1,0 +1,65 @@
+{% extends 'KUIZ/main.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/index.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/feedback.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}"/>
+{% endblock css %}
+{% block title %}
+    <title>KUIZ | Feedback</title>
+{% endblock %}
+{% block nav %}
+    {% include 'components/navbar.html' %}
+{% endblock %}
+{% block content %}
+    <html>
+    <body>
+    {% if user.is_teacher %}
+        <div class="wrapper ">
+        <div id="formContent">
+        <h3 style="text-align: center;margin-top: 20px">Send Feedback</h3>
+        <form method="post">{% csrf_token %}
+        {% csrf_token %}
+        <table class="table table-borderless">
+            <tbody>
+                <tr>{{ form.user }}</tr>
+                <tr>{{ form.quiz }}</tr>
+            </tbody>
+        </table>
+        <div>
+            {{ form.feedback_text }}
+        </div>
+        <button type="submit">Submit</button>
+    {% else %}
+        {% if feedback %}
+            <div class="accordion" id="accordion1">
+            {% for text in feedback %}
+                {% if text.user.username == user.username %}
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button type="button" data-toggle="collapse"
+                                        data-target="#collapse{{ forloop.counter }}"
+                                        aria-expanded="false" aria-controls="{{ forloop.counter }}"
+                                >
+                                    {{ text.quiz.quiz_topic }}:<h2>{{ text.quiz.detail }}</h2>
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="headingOne"
+                             data-parent="#accordion1">
+                            <div class="card-body">
+                                {{ text }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <h1 style="text-align: center">No Feedback Right now</h1>
+        {% endif %}
+    {% endif %}
+    </body>
+    </html>
+{% endblock %}

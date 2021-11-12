@@ -1,0 +1,15 @@
+<div class="card">
+  {% for choice in choices %}
+    <div class="option">
+      <input type="radio" name="card" id="{{ choice.choice_text }}" value="{{ choice.correct }}">
+      <label for="{{ choice.choice_text }}">
+        <span></span>
+        {{ choice.choice_text }}
+      </label>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+
+</script>

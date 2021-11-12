@@ -1,0 +1,65 @@
+.card {
+    width: 98%;
+    margin-top: 50px;
+}
+
+[type="radio"] {
+    z-index: -1;
+    position: absolute;
+    opacity: 0;
+}
+[type="radio"]:checked ~ label {
+    border-color: #92CABB;
+    background-color: whitesmoke;
+    color: #000;
+}
+
+[type="radio"]:checked ~ label > span {
+    border: 0;
+    background-image: linear-gradient(to top right, #B5D8CF, #92CABB);
+}
+[type="radio"]:checked ~ label > span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+label {
+    position: relative;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 20px auto 100px;
+    grid-gap: 20px;
+    width: 100%;
+    height: 100px;
+    padding: 0 20px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    background-color: transparent;
+    transition: all 300ms ease-in;
+    font-size: 22px;
+    cursor: pointer;
+}
+label:hover {
+    border-color: #92CABB;
+    background-color: whitesmoke;
+}
+
+label > span {
+    position: relative;
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    border: 2px solid #B5D8CF;
+}
+
+.option:not(:last-child) {
+    margin-bottom: 4px;
+}

@@ -1,29 +1,96 @@
-{%  extends 'base.html' %}
+{% load static %}
 
-{% block content %}
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/account.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            font-family: 'Rubik', sans-serif;
+        }
+    </style>
+    <title>Register</title>
+</head>
+<body>
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <h1>Register</h1>
+            <form method="post">{% csrf_token %}
+                {% for field in registration_form %}
+                    <p>
+                        {% for error in field.errors %}
+                            <p style="color:red;">{{ error }}</p>
+                        {% endfor %}
+                    </p>
+                {% endfor %}
+                <table class="table table-borderless">
 
-<h2>Register</h2>
-<form method="post">{% csrf_token %}
-    {% for field in registration_form %}
-        <p>
-            {{ field.label_tag }}
-            {{ field }}
-            {% if field.help_text %}
-                <small style="color:gray;">{{ field.help_text }}</small>
-            {% endif %}
+                    <tbody>
+                    <tr>
 
-            {% for error in field.errors %}
-                <p style="color:red;">{{ error }}</p>
-            {% endfor %}
+                        <td>
+                            <label-tag>Email</label-tag>
+                            <br>
 
-        </small>
-        </p>
+                            {{ registration_form.email }}<br>
+                        </td>
+                        <td>
+                            <label-tag>Username</label-tag>
+                            <br>
+                            {{ registration_form.username }}<br></td>
 
-    {% endfor %}
+                    </tr>
+                    <tr>
 
-    <button type="submit">Register</button>
-</form>
+                        <td>
+                            <label-tag>First Name</label-tag>
+                            <br>
+                            {{ registration_form.first_name }}<br>
+                        </td>
+                        <td>
+                            <label-tag>Last Name</label-tag>
+                            <br>
+                            {{ registration_form.last_name }}<br></td>
 
-{% endblock content %}
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <label-tag>Password</label-tag>
+                            <br>
+                            {{ registration_form.password1 }}
+                        </td>
+                        <td>
+                            <label-tag>Confirm Password</label-tag>
+                            <br>
+                            {{ registration_form.password2 }}<br>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="role">
+                    <h2>Student</h2>
+                    <label class="switch">
+                        {{ registration_form.is_teacher }}
+                        <span class="slider round"></span>
+                    </label>
+                    <h2>Teacher</h2><br>
+                </div>
+                <button type="submit" style="background-color: #3AB1BE;color:white">Register</button>
+            </form>
+            <div id="formFooter">
+                <span>Already have an account ? 
+                    <a class="underlineHover" href="{% url 'login' %}">LOGIN HERE!</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
