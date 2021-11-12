@@ -49,3 +49,11 @@ def login_view(request):
         form = AccountAuthenticationForm()
     context['login_form'] = form
     return render(request, 'account/login.html',context)
+
+
+def profile_page(request):
+    return render(request, 'account/profile.html', { 'user': request.user })
+
+
+def profile_edit_view(request):
+    return render(request, 'account/profile_edit.html')
