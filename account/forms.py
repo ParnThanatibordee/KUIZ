@@ -21,8 +21,14 @@ class AccountAuthenticationForm(forms.ModelForm):
 
     def clean(self):
         if self.is_valid():
-
             username = self.cleaned_data['username']
             password = self.cleaned_data['password']
             if not authenticate(username=username, password=password):
                 raise forms.ValidationError("Invalid login")
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ('username','profile_pic', 'first_name', 'last_name')
+
