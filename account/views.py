@@ -58,6 +58,8 @@ def profile_page(request):
 
 
 def profile_edit_view(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     context = {}
     form = ProfileForm(request.POST, instance=request.user)
     if request.POST:
