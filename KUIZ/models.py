@@ -88,6 +88,11 @@ class Type(models.Model):
     choice_text = models.CharField(max_length=200, default="")
     correct = models.CharField(max_length=200)
 
+    def check_answer(self, answer):
+        if answer.lower() == str(self.correct).lower():
+            return True
+        return False
+
     def __str__(self):
         """Display choice_text."""
         return f"answer: {self.correct}"

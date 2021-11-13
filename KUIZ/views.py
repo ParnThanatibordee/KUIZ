@@ -98,39 +98,66 @@ def answer(request, pk, question_id):
     """Answer for choice or type."""
     quiz = Quiz.objects.get(pk=pk)
     question = get_object_or_404(Question, pk=question_id)
-    try:
-        choice_id = request.POST['choice']
-        selected_choice = question.choice_set.get(pk=choice_id)
-    except (KeyError, Choice.DoesNotExist):
-        # next iteration for collect ERROR
-        # return HttpResponse(f'ERROR {question_id}')
-        num_of_question = all_question.index(
-            Question.objects.get(pk=question_id))
+    all_choice = question.choice_set.all()
+    if len(all_choice) == 0:
+        all_choice = question.type_set.all()
+    if isinstance(all_choice[0], Choice):
         try:
-            next_question = all_question[num_of_question + 1].id
-            next_link = True
-        except:
-            next_link = False
-        if next_link:
-            return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+            choice_id = request.POST['choice']
+            selected_choice = question.choice_set.get(pk=choice_id)
+        except (KeyError, Choice.DoesNotExist):
+            # next iteration for collect ERROR
+            # return HttpResponse(f'ERROR {question_id}')
+            num_of_question = all_question.index(
+                Question.objects.get(pk=question_id))
+            try:
+                next_question = all_question[num_of_question + 1].id
+                next_link = True
+            except:
+                next_link = False
+            if next_link:
+                return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+            else:
+                return HttpResponseRedirect(reverse('result', args=(pk,)))
         else:
-            return HttpResponseRedirect(reverse('result', args=(pk,)))
+            if quiz.automate:
+                if selected_choice.correct:
+                    quiz.score += question.point
+                quiz.save()
+            num_of_question = all_question.index(
+                Question.objects.get(pk=question_id))
+            try:
+                next_question = all_question[num_of_question + 1].id
+                next_link = True
+            except:
+                next_link = False
+            if next_link:
+                return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+            else:
+                return HttpResponseRedirect(reverse('result', args=(pk,)))
+    elif isinstance(all_choice[0], Type):
+        try:
+            answer = request.POST['type']
+        except:
+            answer = ""
+        else:
+            if quiz.automate:
+                if all_choice[0].check_answer(answer):
+                    quiz.score += question.point
+                quiz.save()
+            num_of_question = all_question.index(
+                Question.objects.get(pk=question_id))
+            try:
+                next_question = all_question[num_of_question + 1].id
+                next_link = True
+            except:
+                next_link = False
+            if next_link:
+                return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+            else:
+                return HttpResponseRedirect(reverse('result', args=(pk,)))
     else:
-        if quiz.automate:
-            if selected_choice.correct:
-                quiz.score += question.point
-            quiz.save()
-        num_of_question = all_question.index(
-            Question.objects.get(pk=question_id))
-        try:
-            next_question = all_question[num_of_question + 1].id
-            next_link = True
-        except:
-            next_link = False
-        if next_link:
-            return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
-        else:
-            return HttpResponseRedirect(reverse('result', args=(pk,)))
+        return HttpResponse("ERROR")
 
 
 def result(request, pk):

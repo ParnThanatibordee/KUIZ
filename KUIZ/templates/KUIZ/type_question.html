@@ -23,12 +23,10 @@
             <form action="{% url 'answer' quiz.pk question.id %}" method="post">
             {% csrf_token %}
             <br>
-            *********************************************
             {% for choice in choices %}
             <label for="type">{{choice.choice_text}}</label>
             <input type="text" id="type" name="type"><br><br>
             {% endfor %}
-            *********************************************
             <br>
             {% if back_link %}
             <button type="button"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
