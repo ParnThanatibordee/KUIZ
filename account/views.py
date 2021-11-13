@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-
+from KUIZ.models import Attendee
 from account.forms import RegistrationForm, AccountAuthenticationForm, ProfileForm
 
 
@@ -52,9 +52,10 @@ def login_view(request):
 
 
 def profile_page(request):
+    attendee = Attendee.objects.filter(user = request.user)
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, 'account/profile.html', {'user': request.user})
+    return render(request, 'account/profile.html', {'user': request.user, 'quiz_list': list(attendee)})
 
 
 def profile_edit_view(request):

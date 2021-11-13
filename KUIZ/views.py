@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import FeedbackForm
-from KUIZ.models import Quiz, Feedback, Question
+from KUIZ.models import Quiz, Feedback, Question, Attendee
 
 
 def index(request):
@@ -30,7 +30,8 @@ def exam(request, pk):
     # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
     all_question = quiz.question_set.all()
     question1 = all_question[0]
-    return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question), 'time': quiz.exam_duration})
+    return render(request, 'KUIZ/exam.html',
+                  {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question), 'time': quiz.exam_duration})
 
 
 def question(request, pk, question_id):
@@ -55,7 +56,8 @@ def question(request, pk, question_id):
         link = 'result'
     return render(request, 'KUIZ/question.html',
                   {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1,
-                   'choices': all_choice, 'text': text, 'link': link, 'back_link': back_link, 'max_num': len(all_question), 'time': quiz.exam_duration})
+                   'choices': all_choice, 'text': text, 'link': link, 'back_link': back_link,
+                   'max_num': len(all_question), 'time': quiz.exam_duration})
 
 
 def answer(request, pk, question_id):
@@ -71,6 +73,7 @@ def result(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     all_question = list(quiz.question_set.all())
     max_score = 0  # should in model
+    Attendee.objects.create(user=user, quiz=quiz)
     if automate:
         for question in all_question:
             # must add in user

@@ -20,6 +20,9 @@
         </div>
         <button class="btn btn-info position-absolute d-flex"><a href="{% url 'profile_edit' %}"><i class="fas fa-user-cog"></i><span>Edit Profile</span></a></button>
     </div>
+    {% for attendee in quiz_list %}
+<p>{{ attendee.quiz.quiz_topic}}</p>
+{% endfor %}
 </div>
 
 {% endblock %}

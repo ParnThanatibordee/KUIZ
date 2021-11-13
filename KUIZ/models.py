@@ -16,6 +16,7 @@ TOPIC = [
     ('others', 'Others')
 ]
 
+
 class Quiz(models.Model):
     """Quiz model."""
 
@@ -89,3 +90,8 @@ class Feedback(models.Model):
     def __str__(self):
         """Display feedback_text"""
         return self.feedback_text
+
+
+class Attendee(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
