@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
 
-from KUIZ.models import Quiz, Question, Choice, Feedback
+from KUIZ.models import Quiz, Question, Choice, Type, Feedback
 from .forms import FeedbackForm
 
 
@@ -57,10 +57,15 @@ def question(request, pk, question_id):
         num_of_question = all_question.index(
             Question.objects.get(pk=question_id))
         this_question = all_question[num_of_question]
+        type_or_not = False
         all_choice = this_question.choice_set.all()
-        choices = {}
-        for i in range(len(all_choice)):
-            choices[chr(i + 65)] = all_choice[i]
+        if len(all_choice) == 0:
+            all_choice = this_question.type_set.all()
+            type_or_not = True
+        else:
+            choices = {}
+            for i in range(len(all_choice)):
+                choices[chr(i + 65)] = all_choice[i]
         back_question = ""
         next_question = ""
         back_link = False
@@ -72,11 +77,18 @@ def question(request, pk, question_id):
             next_link = True
         except:
             next_link = False
-        return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
-                                                      'num': num_of_question + 1, 'max_num': len(all_question),
-                                                      'choices': choices, 'next_link': next_link,
-                                                      'next_question': next_question, 'back_link': back_link,
-                                                      'back_question': back_question, 'time': quiz.exam_duration})
+        if type_or_not:
+            return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
+                                                                'num': num_of_question + 1, 'max_num': len(all_question),
+                                                                'choices': all_choice, 'next_link': next_link,
+                                                                'next_question': next_question, 'back_link': back_link,
+                                                                'back_question': back_question, 'time': quiz.exam_duration})
+        else:
+            return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
+                                                          'num': num_of_question + 1, 'max_num': len(all_question),
+                                                          'choices': choices, 'next_link': next_link,
+                                                          'next_question': next_question, 'back_link': back_link,
+                                                          'back_question': back_question, 'time': quiz.exam_duration})
     else:
         error_message = "quiz is not allow to at this time."
         return HttpResponse(error_message)
