@@ -28,6 +28,11 @@ class AccountAuthenticationForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+    username = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Please enter the new username'}))
+    first_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Please enter the new first name'}))
+    last_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Please enter the new last name'}))
+    profile_pic = forms.ImageField(label=('Profile Picture'), required=False, error_messages = {'invalid':("Image files only")}, widget=forms.FileInput)
+
     class Meta:
         model = Account
         fields = ('username','profile_pic', 'first_name', 'last_name')

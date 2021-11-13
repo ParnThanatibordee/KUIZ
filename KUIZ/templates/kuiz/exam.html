@@ -28,6 +28,9 @@
                     <p>{{quiz.detail}}</p>
                     <span>This quiz contains {{ num_of_question }} questions with {{ time }} minutes.</span>
                     <a href="{%url 'question' quiz.id q1.id %}" class="btn" onclick="setTimerStorage()">Start quiz</a>
+                    {% if user == quiz.user %}
+                        <a href="{% url 'edit_quiz' quiz.id %}" class="btn btn-primary">Edit quiz</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

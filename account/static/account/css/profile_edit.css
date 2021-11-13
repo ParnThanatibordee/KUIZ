@@ -1,0 +1,15 @@
+h2 {
+    letter-spacing: 3px;
+    margin: 50px 0;
+}
+
+label {
+    margin: 20px 0 5px;
+}
+
+button {
+    margin-top: 40px;
+    background-color: teal !important;
+    border-color: teal;
+    color: white !important;
+}

@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
-from .forms import FeedbackForm
-from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type,
+from .forms import FeedbackForm, NewQuizForm
+from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     """Index homepage."""
@@ -192,3 +193,48 @@ def get_feedback(request):
     else:
         form = FeedbackForm()
     return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
+
+
+@login_required(login_url='/login')
+def new_quiz(request):
+    """Create a new quiz by teacher."""
+    if request.method == "POST":
+        quiz_form = NewQuizForm(request.POST)
+        if quiz_form.is_valid():
+            quiz_title  = quiz_form.cleaned_data['quiz_topic']
+            try:
+                quiz = quiz_form.save()
+            except:
+                return redirect('detail')
+            quiz.user = request.user
+            quiz.save()
+            return redirect('detail')
+    else:
+        quiz_form = NewQuizForm()
+    return render(request, "KUIZ/new_quiz.html", {"quiz_form": quiz_form})
+
+
+@login_required(login_url='/login')
+def edit_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    if quiz.user == request.user:
+        quiz_form = NewQuizForm(initial={
+            'quiz_topic': quiz.quiz_topic,
+            'detail': quiz.detail,
+            'topic': quiz.topic,
+            'exam_duration': quiz.exam_duration,
+            'score': quiz.score
+        })
+        if request.method == "POST":
+            quiz_form = NewQuizForm(request.POST, instance=quiz)
+            if quiz_form.is_valid():
+                try:
+                    quiz = quiz_form.save()
+                except:
+                    return redirect('detail')
+                quiz.save()
+                return redirect('detail')
+    else:
+        return redirect('detail')
+    return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
+
