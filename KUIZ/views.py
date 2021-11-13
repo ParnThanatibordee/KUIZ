@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import FeedbackForm
+from .forms import FeedbackForm, NewQuizForm
 from KUIZ.models import Quiz, Feedback, Question
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def index(request):
@@ -93,3 +95,22 @@ def get_feedback(request):
     else:
         form = FeedbackForm()
     return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
+
+
+@login_required(login_url='/login')
+def new_quiz(request):
+    """Create a new quiz by teacher."""
+    if request.method == "POST":
+        quiz_form = NewQuizForm(request.POST)
+        if quiz_form.is_valid():
+            quiz_title  = quiz_form.cleaned_data['quiz_topic']
+            try:
+                quiz = quiz_form.save()
+            except:
+                return redirect('detail')
+            quiz.user = request.user
+            quiz.save()
+            return redirect('detail')
+    else:
+        quiz_form = NewQuizForm()
+    return render(request, "KUIZ/new_quiz.html", {"quiz_form": quiz_form})
