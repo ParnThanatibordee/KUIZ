@@ -1,0 +1,28 @@
+{% extends 'KUIZ/main.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'account/css/profile.css' %}">
+{% endblock css %}
+{% block title %}{% endblock %}
+{% block nav %}
+    {% include 'components/navbar.html' %}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="jumbotron align-items-center justify-content-center position-relative show-data">
+        <img src="{{ user.profile_pic.url }}" alt="profile picture">
+        <div class="d-flex flex-column">
+            <h1>{{ user.first_name}} {{ user.last_name }}</h1>
+            <span class="d-flex"><i class="fas fa-user-circle"></i>{{ user.username }}</span>
+            <span class="d-flex"><i class="far fa-envelope"></i>{{ user.email }}</span>
+        </div>
+        <button class="btn btn-info position-absolute d-flex"><a href="{% url 'profile_edit' %}"><i class="fas fa-user-cog"></i><span>Edit Profile</span></a></button>
+    </div>
+    {% for attendee in quiz_list %}
+<p>{{ attendee.quiz.quiz_topic}}</p>
+{% endfor %}
+</div>
+
+{% endblock %}

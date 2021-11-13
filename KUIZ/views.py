@@ -2,10 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
-
-from KUIZ.models import Quiz, Question, Choice, Type, Feedback
 from .forms import FeedbackForm
-
+from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type,
 
 def index(request):
     """Index homepage."""
@@ -30,6 +28,7 @@ def detail_by_topic(request, topic):
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
+
     if quiz.can_vote():
         quiz.score[request.user] = 0  # for test the real web app should record per user
         quiz.save()  # for test
@@ -53,6 +52,7 @@ def question(request, pk, question_id):
     """Question view."""
     # เพิ่มปุ่ม clear choice กับ mark
     quiz = Quiz.objects.get(pk=pk)
+
     if quiz.can_vote():
         num_of_question = all_question.index(
             Question.objects.get(pk=question_id))
@@ -168,6 +168,7 @@ def result(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     score = quiz.score[request.user]
     max_score = 0  # should in model
+    Attendee.objects.create(user=user, quiz=quiz)
     if automate:
         for question in all_question:
             # must add in user

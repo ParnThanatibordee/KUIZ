@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.shortcuts import redirect
@@ -20,7 +22,7 @@ from KUIZ.views import (
     index, home, get_feedback
 )
 from account.views import (
-    registration_view, logout_view, login_view,
+    registration_view, logout_view, login_view, profile_page, profile_edit_view
 )
 
 urlpatterns = [
@@ -30,5 +32,7 @@ urlpatterns = [
     path('register/', registration_view, name='register'),
     path('logout/', logout_view, name='logout'),
     path('login/', login_view, name='login'),
-    path('feedback/', get_feedback, name='feedback')
-]
+    path('profile/', profile_page, name='profile'),
+    path('profile/edit/', profile_edit_view, name='profile_edit'),
+    path('feedback/', get_feedback, name='feedback'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
