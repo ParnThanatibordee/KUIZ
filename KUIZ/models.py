@@ -26,12 +26,15 @@ class Quiz(models.Model):
     """Quiz model."""
 
     quiz_topic = models.CharField(max_length=200)
+    # owner
+    private = models.BooleanField(default=False)
+    password = models.CharField(max_length=200, default="0000")
     detail = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published', default=timezone.now)
     end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=1))
     topic = models.CharField(max_length=20, choices=TOPIC, default='others')
     exam_duration = models.IntegerField(default=0)
-    score = models.IntegerField(default=0)
+    score = {}
     random_order = models.BooleanField(choices=YES_OR_NO, default='No')
     automate = models.BooleanField(choices=YES_OR_NO, default='Yes')
 

@@ -31,7 +31,7 @@ def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
     if quiz.can_vote():
-        quiz.score = 0  # for test the real web app should record per user
+        quiz.score[request.user] = 0  # for test the real web app should record per user
         quiz.save()  # for test
         # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
         global all_question
@@ -122,7 +122,7 @@ def answer(request, pk, question_id):
         else:
             if quiz.automate:
                 if selected_choice.correct:
-                    quiz.score += question.point
+                    quiz.score[request.user] += question.point
                 quiz.save()
             num_of_question = all_question.index(
                 Question.objects.get(pk=question_id))
@@ -143,7 +143,7 @@ def answer(request, pk, question_id):
         else:
             if quiz.automate:
                 if all_choice[0].check_answer(answer):
-                    quiz.score += question.point
+                    quiz.score[request.user] += question.point
                 quiz.save()
             num_of_question = all_question.index(
                 Question.objects.get(pk=question_id))
@@ -166,6 +166,7 @@ def result(request, pk):
     automate = True  # for test
     user = request.user  # เก็บ quiz score ไว้เป็น dict {user:score}
     quiz = Quiz.objects.get(pk=pk)
+    score = quiz.score[request.user]
     max_score = 0  # should in model
     if automate:
         for question in all_question:
@@ -173,10 +174,11 @@ def result(request, pk):
             # if user.selected_choice.correct:
             #     quiz.score += question.point
             max_score += question.point
-        return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
+        return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': score, 'max': max_score})
     else:
         #  will implement later
-        return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
+        # return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': score, 'max': max_score})
+        return HttpResponse("Wait Teacher to check your quiz.")
 
 
 def get_feedback(request):
