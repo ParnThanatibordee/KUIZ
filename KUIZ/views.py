@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import FeedbackForm
 from KUIZ.models import Quiz, Feedback, Question
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -24,15 +25,18 @@ def detail_by_topic(request, topic):
     return render(request, 'KUIZ/detail_by_topic.html', {'quiz_in_topic': quiz_in_topic, 'topic': topic.title()})
 
 
+@login_required(login_url='/login/')
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
     # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
     all_question = quiz.question_set.all()
     question1 = all_question[0]
-    return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question), 'time': quiz.exam_duration})
+    return render(request, 'KUIZ/exam.html',
+                  {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question), 'time': quiz.exam_duration})
 
 
+@login_required(login_url='login')
 def question(request, pk, question_id):
     """Question view."""
     quiz = Quiz.objects.get(pk=pk)
@@ -55,7 +59,8 @@ def question(request, pk, question_id):
         link = 'result'
     return render(request, 'KUIZ/question.html',
                   {'quiz': quiz, 'question': this_question, 'next_question': next_question, 'num': num_of_question + 1,
-                   'choices': all_choice, 'text': text, 'link': link, 'back_link': back_link, 'max_num': len(all_question), 'time': quiz.exam_duration})
+                   'choices': all_choice, 'text': text, 'link': link, 'back_link': back_link,
+                   'max_num': len(all_question), 'time': quiz.exam_duration})
 
 
 def answer(request, pk, question_id):
@@ -63,6 +68,7 @@ def answer(request, pk, question_id):
     pass
 
 
+@login_required(login_url='/login/')
 def result(request, pk):
     """Report of score of user."""
     # automate or hand-check
@@ -83,6 +89,7 @@ def result(request, pk):
         return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': quiz.score, 'max': max_score})
 
 
+@login_required(login_url='/login/')
 def get_feedback(request):
     feedback = Feedback.objects.all()
     if request.method == "POST":
