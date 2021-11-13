@@ -13,20 +13,32 @@ TOPIC = [
     ('astronomy', 'Astronomy'),
     ('social', 'Social'),
     ('sport', 'Sport'),
-    ('others', 'Others')
+    ('others', 'Others'),
 ]
+
+
+YES_OR_NO = [
+    (True, 'Yes'),
+    (False, 'No'),
+]
+
 
 
 class Quiz(models.Model):
     """Quiz model."""
 
     quiz_topic = models.CharField(max_length=200)
+    # owner
+    private = models.BooleanField(default=False)
+    password = models.CharField(max_length=200, default="0000")
     detail = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published', default=timezone.now)
     end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=1))
     topic = models.CharField(max_length=20, choices=TOPIC, default='others')
     exam_duration = models.IntegerField(default=0)
-    score = models.IntegerField(default=0)
+    score = {}
+    random_order = models.BooleanField(choices=YES_OR_NO, default='No')
+    automate = models.BooleanField(choices=YES_OR_NO, default='Yes')
 
     def was_published_recently(self):
         """Check that the question was published recently."""
@@ -74,6 +86,23 @@ class Choice(models.Model):
         return self.choice_text
 
 
+class Type(models.Model):
+    """Choice model."""
+
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200, default="")
+    correct = models.CharField(max_length=200)
+
+    def check_answer(self, answer):
+        if answer.lower() == str(self.correct).lower():
+            return True
+        return False
+
+    def __str__(self):
+        """Display choice_text."""
+        return f"answer: {self.correct}"
+
+
 class Feedback(models.Model):
     """Feedback model."""
 
@@ -95,3 +124,4 @@ class Feedback(models.Model):
 class Attendee(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+
