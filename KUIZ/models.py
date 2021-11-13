@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from account.models import Account
 import datetime
+from django.conf import settings
 
 TOPIC = [
     ('', '----------'),
@@ -18,14 +19,17 @@ TOPIC = [
 
 class Quiz(models.Model):
     """Quiz model."""
-
     quiz_topic = models.CharField(max_length=200)
     detail = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published', default=timezone.now)
-    end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=1))
+    end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=365))
     topic = models.CharField(max_length=20, choices=TOPIC, default='others')
     exam_duration = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                            null=True,
+                            blank=True,
+                            on_delete=models.CASCADE)
 
     def was_published_recently(self):
         """Check that the question was published recently."""
