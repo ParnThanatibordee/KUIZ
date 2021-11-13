@@ -114,3 +114,29 @@ def new_quiz(request):
     else:
         quiz_form = NewQuizForm()
     return render(request, "KUIZ/new_quiz.html", {"quiz_form": quiz_form})
+
+
+@login_required(login_url='/login')
+def edit_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    if quiz.user == request.user:
+        quiz_form = NewQuizForm(initial={
+            'quiz_topic': quiz.quiz_topic,
+            'detail': quiz.detail,
+            'topic': quiz.topic,
+            'exam_duration': quiz.exam_duration,
+            'score': quiz.score
+        })
+        if request.method == "POST":
+            quiz_form = NewQuizForm(request.POST, instance=quiz)
+            if quiz_form.is_valid():
+                try:
+                    quiz = quiz_form.save()
+                except:
+                    return redirect('detail')
+                quiz.save()
+                return redirect('detail')
+    else:
+        return redirect('detail')
+    return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
+
