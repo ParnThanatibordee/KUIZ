@@ -81,6 +81,18 @@ class Choice(models.Model):
         return self.choice_text
 
 
+class Type(models.Model):
+    """Choice model."""
+
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200, default="")
+    correct = models.BooleanField(default=False)
+
+    def __str__(self):
+        """Display choice_text."""
+        return f"answer: {self.correct}"
+
+
 class Feedback(models.Model):
     """Feedback model."""
 
