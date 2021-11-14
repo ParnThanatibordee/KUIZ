@@ -101,6 +101,10 @@ class Type(models.Model):
         return f"answer: {self.correct}"
 
 
+class Answer(models.Model):
+    pass
+
+
 class Feedback(models.Model):
     """Feedback model."""
 
@@ -117,4 +121,3 @@ class Feedback(models.Model):
     def __str__(self):
         """Display feedback_text"""
         return self.feedback_text
-

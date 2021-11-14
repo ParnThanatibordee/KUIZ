@@ -31,7 +31,7 @@ def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
     if quiz.can_vote():
-        quiz.score[request.user] = 0  # for test the real web app should record per user
+        quiz.score[f"{request.user}:{quiz.id}"] = 0  # for test the real web app should record per user
         quiz.save()  # for test
         # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
         global all_question
@@ -101,74 +101,76 @@ def answer(request, pk, question_id):
     all_choice = question.choice_set.all()
     if len(all_choice) == 0:
         all_choice = question.type_set.all()
-    if isinstance(all_choice[0], Choice):
-        try:
-            choice_id = request.POST['choice']
-            selected_choice = question.choice_set.get(pk=choice_id)
-        except (KeyError, Choice.DoesNotExist):
-            # next iteration for collect ERROR
-            # return HttpResponse(f'ERROR {question_id}')
-            num_of_question = all_question.index(
-                Question.objects.get(pk=question_id))
+    try:
+        if isinstance(all_choice[0], Choice):
             try:
-                next_question = all_question[num_of_question + 1].id
-                next_link = True
-            except:
-                next_link = False
-            if next_link:
-                return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+                choice_id = request.POST['choice']
+                selected_choice = question.choice_set.get(pk=choice_id)
+            except (KeyError, Choice.DoesNotExist):
+                # next iteration for collect ERROR
+                # return HttpResponse(f'ERROR {question_id}')
+                num_of_question = all_question.index(
+                    Question.objects.get(pk=question_id))
+                try:
+                    next_question = all_question[num_of_question + 1].id
+                    next_link = True
+                except:
+                    next_link = False
+                if next_link:
+                    return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+                else:
+                    return HttpResponseRedirect(reverse('result', args=(pk,)))
             else:
-                return HttpResponseRedirect(reverse('result', args=(pk,)))
+                if quiz.automate:
+                    if selected_choice.correct:
+                        quiz.score[f"{request.user}:{quiz.id}"] += question.point
+                    quiz.save()
+                num_of_question = all_question.index(
+                    Question.objects.get(pk=question_id))
+                try:
+                    next_question = all_question[num_of_question + 1].id
+                    next_link = True
+                except:
+                    next_link = False
+                if next_link:
+                    return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+                else:
+                    return HttpResponseRedirect(reverse('result', args=(pk,)))
+        elif isinstance(all_choice[0], Type):
+            try:
+                answer = request.POST['type']
+            except:
+                answer = ""
+            else:
+                if quiz.automate:
+                    if all_choice[0].check_answer(answer):
+                        quiz.score[f"{request.user}:{quiz.id}"] += question.point
+                    quiz.save()
+                num_of_question = all_question.index(
+                    Question.objects.get(pk=question_id))
+                try:
+                    next_question = all_question[num_of_question + 1].id
+                    next_link = True
+                except:
+                    next_link = False
+                if next_link:
+                    return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+                else:
+                    return HttpResponseRedirect(reverse('result', args=(pk,)))
         else:
-            if quiz.automate:
-                if selected_choice.correct:
-                    quiz.score[request.user] += question.point
-                quiz.save()
-            num_of_question = all_question.index(
-                Question.objects.get(pk=question_id))
-            try:
-                next_question = all_question[num_of_question + 1].id
-                next_link = True
-            except:
-                next_link = False
-            if next_link:
-                return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
-            else:
-                return HttpResponseRedirect(reverse('result', args=(pk,)))
-    elif isinstance(all_choice[0], Type):
-        try:
-            answer = request.POST['type']
-        except:
-            answer = ""
-        else:
-            if quiz.automate:
-                if all_choice[0].check_answer(answer):
-                    quiz.score[request.user] += question.point
-                quiz.save()
-            num_of_question = all_question.index(
-                Question.objects.get(pk=question_id))
-            try:
-                next_question = all_question[num_of_question + 1].id
-                next_link = True
-            except:
-                next_link = False
-            if next_link:
-                return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
-            else:
-                return HttpResponseRedirect(reverse('result', args=(pk,)))
-    else:
-        return HttpResponse("ERROR")
+            return HttpResponse("ERROR")
+    except:
+        return HttpResponse("no choice")
 
 
 def result(request, pk):
     """Report of score of user."""
     # automate or hand-check
-    automate = True  # for test
     user = request.user  # เก็บ quiz score ไว้เป็น dict {user:score}
     quiz = Quiz.objects.get(pk=pk)
-    score = quiz.score[request.user]
+    score = quiz.score[f"{request.user}:{quiz.id}"]
     max_score = 0  # should in model
-    if automate:
+    if quiz.automate:
         for question in all_question:
             # must add in user
             # if user.selected_choice.correct:
