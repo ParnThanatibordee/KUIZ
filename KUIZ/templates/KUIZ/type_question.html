@@ -5,6 +5,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/left_sidebar.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/right_sidebar.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/question.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/type_question.css' %}">
 {% endblock css %}
 {% block title %}
 <title>KUIZ</title>
@@ -24,21 +25,19 @@
             <br>
             {% for choice in choices %}
             {% if choice.question == lastest_answer_in_question.question %}
-            <label for="type">{{choice.choice_text}}</label>
             <input type="text" id="type" name="type" value="{{lastest_answer_in_question.answer}}"><br><br>
             {% else %}
-            <label for="type">{{choice.choice_text}}</label>
-            <input type="text" id="type" name="type"><br><br>
+            <input type="text" id="type" name="type" class="answer_input"><br><br>
             {% endif %}
             {% endfor %}
             <br>
             {% if back_link %}
-            <button type="button"><a href="{%url 'question' quiz.id back_question.id%}" class="back-btn">Back</a></button>
+            <button type="button" class="back-btn"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
             {% endif %}
             {% if next_link %}
             <input type="submit" value="Next" class="next-btn">
             {% else %}
-            <input type="submit" value="Submit" class="next-btn">
+            <input type="submit" value="Submit" class="next-btn submit-btn">
             {% endif %}
             </form>
         </div>
