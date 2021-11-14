@@ -60,11 +60,15 @@ def profile_page(request):
 
 def profile_edit_view(request):
     context = {}
-    form = ProfileForm(request.POST, instance=request.user)
+    profile_form = ProfileForm(initial={
+        'username': request.user.username,
+        'first_name': request.user.first_name,
+        'last_name': request.user.last_name,
+    })
     if request.POST:
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            context['success_message'] = 'Profile Updated'
-    context['profile_form'] = form
-    return render(request, 'account/profile_edit.html', context)
+            return redirect("profile")
+    context['profile_form'] = profile_form
+    return render(request, 'account/profile_edit.html', {'profile_form': profile_form, 'user': request.user})
