@@ -1,36 +1,31 @@
 {% extends 'KUIZ/main.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/exam.css' %}">
+{% endblock css %}
+{% block title %}
+    <title>KUIZ | Feedback</title>
+{% endblock %}
 {% block content %}
-<style>
-    .exam {
-        width: 100vw;
-        height: 100vh;
-        background-color: #B6D8CF;
-        overflow: hidden;
-    }
-
-    .btn {
-        background-color: transparent;
-        border: 2px solid #B6D8CF;
-    }
-
-    .btn:hover {
-        background-color: #90bdb1;
-        color: white;
-        border: 2px solid #90bdb1;
-    }
-</style>
 <div class="exam">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center position-relative">
         <div class="col-12 col-md-8">
             <div class="card mt-5 p-3" style="background-color: #f7f7f7;">
                 <div class="card-body d-flex flex-column">
-                    <h1>KUIZ : {{quiz.quiz_topic}}</h1>
-                    <p>{{quiz.detail}}</p>
-                    <span>This quiz contains {{ num_of_question }} questions with {{ time }} minutes.</span>
-                    <a href="{%url 'question' quiz.id q1.id %}" class="btn" onclick="setTimerStorage()">Start quiz</a>
-                    {% if user == quiz.user %}
-                        <a href="{% url 'edit_quiz' quiz.id %}" class="btn edit-btn">Edit quiz</a>
+                    <div class="d-flex w-100 justify-content-between">
+                        <h1>KUIZ : {{quiz.quiz_topic}}</h1>
+                        {% if user == quiz.user %}
+                            <a href="{% url 'edit_quiz' quiz.id %}" class="btn btn-secondary edit-btn">Edit quiz</a>
+                        {% endif %}
+                    </div>
+                    <h5>{{quiz.detail}}</h5>
+                    <p>This quiz contains {{ num_of_question }} questions with {{ time }} minutes.</span>
+                    {% if user %}
+                        <p>Created by {{ quiz.user.username }}</p>
+                    {% else %}
+                        <p>Created by Admin</p>
                     {% endif %}
+                    <a href="{%url 'question' quiz.id q1.id %}" class="btn start-btn" onclick="setTimerStorage()">Start quiz</a>
                 </div>
             </div>
         </div>
