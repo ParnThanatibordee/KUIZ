@@ -60,7 +60,11 @@ def profile_page(request):
 
 def profile_edit_view(request):
     context = {}
-    profile_form = ProfileForm(request.POST, instance=request.user)
+    profile_form = ProfileForm(initial={
+        'username': request.user.username,
+        'first_name': request.user.first_name,
+        'last_name': request.user.last_name,
+    })
     if request.POST:
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
