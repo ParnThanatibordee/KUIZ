@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/card_quiz.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
 {% endblock css %}
-{% block title %}<title>Quiz | All Quizzes</title>{% endblock %}
+{% block title %}<title>Kuiz | New Quiz</title>{% endblock %}
 {% block nav %}
     {% include 'components/navbar.html' %}
 {% endblock %}
@@ -24,14 +24,17 @@
               {{ quiz_form.as_p }}
               <div class="d-flex">
                 <a
-                  class="btn btn-danger mr-2"
+                  class="btn btn-danger"
                   href="{% url 'detail' %}"
+                  style="margin: 0"
                   >
                   Back
                 </a>
                 <button
                   class="btn btn-success"
-                  type="submit">
+                  type="submit"
+                  style="margin-left: 15px;"
+                >
                   Create
                 </button>
               </div>
