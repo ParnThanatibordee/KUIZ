@@ -69,6 +69,7 @@ class Question(models.Model):
 
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=200)
+    correct = models.CharField(max_length=200)
     point = models.IntegerField(default=1)
 
     def __str__(self):
@@ -81,7 +82,6 @@ class Choice(models.Model):
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
-    correct = models.BooleanField(default=False)
 
     def __str__(self):
         """Display choice_text."""
@@ -95,18 +95,35 @@ class Type(models.Model):
     choice_text = models.CharField(max_length=200, default="")
     correct = models.CharField(max_length=200)
 
-    def check_answer(self, answer):
-        if answer.lower() == str(self.correct).lower():
-            return True
-        return False
-
     def __str__(self):
         """Display choice_text."""
         return f"answer: {self.correct}"
 
 
+class Score(models.Model):
+    """Score model."""
+
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    score = models.IntegerField(default=0)
+
+
 class Answer(models.Model):
-    pass
+    """Answer model."""
+
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer = models.CharField(max_length=200)
+
+    def check_answer(self, correct):
+        if correct.lower() == str(self.answer).lower():
+            return True
+        return False
+
+    def __str__(self):
+        """Display answer"""
+        return self.answer
 
 
 class Feedback(models.Model):

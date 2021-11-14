@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
 from .forms import FeedbackForm, NewQuizForm
-from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type
+from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
 from django.contrib.auth.decorators import login_required
 
 def index(request):
@@ -31,8 +31,6 @@ def exam(request, pk):
     quiz = Quiz.objects.get(pk=pk)
 
     if quiz.can_vote():
-        quiz.score[f"{request.user}:{quiz.id}"] = 0  # for test the real web app should record per user
-        quiz.save()  # for test
         # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
         global all_question
         all_question = list(quiz.question_set.all())
@@ -122,10 +120,11 @@ def answer(request, pk, question_id):
                 else:
                     return HttpResponseRedirect(reverse('result', args=(pk,)))
             else:
-                if quiz.automate:
-                    if selected_choice.correct:
-                        quiz.score[f"{request.user}:{quiz.id}"] += question.point
-                    quiz.save()
+                all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz, question=question)
+                if len(all_answer_in_quiz) > 0:
+                    for i in all_answer_in_quiz:
+                        i.delete()
+                Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=selected_choice.choice_text)
                 num_of_question = all_question.index(
                     Question.objects.get(pk=question_id))
                 try:
@@ -143,10 +142,11 @@ def answer(request, pk, question_id):
             except:
                 answer = ""
             else:
-                if quiz.automate:
-                    if all_choice[0].check_answer(answer):
-                        quiz.score[f"{request.user}:{quiz.id}"] += question.point
-                    quiz.save()
+                all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz, question=question)
+                if len(all_answer_in_quiz) > 0:
+                    for i in all_answer_in_quiz:
+                        i.delete()
+                Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=answer)
                 num_of_question = all_question.index(
                     Question.objects.get(pk=question_id))
                 try:
@@ -169,15 +169,17 @@ def result(request, pk):
     # automate or hand-check
     user = request.user  # เก็บ quiz score ไว้เป็น dict {user:score}
     quiz = Quiz.objects.get(pk=pk)
-    score = quiz.score[f"{request.user}:{quiz.id}"]
+    score = 0
     max_score = 0  # should in model
+    all_answer_in_quiz = Answer.objects.filter(user=user, quiz=quiz)
     Attendee.objects.create(user=user, quiz=quiz)
     if quiz.automate:
+        for answer in all_answer_in_quiz:
+            if answer.check_answer(answer.question.correct):
+                score += answer.question.point
         for question in all_question:
-            # must add in user
-            # if user.selected_choice.correct:
-            #     quiz.score += question.point
             max_score += question.point
+        Score.objects.create(user=user, quiz=quiz, score=score)
         return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': score, 'max': max_score})
     else:
         #  will implement later
@@ -225,7 +227,6 @@ def edit_quiz(request, pk):
             'detail': quiz.detail,
             'topic': quiz.topic,
             'exam_duration': quiz.exam_duration,
-            'score': quiz.score
         })
         if request.method == "POST":
             quiz_form = NewQuizForm(request.POST, instance=quiz)
