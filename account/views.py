@@ -69,7 +69,7 @@ def profile_page(request):
 
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, 'account/profile.html', {'score': lastest_dict})
+    return render(request, 'account/profile.html', {'score': lastest_dict, 'length_score': len(lastest_dict)})
 
 
 def profile_edit_view(request):
