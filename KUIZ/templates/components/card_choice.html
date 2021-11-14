@@ -1,14 +1,23 @@
-<div class="card">
-  {% for choice in choices %}
+<form action="{% url 'answer' quiz.pk question.id %}" method="post">
+{% csrf_token %}
+  {% for index, choice in choices.items %}
     <div class="option">
-      <input type="radio" name="card" id="{{ choice.choice_text }}" value="{{ choice.correct }}">
+      <input type="radio" name="choice" id="{{ choice.choice_text }}" value="{{ choice.id }}">
       <label for="{{ choice.choice_text }}">
         <span></span>
         {{ choice.choice_text }}
       </label>
     </div>
   {% endfor %}
-</div>
+{% if back_link %}
+<button type="button"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
+  {% endif %}
+  {% if next_link %}
+  <input type="submit" value="Next">
+  {% else %}
+  <input type="submit" value="Submit">
+  {% endif %}
+</form>
 
 <script>
 

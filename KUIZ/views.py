@@ -179,7 +179,7 @@ def result(request, pk):
                 score += answer.question.point
         for question in all_question:
             max_score += question.point
-        Score.objects.create(user=user, quiz=quiz, score=score)
+        Score.objects.create(user=user, quiz=quiz, score=score, max_score=max_score)
         return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': score, 'max': max_score})
     else:
         #  will implement later
