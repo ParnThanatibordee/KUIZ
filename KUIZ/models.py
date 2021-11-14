@@ -34,8 +34,8 @@ class Quiz(models.Model):
     end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=365))
     topic = models.CharField(max_length=20, choices=TOPIC, default='others')
     exam_duration = models.IntegerField(default=0)
-    random_order = models.BooleanField(choices=YES_OR_NO, default='No')
-    automate = models.BooleanField(choices=YES_OR_NO, default='Yes')
+    random_order = models.BooleanField(choices=YES_OR_NO, default=False)
+    automate = models.BooleanField(choices=YES_OR_NO, default=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                             null=True,
                             blank=True,
