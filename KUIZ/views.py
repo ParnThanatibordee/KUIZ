@@ -34,6 +34,10 @@ def exam(request, pk):
         # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
         global all_question
         all_question = list(quiz.question_set.all())
+        all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz)
+        if len(all_answer_in_quiz) > 0:
+            for i in all_answer_in_quiz:
+                i.delete()
         if quiz.random_order:
             random.shuffle(all_question)
         try:
