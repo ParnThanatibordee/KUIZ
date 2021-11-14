@@ -1,0 +1,38 @@
+.answer_input {
+  width: 98%;
+  font-size: 1.2rem;
+}
+
+form {
+  position: relative;
+}
+
+.next-btn {
+  position: absolute;
+  width: 150px;
+  height: 45px;
+  right: 2%;
+  bottom: -70px;
+  border: none;
+  background-color: #2890A3;
+  border-radius: 5px;
+  color: white;
+  font-size: 1.3rem;
+}
+
+.back-btn {
+  position: absolute;
+  width: 150px;
+  height: 45px;
+  left: 0;
+  bottom: -70px;
+  border: none;
+  background-color: #2890A3;
+  border-radius: 5px;
+}
+
+.back-btn a {
+  color: white;
+  font-size: 1.3rem;
+  text-decoration: none;
+}
