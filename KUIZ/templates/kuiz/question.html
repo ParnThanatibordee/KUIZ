@@ -15,11 +15,12 @@
     {% endblock %} 
     {% block content %}
     <div class="content d-flex flex-column">
-        <div>
+        <div class="header">
             <h1>Question: {{ num }} / {{ max_num }}</h1>
         </div>
-        <div>
+        <div class="body">
             <h1>{{question.question_text}}</h1>
+
             <!-- {% include 'components/card_choice.html' %} -->
             <form action="{% url 'answer' quiz.pk question.id %}" method="post">
             {% csrf_token %}
@@ -39,6 +40,7 @@
             {% endif %}
             </form>
             <!-- {% if back_link %}
+
                 <button type="button" class="btn back-btn">
                     <a href="{%url 'question' quiz.id back_question.id %}"><i class="fas fa-long-arrow-alt-left"></i>Previous</a>
                 </button>

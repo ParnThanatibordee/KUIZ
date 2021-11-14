@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from account.models import Account
 import datetime
+from django.conf import settings
 
 TOPIC = [
     ('', '----------'),
@@ -24,19 +25,22 @@ YES_OR_NO = [
 
 class Quiz(models.Model):
     """Quiz model."""
-
     quiz_topic = models.CharField(max_length=200)
     # owner
     private = models.BooleanField(default=False)
     password = models.CharField(max_length=200, default="0000")
     detail = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published', default=timezone.now)
-    end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=1))
+    end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=365))
     topic = models.CharField(max_length=20, choices=TOPIC, default='others')
     exam_duration = models.IntegerField(default=0)
-    score = {}
     random_order = models.BooleanField(choices=YES_OR_NO, default='No')
     automate = models.BooleanField(choices=YES_OR_NO, default='Yes')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                            null=True,
+                            blank=True,
+                            on_delete=models.CASCADE)
+
 
     def was_published_recently(self):
         """Check that the question was published recently."""
@@ -121,3 +125,8 @@ class Feedback(models.Model):
     def __str__(self):
         """Display feedback_text"""
         return self.feedback_text
+
+
+class Attendee(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)

@@ -2,10 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
-
-from KUIZ.models import Quiz, Question, Choice, Type, Feedback
-from .forms import FeedbackForm
-
+from .forms import FeedbackForm, NewQuizForm
+from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     """Index homepage."""
@@ -30,6 +29,7 @@ def detail_by_topic(request, topic):
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
+
     if quiz.can_vote():
         quiz.score[f"{request.user}:{quiz.id}"] = 0  # for test the real web app should record per user
         quiz.save()  # for test
@@ -53,6 +53,7 @@ def question(request, pk, question_id):
     """Question view."""
     # เพิ่มปุ่ม clear choice กับ mark
     quiz = Quiz.objects.get(pk=pk)
+
     if quiz.can_vote():
         num_of_question = all_question.index(
             Question.objects.get(pk=question_id))
@@ -170,6 +171,7 @@ def result(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     score = quiz.score[f"{request.user}:{quiz.id}"]
     max_score = 0  # should in model
+    Attendee.objects.create(user=user, quiz=quiz)
     if quiz.automate:
         for question in all_question:
             # must add in user
@@ -193,3 +195,48 @@ def get_feedback(request):
     else:
         form = FeedbackForm()
     return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
+
+
+@login_required(login_url='/login')
+def new_quiz(request):
+    """Create a new quiz by teacher."""
+    if request.method == "POST":
+        quiz_form = NewQuizForm(request.POST)
+        if quiz_form.is_valid():
+            quiz_title = quiz_form.cleaned_data['quiz_topic']
+            try:
+                quiz = quiz_form.save()
+            except:
+                return redirect('detail')
+            quiz.user = request.user
+            quiz.save()
+            return redirect('detail')
+    else:
+        quiz_form = NewQuizForm()
+    return render(request, "KUIZ/new_quiz.html", {"quiz_form": quiz_form})
+
+
+@login_required(login_url='/login')
+def edit_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    if quiz.user == request.user:
+        quiz_form = NewQuizForm(initial={
+            'quiz_topic': quiz.quiz_topic,
+            'detail': quiz.detail,
+            'topic': quiz.topic,
+            'exam_duration': quiz.exam_duration,
+            'score': quiz.score
+        })
+        if request.method == "POST":
+            quiz_form = NewQuizForm(request.POST, instance=quiz)
+            if quiz_form.is_valid():
+                try:
+                    quiz = quiz_form.save()
+                except:
+                    return redirect('detail')
+                quiz.save()
+                return redirect('detail')
+    else:
+        return redirect('detail')
+    return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
+

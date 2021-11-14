@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-
-from account.forms import RegistrationForm, AccountAuthenticationForm
+from KUIZ.models import Attendee
+from account.forms import RegistrationForm, AccountAuthenticationForm, ProfileForm
 
 
 # Create your views here.
@@ -48,4 +48,23 @@ def login_view(request):
     else:
         form = AccountAuthenticationForm()
     context['login_form'] = form
-    return render(request, 'account/login.html',context)
+    return render(request, 'account/login.html', context)
+
+
+def profile_page(request):
+    attendee = Attendee.objects.filter(user = request.user)
+    if not request.user.is_authenticated:
+        return redirect("login")
+    return render(request, 'account/profile.html', {'user': request.user, 'quiz_list': list(attendee)})
+
+
+def profile_edit_view(request):
+    context = {}
+    profile_form = ProfileForm(request.POST, instance=request.user)
+    if request.POST:
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("profile")
+    context['profile_form'] = profile_form
+    return render(request, 'account/profile_edit.html', {'profile_form': profile_form, 'user': request.user})
