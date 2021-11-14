@@ -19,7 +19,7 @@
             <h1>Question: {{ num }} / {{ max_num }}</h1>
         </div>
         <div class="body">
-            <h1>{{question.question_text}}</h1>
+            <h1>{{question.question_text}} ({{question.point}} pts.)</h1>
             <form action="{% url 'answer' quiz.pk question.id %}" method="post">
             {% csrf_token %}
             <br>
