@@ -10,14 +10,14 @@
 <title>KUIZ</title>
 {% endblock %}
     {% block nav %}
-        {% include 'components/left_sidebar.html' %} 
-    {% endblock %} 
+        {% include 'components/left_sidebar.html' %}
+    {% endblock %}
     {% block content %}
     <div class="content d-flex flex-column">
-        <div>
+        <div class="header">
             <h1>Question: {{ num }} / {{ max_num }}</h1>
         </div>
-        <div>
+        <div class="body">
             <h1>{{question.question_text}}</h1>
             <form action="{% url 'answer' quiz.pk question.id %}" method="post">
             {% csrf_token %}
@@ -28,12 +28,12 @@
             {% endfor %}
             <br>
             {% if back_link %}
-            <button type="button"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
+            <button type="button"><a href="{%url 'question' quiz.id back_question.id%}" class="back-btn">Back</a></button>
             {% endif %}
             {% if next_link %}
-            <input type="submit" value="Next">
+            <input type="submit" value="Next" class="next-btn">
             {% else %}
-            <input type="submit" value="Submit">
+            <input type="submit" value="Submit" class="next-btn">
             {% endif %}
             </form>
         </div>
