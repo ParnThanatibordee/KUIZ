@@ -76,18 +76,25 @@ def question(request, pk, question_id):
             next_link = True
         except:
             next_link = False
+        answer_in_question = list(Answer.objects.filter(user=request.user, quiz=quiz, question=this_question))
+        if len(answer_in_question) > 0:
+            lastest_answer_in_question = answer_in_question[-1]
+        else:
+            lastest_answer_in_question = None
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
                                                                 'num': num_of_question + 1, 'max_num': len(all_question),
                                                                 'choices': all_choice, 'next_link': next_link,
                                                                 'next_question': next_question, 'back_link': back_link,
-                                                                'back_question': back_question, 'time': quiz.exam_duration})
+                                                                'back_question': back_question, 'time': quiz.exam_duration,
+                                                                'lastest_answer_in_question': lastest_answer_in_question})
         else:
             return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
                                                           'num': num_of_question + 1, 'max_num': len(all_question),
                                                           'choices': choices, 'next_link': next_link,
                                                           'next_question': next_question, 'back_link': back_link,
-                                                          'back_question': back_question, 'time': quiz.exam_duration})
+                                                          'back_question': back_question, 'time': quiz.exam_duration,
+                                                          'lastest_answer_in_question': lastest_answer_in_question})
     else:
         error_message = "quiz is not allow to at this time."
         return HttpResponse(error_message)
