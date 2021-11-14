@@ -29,7 +29,7 @@
                     <span>This quiz contains {{ num_of_question }} questions with {{ time }} minutes.</span>
                     <a href="{%url 'question' quiz.id q1.id %}" class="btn" onclick="setTimerStorage()">Start quiz</a>
                     {% if user == quiz.user %}
-                        <a href="{% url 'edit_quiz' quiz.id %}" class="btn btn-primary">Edit quiz</a>
+                        <a href="{% url 'edit_quiz' quiz.id %}" class="btn edit-btn">Edit quiz</a>
                     {% endif %}
                 </div>
             </div>
@@ -37,9 +37,11 @@
     </div>
 </div>
 <script>
-    const time = "{{ time }}";
+    let time = "{{ time }}";
     const setTimerStorage = () => {
-        console.log("set");
+        if (time.length === 1) {
+            time = `0${time}`;
+        }
         localStorage.setItem("timer", `${time}:00`);
     }
 </script>

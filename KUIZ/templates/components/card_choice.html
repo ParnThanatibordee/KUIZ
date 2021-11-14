@@ -9,13 +9,15 @@
       </label>
     </div>
   {% endfor %}
-{% if back_link %}
-<button type="button"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
+
+  {% if back_link %}
+  <button type="button"><a href="{%url 'question' quiz.id back_question.id%}" class="back-btn">Back</a></button>
   {% endif %}
+
   {% if next_link %}
-  <input type="submit" value="Next">
+  <input type="submit" value="Next" class="next-btn">
   {% else %}
-  <input type="submit" value="Submit">
+  <input type="submit" value="Submit" class="next-btn">
   {% endif %}
 </form>
 
