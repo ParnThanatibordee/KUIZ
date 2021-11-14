@@ -17,3 +17,10 @@ i {
 li .nav-link:hover, div .nav-link:hover {
     background-color: #B5D8CF;
 }
+
+img {
+    width:70px;
+    height: 70px;
+    border-radius:50%;
+    border: 1px solid grey;
+}
