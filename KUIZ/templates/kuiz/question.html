@@ -20,40 +20,7 @@
         </div>
         <div class="body">
             <h1>{{question.question_text}}</h1>
-
-            <!-- {% include 'components/card_choice.html' %} -->
-            <form action="{% url 'answer' quiz.pk question.id %}" method="post">
-            {% csrf_token %}
-            <br>
-            {% for index, choice in choices.items %}
-            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-            {% endfor %}
-            <br>
-            {% if back_link %}
-            <button type="button"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
-            {% endif %}
-            {% if next_link %}
-            <input type="submit" value="Next">
-            {% else %}
-            <input type="submit" value="Submit">
-            {% endif %}
-            </form>
-            <!-- {% if back_link %}
-
-                <button type="button" class="btn back-btn">
-                    <a href="{%url 'question' quiz.id back_question.id %}"><i class="fas fa-long-arrow-alt-left"></i>Previous</a>
-                </button>
-            {% endif %} -->
-            <!-- {% if next_link %}
-            <button type="button" class="btn next-btn">
-                <a href="{%url 'question' quiz.id next_question.id %}">Next<i class="fas fa-long-arrow-alt-right"></i></a>
-            </button>
-            {% else %}
-            <button type="button" class="btn next-btn">
-                <a href="{%url 'result' quiz.id %}">Submit<i class="fas fa-long-arrow-alt-right"></i></a>
-            </button>
-            {% endif %} -->
+            {% include 'components/card_choice.html' %}
         </div>
     </div>
     {% include 'components/right_sidebar.html' %}
