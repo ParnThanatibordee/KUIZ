@@ -60,6 +60,32 @@ label > span {
     border: 2px solid #B5D8CF;
 }
 
-.option:not(:last-child) {
-    margin-bottom: 4px;
+.next-btn {
+    position: absolute;
+    width: 150px;
+    height: 45px;
+    right: 0;
+    bottom: -70px;
+    border: none;
+    background-color: #2890A3;
+    border-radius: 5px;
+    color: white;
+    font-size: 1.3rem;
+}
+
+.back-btn {
+    position: absolute;
+    width: 150px;
+    height: 45px;
+    left: 0;
+    bottom: -70px;
+    border: none;
+    background-color: #2890A3;
+    border-radius: 5px;
+}
+
+.back-btn a {
+    color: white;
+    font-size: 1.3rem;
+    text-decoration: none;
 }

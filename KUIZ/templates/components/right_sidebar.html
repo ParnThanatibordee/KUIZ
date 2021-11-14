@@ -19,6 +19,7 @@
     const alertBox =  document.querySelector(".alert");
     const nextBtn = document.querySelector(".next-btn");
     const backBtn = document.querySelector(".back-btn");
+    const submitBtn = document.querySelector(".submit-btn");
     const startTimer = (duration, display) => {
         let timer = duration, minutes, seconds;
         const countdown = setInterval(() => {
@@ -28,16 +29,21 @@
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
             if (Number.isNaN(minutes) || Number.isNaN(seconds)) return;
-
-            display.textContent = minutes + ":" + seconds;
-            nextBtn.addEventListener("click", () => {
-                localStorage.setItem("timer", display.textContent);
-                if (text === "Submit") {
+            if ("{{next_link}}" === "True") {
+                nextBtn.addEventListener("click", () => {
+                    localStorage.setItem("timer", display.textContent);
+                })
+                
+            } else if ("{{next_link}}" === "False") {
+                submitBtn.addEventListener("click", () => {
                     display.textContent = "DONE";
                     return;
-                }
-            })
-            if ("{{back_link}}" != "False") {
+                })
+            } else {
+                display.textContent = "DONE";
+                return;
+            }
+            if ("{{back_link}}" === "True") {
                 backBtn.addEventListener('click', () => {
                     localStorage.setItem("timer", display.textContent);
                 });
@@ -48,6 +54,7 @@
                 alertBox.style.display = "block";
                 clearInterval(countdown);
             }
+            display.textContent = minutes + ":" + seconds;
         }, 1000);
     }
 
