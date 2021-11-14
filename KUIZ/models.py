@@ -106,6 +106,7 @@ class Score(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
+    max_score = models.IntegerField(default=-1)
 
 
 class Answer(models.Model):
