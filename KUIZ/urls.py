@@ -12,4 +12,3 @@ urlpatterns = [
     path('exam/<int:pk>/question/result', views.result, name='result'),
     path('create/', views.new_quiz, name='new_quiz'),
     path('edit/<int:pk>', views.edit_quiz, name='edit_quiz'),
-]
