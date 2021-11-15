@@ -26,6 +26,7 @@ def detail_by_topic(request, topic):
     return render(request, 'KUIZ/detail_by_topic.html', {'quiz_in_topic': quiz_in_topic, 'topic': topic.title()})
 
 
+@login_required(login_url='/login')
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
