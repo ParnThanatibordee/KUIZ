@@ -1,0 +1,34 @@
+<form action="{% url 'answer' quiz.pk question.id %}" method="post" class="card">
+{% csrf_token %}
+  {% for index, choice in choices.items %}
+    <div class="option">
+      {% if choice.choice_text == lastest_answer_in_question.answer %}
+      <input type="radio" name="choice" id="{{ choice.choice_text }}" value="{{ choice.id }}" checked>
+      <label for="{{ choice.choice_text }}">
+        <span></span>
+        {{ choice.choice_text }}
+      </label>
+      {% else %}
+      <input type="radio" name="choice" id="{{ choice.choice_text }}" value="{{ choice.id }}">
+      <label for="{{ choice.choice_text }}">
+        <span></span>
+        {{ choice.choice_text }}
+      </label>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  {% if back_link %}
+  <button type="button" class="back-btn"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
+  {% endif %}
+
+  {% if next_link %}
+  <input type="submit" value="Next" class="next-btn">
+  {% else %}
+  <input type="submit" value="Submit" class="next-btn submit-btn">
+  {% endif %}
+</form>
+
+<script>
+
+</script>

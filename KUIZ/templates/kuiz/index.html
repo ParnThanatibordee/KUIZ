@@ -1,3 +1,26 @@
+{% extends 'KUIZ/main.html' %}
 {% load static %}
-
-<button type="button" class="btn btn-primary"><a href="{% url 'detail' %}">GO TO QUIZ!</a></button>
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/index.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
+{% endblock css %}
+{% block title %}
+    <title>KUIZ</title>
+{% endblock %}
+{% block nav %}
+    {% include 'components/navbar.html' %}
+{% endblock %}
+{% block content %}
+    <div class="body">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">KUIZ KUIZ KUIZ KUIZ KUIZ KUIZ</h1>
+                <p class="lead">KUIZ is a web application quiz where you can create/take a quiz for learning and sharing knowledge from various subjects, questions and answers. The target of KUIZ is to help educational personnel (Teachers, Professors, Students) or people who want to enhance the knowledge.</p>
+            </div>
+        </div>
+        <span class="question-mark mark1">?</span>
+        <span class="question-mark mark2">?</span>
+        <button type="button" class="btn btn-quiz"><a href="{% url 'detail' %}">GO TO QUIZ!</a></button>
+    </div>
+{% endblock %}

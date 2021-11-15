@@ -15,7 +15,7 @@ a .card:hover {
     color: rgb(136, 136, 136);
 }
 
-i {
+.fa-long-arrow-alt-right {
     font-size: 30px;
     margin-right: 40px;
     color: rgb(56, 56, 56);
