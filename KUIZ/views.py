@@ -235,9 +235,12 @@ def edit_quiz(request, pk):
     if quiz.user == request.user:
         quiz_form = NewQuizForm(initial={
             'quiz_topic': quiz.quiz_topic,
+            'private': quiz.private,
+            'password': quiz.password,
             'detail': quiz.detail,
             'topic': quiz.topic,
             'exam_duration': quiz.exam_duration,
+            'random_order': quiz.random_order
         })
         if request.method == "POST":
             quiz_form = NewQuizForm(request.POST, instance=quiz)
