@@ -1,4 +1,4 @@
-from .models import Feedback, Quiz
+from .models import Feedback, Quiz, Question
 from django.forms import ModelForm
 from django import forms
 
@@ -42,4 +42,16 @@ class NewQuizForm(ModelForm):
             'detail': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'topic': forms.Select(attrs={'class': 'form-control'}),
             'random_order': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+class NewQuestionForm(ModelForm):
+
+    class Meta:
+        model = Question
+        fields = ['quiz', 'question_text', 'correct', 'point']
+        widgets = {
+            'quiz': forms.Select(attrs={'class': 'form-control'}),
+            'question_text': forms.TextInput(attrs={'class': 'form-control'}),
+            'correct': forms.TextInput(attrs={'class': 'form-control'}),
+            'point': forms.NumberInput(attrs={'class': 'form-control'}),
         }
