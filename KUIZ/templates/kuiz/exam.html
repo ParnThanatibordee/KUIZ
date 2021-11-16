@@ -15,7 +15,10 @@
                     <div class="d-flex w-100 justify-content-between">
                         <h1>KUIZ : {{quiz.quiz_topic}}</h1>
                         {% if user == quiz.user %}
-                            <a href="{% url 'edit_quiz' quiz.id %}" class="btn btn-secondary edit-btn">Edit quiz</a>
+                            <div class="edit">
+                                <a href="{% url 'edit_quiz' quiz.id %}" class="btn btn-secondary active">Edit Quiz</a>
+                                <a href="{% url 'select_question' quiz.id %}" class="btn btn-warning active">Edit Question</a>
+                            </div>
                         {% endif %}
                     </div>
                     <h5>{{quiz.detail}}</h5>

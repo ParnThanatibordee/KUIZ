@@ -270,3 +270,29 @@ def new_question(request):
     else:
         question_form = NewQuestionForm()
     return render(request, "KUIZ/new_question.html", {"question_form": question_form})
+
+@login_required(login_url='/login')
+def select_question(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    questions = quiz.question_set.all()
+    return render(request, "KUIZ/select_question.html", {"questions": questions})
+
+@login_required(login_url='/login')
+def edit_question(request, question_id):
+    question = Question.objects.get(pk=question_id)
+    question_form = NewQuestionForm(initial={
+        'quiz': question.quiz,
+        'question_text': question.question_text,
+        'correct': question.correct,
+        'point': question.point
+    })
+    if request.method == "POST":
+        question_form = NewQuestionForm(request.POST, instance=question)
+        if question_form.is_valid():
+            try:
+                question = question_form.save()
+            except:
+                return redirect('detail')
+            question.save()
+            return redirect('detail')
+    return render(request, "KUIZ/edit_question.html", {"question": question, 'question_form': question_form})

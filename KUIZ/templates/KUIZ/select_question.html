@@ -1,0 +1,24 @@
+{% extends 'KUIZ/main.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/card_quiz.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
+{% endblock css %}
+{% block title %}<title>KUIZ | Edit Question</title>{% endblock %}
+{% block nav %}
+    {% include 'components/navbar.html' %}
+{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="jumbotron d-flex justify-content-center">
+        <div class="col-md-8 col-12">
+            <h1 class="mb-5 mt-3">Select Question to Edit</h1>
+            {% for question in questions %}
+                {% include 'components/card_question.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
