@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'account/css/profile.css' %}">
 {% endblock css %}
-{% block title %}{% endblock %}
+{% block title %}<title>Profile | {{ user.username }}</title>{% endblock %}
 {% block nav %}
     {% include 'components/navbar.html' %}
 {% endblock %}
