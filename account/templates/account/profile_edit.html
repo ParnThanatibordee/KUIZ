@@ -19,10 +19,12 @@
             {% csrf_token %}
             <label for="username">Username:</label>
             {{ profile_form.username }}
-            <label for="username">First Name:</label>
+            <label for="first_name">First Name:</label>
             {{ profile_form.first_name }}
-            <label for="username">Last Name:</label>
+            <label for="last_name">Last Name:</label>
             {{ profile_form.last_name }}
+            <label for="last_name">Roles:</label>
+            {{ profile_form.is_teacher }}
             <div class="">
                 <label for="username">Profile Picture:</label>
                 {{ profile_form.profile_pic }}
