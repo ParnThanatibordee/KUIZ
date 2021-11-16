@@ -13,3 +13,15 @@ button {
     border-color: teal;
     color: white !important;
 }
+
+input:not(input:last-child) {
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 5px 10px;
+}
+
+select {
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 5px;
+}
