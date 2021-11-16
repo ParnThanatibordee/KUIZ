@@ -212,6 +212,7 @@ def get_feedback(request):
             return redirect('index')
     else:
         form = FeedbackForm()
+        form.fields['quiz'].queryset = Quiz.objects.filter(user=request.user)
     return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
 
 
