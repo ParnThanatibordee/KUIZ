@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <link rel="stylesheet" type="text/css" href="{% static 'account/css/account.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -22,6 +21,16 @@
         <div id="formContent">
             <!-- Tabs Titles -->
             <h1>Login</h1>
+            <div class="oauth">
+                <a href="{% url "social:begin" "google-oauth2" %}">
+                    <img src="{% static 'account/images/google-icon.svg' %}" alt="google logo">
+                    <span>Sign in with Google</span>
+                </a>
+            </div>
+            <div class="space">
+                <span>or Sign in with username</span>
+                <div class="line"></div>
+            </div>
             <!-- Login Form -->
             <form method="post">{% csrf_token %}
                 <h3>Username</h3>
