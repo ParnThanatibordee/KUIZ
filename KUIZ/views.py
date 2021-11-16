@@ -6,6 +6,7 @@ from .forms import FeedbackForm, NewQuizForm
 from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
 from django.contrib.auth.decorators import login_required
 
+
 def index(request):
     """Index homepage."""
     return render(request, 'KUIZ/index.html')
@@ -88,11 +89,12 @@ def question(request, pk, question_id):
             lastest_answer_in_question = None
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
-                                                                'num': num_of_question + 1, 'max_num': len(all_question),
-                                                                'choices': all_choice, 'next_link': next_link,
-                                                                'next_question': next_question, 'back_link': back_link,
-                                                                'back_question': back_question, 'time': quiz.exam_duration,
-                                                                'lastest_answer_in_question': lastest_answer_in_question})
+                                                               'num': num_of_question + 1, 'max_num': len(all_question),
+                                                               'choices': all_choice, 'next_link': next_link,
+                                                               'next_question': next_question, 'back_link': back_link,
+                                                               'back_question': back_question,
+                                                               'time': quiz.exam_duration,
+                                                               'lastest_answer_in_question': lastest_answer_in_question})
         else:
             return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
                                                           'num': num_of_question + 1, 'max_num': len(all_question),
@@ -136,7 +138,8 @@ def answer(request, pk, question_id):
                 if len(all_answer_in_quiz) > 0:
                     for i in all_answer_in_quiz:
                         i.delete()
-                Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=selected_choice.choice_text)
+                Answer.objects.create(user=request.user, quiz=quiz, question=question,
+                                      answer=selected_choice.choice_text)
                 num_of_question = all_question.index(
                     Question.objects.get(pk=question_id))
                 try:
@@ -199,6 +202,7 @@ def result(request, pk):
         return HttpResponse("Wait Teacher to check your quiz.")
 
 
+@login_required(login_url='/login')
 def get_feedback(request):
     feedback = Feedback.objects.all()
     if request.method == "POST":
@@ -252,4 +256,3 @@ def edit_quiz(request, pk):
     else:
         return redirect('detail')
     return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
-
