@@ -21,7 +21,10 @@
             <div class="d-flex align-items-center justify-content-between">
                 <h1 class="d-inline">All Quizzes</h1>
                 {% if user.is_teacher %}
-                <a href="{% url 'new_quiz' %}" class="btn btn-secondary active" role="button" aria-pressed="true">Add Quiz</a>
+                <div class="create">
+                    <a href="{% url 'new_quiz' %}" class="btn btn-secondary active" role="button" aria-pressed="true">Add Quiz</a>
+                    <a href="{% url 'new_question' %}" class="btn btn-warning active" role="button" aria-pressed="true">Add Question</a>
+                </div>
                 {% endif %}
             </div>
             <div class="row mt-4">
@@ -30,7 +33,7 @@
                         {% include 'components/card_quiz.html' %}
                     {% endfor %}
                 {% else %}
-                    <p>No quiz.</p>
+                    <h3>No quiz.</h3>
                 {% endif %}
             </div>
         </div>

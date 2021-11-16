@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
-from .forms import FeedbackForm, NewQuizForm
+from .forms import FeedbackForm, NewQuizForm, NewQuestionForm
 from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
 from django.contrib.auth.decorators import login_required
 
@@ -216,7 +216,6 @@ def new_quiz(request):
     if request.method == "POST":
         quiz_form = NewQuizForm(request.POST)
         if quiz_form.is_valid():
-            quiz_title = quiz_form.cleaned_data['quiz_topic']
             try:
                 quiz = quiz_form.save()
             except:
@@ -255,3 +254,19 @@ def edit_quiz(request, pk):
         return redirect('detail')
     return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
 
+
+@login_required(login_url='/login')
+def new_question(request):
+    """Create a new question by teacher."""
+    if request.method == "POST":
+        question_form = NewQuestionForm(request.POST)
+        if question_form.is_valid():
+            try:
+                question = question_form.save()
+            except:
+                return redirect('detail')
+            question.save()
+            return redirect('detail')
+    else:
+        question_form = NewQuestionForm()
+    return render(request, "KUIZ/new_question.html", {"question_form": question_form})
