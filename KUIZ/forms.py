@@ -1,4 +1,4 @@
-from .models import Feedback, Quiz, Question
+from .models import Feedback, Quiz, Question, Choice
 from django.forms import ModelForm
 from django import forms
 
@@ -54,4 +54,15 @@ class NewQuestionForm(ModelForm):
             'question_text': forms.TextInput(attrs={'class': 'form-control'}),
             'correct': forms.TextInput(attrs={'class': 'form-control'}),
             'point': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+class NewMultipleChoiceForm(ModelForm):
+
+    class Meta:
+        model = Choice
+        fields = ['question', 'choice_text']
+        widgets = {
+            'question': forms.Select(attrs={'class': 'form-control'}),
+            'choice_text': forms.TextInput(attrs={'class': 'form-control'})
         }
