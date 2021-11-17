@@ -344,3 +344,39 @@ def select_choice(request, question_id):
     multiple_choices = question.choice_set.all()
     typing_choices = question.type_set.all()
     return render(request, "KUIZ/select_choice.html", {'multiple_choices': multiple_choices, 'typing_choices': typing_choices})
+
+@login_required(login_url='/login')
+def edit_multiple_choice(request, choice_id):
+    choice = Choice.objects.get(pk=choice_id)
+    choice_form = NewMultipleChoiceForm(initial={
+        'question': choice.question,
+        'choice_text': choice.choice_text
+    })
+    if request.method == "POST":
+        choice_form = NewMultipleChoiceForm(request.POST, instance=choice)
+        if choice_form.is_valid():
+            try:
+                choice = choice_form.save()
+            except:
+                return redirect('detail')
+            choice.save()
+            return redirect('detail')
+    return render(request, "KUIZ/edit_multiple_choice.html", {"choice": choice, 'choice_form': choice_form})
+
+@login_required(login_url='/login')
+def edit_typing_choice(request, choice_id):
+    typing_choice = Type.objects.get(pk=choice_id)
+    choice_form = NewTypingChoiceForm(initial={
+        'question': typing_choice.question,
+        'correct': typing_choice.correct
+    })
+    if request.method == "POST":
+        choice_form = NewTypingChoiceForm(request.POST, instance=typing_choice)
+        if choice_form.is_valid():
+            try:
+                typing_choice = choice_form.save()
+            except:
+                return redirect('detail')
+            typing_choice.save()
+            return redirect('detail')
+    return render(request, "KUIZ/edit_typing_choice.html", {"choice": typing_choice, 'choice_form': choice_form})
