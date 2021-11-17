@@ -332,3 +332,15 @@ def new_typing_choice(request):
         choice_form = NewTypingChoiceForm()
     return render(request, "KUIZ/new_typing_choice.html", {"choice_form": choice_form})
 
+@login_required(login_url='/login')
+def select_question_to_edit_choice(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    questions = quiz.question_set.all()
+    return render(request, "KUIZ/select_question.html", {"questions": questions, 'choice': True})
+
+@login_required(login_url='/login')
+def select_choice(request, question_id):
+    question = Question.objects.get(pk=question_id)
+    multiple_choices = question.choice_set.all()
+    typing_choices = question.type_set.all()
+    return render(request, "KUIZ/select_choice.html", {'multiple_choices': multiple_choices, 'typing_choices': typing_choices})
