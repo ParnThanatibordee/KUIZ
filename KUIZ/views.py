@@ -6,6 +6,7 @@ from .forms import FeedbackForm, NewQuizForm, NewQuestionForm, NewMultipleChoice
 from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
 from django.contrib.auth.decorators import login_required
 
+
 def index(request):
     """Index homepage."""
     return render(request, 'KUIZ/index.html')
@@ -26,6 +27,7 @@ def detail_by_topic(request, topic):
     return render(request, 'KUIZ/detail_by_topic.html', {'quiz_in_topic': quiz_in_topic, 'topic': topic.title()})
 
 
+@login_required(login_url='/login')
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
@@ -87,11 +89,12 @@ def question(request, pk, question_id):
             lastest_answer_in_question = None
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
-                                                                'num': num_of_question + 1, 'max_num': len(all_question),
-                                                                'choices': all_choice, 'next_link': next_link,
-                                                                'next_question': next_question, 'back_link': back_link,
-                                                                'back_question': back_question, 'time': quiz.exam_duration,
-                                                                'lastest_answer_in_question': lastest_answer_in_question})
+                                                               'num': num_of_question + 1, 'max_num': len(all_question),
+                                                               'choices': all_choice, 'next_link': next_link,
+                                                               'next_question': next_question, 'back_link': back_link,
+                                                               'back_question': back_question,
+                                                               'time': quiz.exam_duration,
+                                                               'lastest_answer_in_question': lastest_answer_in_question})
         else:
             return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
                                                           'num': num_of_question + 1, 'max_num': len(all_question),
@@ -135,7 +138,8 @@ def answer(request, pk, question_id):
                 if len(all_answer_in_quiz) > 0:
                     for i in all_answer_in_quiz:
                         i.delete()
-                Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=selected_choice.choice_text)
+                Answer.objects.create(user=request.user, quiz=quiz, question=question,
+                                      answer=selected_choice.choice_text)
                 num_of_question = all_question.index(
                     Question.objects.get(pk=question_id))
                 try:
@@ -198,6 +202,7 @@ def result(request, pk):
         return HttpResponse("Wait Teacher to check your quiz.")
 
 
+@login_required(login_url='/login')
 def get_feedback(request):
     feedback = Feedback.objects.all()
     if request.method == "POST":
@@ -207,6 +212,7 @@ def get_feedback(request):
             return redirect('index')
     else:
         form = FeedbackForm()
+        form.fields['quiz'].queryset = Quiz.objects.filter(user=request.user)
     return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
 
 
@@ -253,7 +259,6 @@ def edit_quiz(request, pk):
     else:
         return redirect('detail')
     return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
-
 
 @login_required(login_url='/login')
 def new_question(request):
@@ -380,3 +385,4 @@ def edit_typing_choice(request, choice_id):
             typing_choice.save()
             return redirect('detail')
     return render(request, "KUIZ/edit_typing_choice.html", {"choice": typing_choice, 'choice_form': choice_form})
+
