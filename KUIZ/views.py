@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
-from .forms import FeedbackForm, NewQuizForm, NewQuestionForm, NewMultipleChoiceForm
+from .forms import FeedbackForm, NewQuizForm, NewQuestionForm, NewMultipleChoiceForm, NewTypingChoiceForm
 from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
 from django.contrib.auth.decorators import login_required
 
@@ -315,3 +315,20 @@ def new_multiple_choice(request):
     else:
         choice_form = NewMultipleChoiceForm()
     return render(request, "KUIZ/new_multiple_choice.html", {"choice_form": choice_form})
+
+@login_required(login_url='/login')
+def new_typing_choice(request):
+    """Create a new typing choice by teacher."""
+    if request.method == "POST":
+        choice_form = NewTypingChoiceForm(request.POST)
+        if choice_form.is_valid():
+            try:
+                choice = choice_form.save()
+            except:
+                return redirect('detail')
+            choice.save()
+            return redirect('detail')
+    else:
+        choice_form = NewTypingChoiceForm()
+    return render(request, "KUIZ/new_typing_choice.html", {"choice_form": choice_form})
+

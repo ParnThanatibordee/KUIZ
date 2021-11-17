@@ -16,5 +16,6 @@ urlpatterns = [
     path('select/question/<int:pk>', views.select_question, name='select_question'),
     path('edit/question/<int:question_id>', views.edit_question, name='edit_question'),
     path('create/multiple/choice', views.new_multiple_choice, name='new_multiple_choice'),
+    path('create/typing/choice', views.new_typing_choice, name='new_typing_choice'),
     path('feedback/', views.get_feedback, name='feedback')
 ]
