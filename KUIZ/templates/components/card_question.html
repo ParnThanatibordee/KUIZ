@@ -1,0 +1,12 @@
+<a href="{% if choice %}{%url 'select_choice' question.id %}{% else %}{%url 'edit_question' question.id %}{% endif %}">
+    <div class="card w-90 mb-2">
+      <div class="d-flex justify-content-between align-items-center">
+          <div class="card-body">
+              <h4 class="card-title">{{question.question_text}}</h4>
+          </div>
+          <div>
+              <i class="fas fa-long-arrow-alt-right"></i>
+          </div>
+      </div>
+    </div>
+  </a>

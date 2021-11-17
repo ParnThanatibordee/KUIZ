@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
-from .forms import FeedbackForm, NewQuizForm
+from .forms import FeedbackForm, NewQuizForm, NewQuestionForm, NewMultipleChoiceForm, NewTypingChoiceForm
 from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
 from django.contrib.auth.decorators import login_required
+
 
 def index(request):
     """Index homepage."""
@@ -88,11 +89,12 @@ def question(request, pk, question_id):
             lastest_answer_in_question = None
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
-                                                                'num': num_of_question + 1, 'max_num': len(all_question),
-                                                                'choices': all_choice, 'next_link': next_link,
-                                                                'next_question': next_question, 'back_link': back_link,
-                                                                'back_question': back_question, 'time': quiz.exam_duration,
-                                                                'lastest_answer_in_question': lastest_answer_in_question})
+                                                               'num': num_of_question + 1, 'max_num': len(all_question),
+                                                               'choices': all_choice, 'next_link': next_link,
+                                                               'next_question': next_question, 'back_link': back_link,
+                                                               'back_question': back_question,
+                                                               'time': quiz.exam_duration,
+                                                               'lastest_answer_in_question': lastest_answer_in_question})
         else:
             return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
                                                           'num': num_of_question + 1, 'max_num': len(all_question),
@@ -136,7 +138,8 @@ def answer(request, pk, question_id):
                 if len(all_answer_in_quiz) > 0:
                     for i in all_answer_in_quiz:
                         i.delete()
-                Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=selected_choice.choice_text)
+                Answer.objects.create(user=request.user, quiz=quiz, question=question,
+                                      answer=selected_choice.choice_text)
                 num_of_question = all_question.index(
                     Question.objects.get(pk=question_id))
                 try:
@@ -199,6 +202,7 @@ def result(request, pk):
         return HttpResponse("Wait Teacher to check your quiz.")
 
 
+@login_required(login_url='/login')
 def get_feedback(request):
     feedback = Feedback.objects.all()
     if request.method == "POST":
@@ -208,6 +212,7 @@ def get_feedback(request):
             return redirect('index')
     else:
         form = FeedbackForm()
+        form.fields['quiz'].queryset = Quiz.objects.filter(user=request.user)
     return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
 
 
@@ -217,7 +222,6 @@ def new_quiz(request):
     if request.method == "POST":
         quiz_form = NewQuizForm(request.POST)
         if quiz_form.is_valid():
-            quiz_title = quiz_form.cleaned_data['quiz_topic']
             try:
                 quiz = quiz_form.save()
             except:
@@ -236,9 +240,12 @@ def edit_quiz(request, pk):
     if quiz.user == request.user:
         quiz_form = NewQuizForm(initial={
             'quiz_topic': quiz.quiz_topic,
+            'private': quiz.private,
+            'password': quiz.password,
             'detail': quiz.detail,
             'topic': quiz.topic,
             'exam_duration': quiz.exam_duration,
+            'random_order': quiz.random_order
         })
         if request.method == "POST":
             quiz_form = NewQuizForm(request.POST, instance=quiz)
@@ -252,4 +259,130 @@ def edit_quiz(request, pk):
     else:
         return redirect('detail')
     return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
+
+@login_required(login_url='/login')
+def new_question(request):
+    """Create a new question by teacher."""
+    if request.method == "POST":
+        question_form = NewQuestionForm(request.POST)
+        if question_form.is_valid():
+            try:
+                question = question_form.save()
+            except:
+                return redirect('detail')
+            question.save()
+            return redirect('detail')
+    else:
+        question_form = NewQuestionForm()
+    return render(request, "KUIZ/new_question.html", {"question_form": question_form})
+
+
+@login_required(login_url='/login')
+def select_question(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    questions = quiz.question_set.all()
+    return render(request, "KUIZ/select_question.html", {"questions": questions})
+
+
+@login_required(login_url='/login')
+def edit_question(request, question_id):
+    question = Question.objects.get(pk=question_id)
+    question_form = NewQuestionForm(initial={
+        'quiz': question.quiz,
+        'question_text': question.question_text,
+        'correct': question.correct,
+        'point': question.point
+    })
+    if request.method == "POST":
+        question_form = NewQuestionForm(request.POST, instance=question)
+        if question_form.is_valid():
+            try:
+                question = question_form.save()
+            except:
+                return redirect('detail')
+            question.save()
+            return redirect('detail')
+    return render(request, "KUIZ/edit_question.html", {"question": question, 'question_form': question_form})
+
+
+@login_required(login_url='/login')
+def new_multiple_choice(request):
+    """Create a new multiple choice by teacher."""
+    if request.method == "POST":
+        choice_form = NewMultipleChoiceForm(request.POST)
+        if choice_form.is_valid():
+            try:
+                choice = choice_form.save()
+            except:
+                return redirect('detail')
+            choice.save()
+            return redirect('detail')
+    else:
+        choice_form = NewMultipleChoiceForm()
+    return render(request, "KUIZ/new_multiple_choice.html", {"choice_form": choice_form})
+
+@login_required(login_url='/login')
+def new_typing_choice(request):
+    """Create a new typing choice by teacher."""
+    if request.method == "POST":
+        choice_form = NewTypingChoiceForm(request.POST)
+        if choice_form.is_valid():
+            try:
+                choice = choice_form.save()
+            except:
+                return redirect('detail')
+            choice.save()
+            return redirect('detail')
+    else:
+        choice_form = NewTypingChoiceForm()
+    return render(request, "KUIZ/new_typing_choice.html", {"choice_form": choice_form})
+
+@login_required(login_url='/login')
+def select_question_to_edit_choice(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    questions = quiz.question_set.all()
+    return render(request, "KUIZ/select_question.html", {"questions": questions, 'choice': True})
+
+@login_required(login_url='/login')
+def select_choice(request, question_id):
+    question = Question.objects.get(pk=question_id)
+    multiple_choices = question.choice_set.all()
+    typing_choices = question.type_set.all()
+    return render(request, "KUIZ/select_choice.html", {'multiple_choices': multiple_choices, 'typing_choices': typing_choices})
+
+@login_required(login_url='/login')
+def edit_multiple_choice(request, choice_id):
+    choice = Choice.objects.get(pk=choice_id)
+    choice_form = NewMultipleChoiceForm(initial={
+        'question': choice.question,
+        'choice_text': choice.choice_text
+    })
+    if request.method == "POST":
+        choice_form = NewMultipleChoiceForm(request.POST, instance=choice)
+        if choice_form.is_valid():
+            try:
+                choice = choice_form.save()
+            except:
+                return redirect('detail')
+            choice.save()
+            return redirect('detail')
+    return render(request, "KUIZ/edit_multiple_choice.html", {"choice": choice, 'choice_form': choice_form})
+
+@login_required(login_url='/login')
+def edit_typing_choice(request, choice_id):
+    typing_choice = Type.objects.get(pk=choice_id)
+    choice_form = NewTypingChoiceForm(initial={
+        'question': typing_choice.question,
+        'correct': typing_choice.correct
+    })
+    if request.method == "POST":
+        choice_form = NewTypingChoiceForm(request.POST, instance=typing_choice)
+        if choice_form.is_valid():
+            try:
+                typing_choice = choice_form.save()
+            except:
+                return redirect('detail')
+            typing_choice.save()
+            return redirect('detail')
+    return render(request, "KUIZ/edit_typing_choice.html", {"choice": typing_choice, 'choice_form': choice_form})
 
