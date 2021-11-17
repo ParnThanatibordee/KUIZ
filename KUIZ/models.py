@@ -92,6 +92,7 @@ class Type(models.Model):
     """Choice model."""
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200, blank=True)
     correct = models.CharField(max_length=200)
 
     def __str__(self):
