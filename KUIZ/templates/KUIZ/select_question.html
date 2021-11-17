@@ -16,7 +16,7 @@
     <div class="jumbotron d-flex justify-content-center">
         <div class="col-md-8 col-12 edit">
             <div class="d-flex w-100 justify-content-between">
-                <h2 class="mb-5 mt-3">Select Question to Edit</h2>
+                <h2 class="mb-5 mt-3">Select Question to Edit {% if choice %}Choice{% else %}Question{% endif %}</h2>
             </div>
             {% for question in questions %}
                 {% include 'components/card_question.html' %}
