@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
-from .forms import FeedbackForm, NewQuizForm, NewQuestionForm
+from .forms import FeedbackForm, NewQuizForm, NewQuestionForm, NewMultipleChoiceForm
 from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
 from django.contrib.auth.decorators import login_required
 
@@ -271,11 +271,13 @@ def new_question(request):
         question_form = NewQuestionForm()
     return render(request, "KUIZ/new_question.html", {"question_form": question_form})
 
+
 @login_required(login_url='/login')
 def select_question(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     questions = quiz.question_set.all()
     return render(request, "KUIZ/select_question.html", {"questions": questions})
+
 
 @login_required(login_url='/login')
 def edit_question(request, question_id):
@@ -296,3 +298,20 @@ def edit_question(request, question_id):
             question.save()
             return redirect('detail')
     return render(request, "KUIZ/edit_question.html", {"question": question, 'question_form': question_form})
+
+
+@login_required(login_url='/login')
+def new_multiple_choice(request):
+    """Create a new multiple choice by teacher."""
+    if request.method == "POST":
+        choice_form = NewMultipleChoiceForm(request.POST)
+        if choice_form.is_valid():
+            try:
+                choice = choice_form.save()
+            except:
+                return redirect('detail')
+            choice.save()
+            return redirect('detail')
+    else:
+        choice_form = NewMultipleChoiceForm()
+    return render(request, "KUIZ/new_multiple_choice.html", {"choice_form": choice_form})
