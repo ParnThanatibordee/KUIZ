@@ -17,18 +17,6 @@
         <div class="col-md-8 col-12 edit">
             <div class="d-flex w-100 justify-content-between">
                 <h2 class="mb-5 mt-3">Select Question to Edit</h2>
-                <div class="btn-group dropright mt-3" style="height: max-content;">
-                    <button type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Choices
-                      <i class="fas fa-caret-down"></i>
-                    </button>
-                    <div class="dropdown-menu">
-                        <a href="{% url 'new_multiple_choice' %}" class="btn btn-secondary active">Create Multiple Choice</a>
-                        <a href="" class="btn btn-warning active">Edit Multiple Choice</a>
-                        <a href="{% url 'new_typing_choice' %}" class="btn btn-secondary active">Create Typing Choice</a>
-                        <a href="#" class="btn btn-warning active">Edit Typing Choice</a>
-                    </div>
-                </div>
             </div>
             {% for question in questions %}
                 {% include 'components/card_question.html' %}

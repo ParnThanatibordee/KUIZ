@@ -1,7 +1,8 @@
 {% extends 'KUIZ/main.html' %}
 {% load static %}
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/exam.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/exam.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
 {% endblock css %}
 {% block title %}
     <title>KUIZ | {{ quiz.quiz_topic }}</title>
@@ -18,6 +19,15 @@
                             <div class="edit">
                                 <a href="{% url 'edit_quiz' quiz.id %}" class="btn btn-secondary active">Edit Quiz</a>
                                 <a href="{% url 'select_question' quiz.id %}" class="btn btn-warning active">Edit Question</a>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      Choices
+                                    </button>
+                                    <div class="dropdown-menu mt-2">
+                                        <a href="{% url 'new_multiple_choice' %}" class="btn btn-warning active">Edit Multiple Choice</a>
+                                        <a href="{% url 'new_typing_choice' %}" class="btn btn-warning active">Edit Typing Choice</a>
+                                    </div>
+                                </div>
                             </div>
                         {% endif %}
                     </div>
