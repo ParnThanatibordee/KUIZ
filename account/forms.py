@@ -32,8 +32,9 @@ class ProfileForm(forms.ModelForm):
     first_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Please enter the new first name'}))
     last_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Please enter the new last name'}))
     profile_pic = forms.ImageField(label=('Profile Picture'), required=False, error_messages = {'invalid':("Image files only")}, widget=forms.FileInput)
+    is_teacher = forms.ChoiceField(choices =((True, 'Teacher'), (False, 'Student')), widget=forms.Select(), required=True)
 
     class Meta:
         model = Account
-        fields = ('username','profile_pic', 'first_name', 'last_name')
+        fields = ('username','profile_pic', 'first_name', 'is_teacher')
 
