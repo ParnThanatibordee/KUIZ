@@ -129,6 +129,10 @@
     color: white;
 }
 
+.dropdown-menu a:last-child {
+    margin: 0;
+}
+
 .dropdown-menu a:hover {
     background-color: rgb(100, 100, 100);
     color: white;
