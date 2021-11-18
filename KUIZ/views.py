@@ -121,8 +121,12 @@ def answer(request, pk, question_id):
                 choice_id = request.POST['choice']
                 selected_choice = question.choice_set.get(pk=choice_id)
             except (KeyError, Choice.DoesNotExist):
-                # next iteration for collect ERROR
-                # return HttpResponse(f'ERROR {question_id}')
+                all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz, question=question)
+                if len(all_answer_in_quiz) > 0:
+                    for i in all_answer_in_quiz:
+                        i.delete()
+                Answer.objects.create(user=request.user, quiz=quiz, question=question,
+                                      answer="")
                 num_of_question = all_question.index(
                     Question.objects.get(pk=question_id))
                 try:
@@ -157,6 +161,11 @@ def answer(request, pk, question_id):
                 answer = request.POST['type']
             except:
                 answer = ""
+                all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz, question=question)
+                if len(all_answer_in_quiz) > 0:
+                    for i in all_answer_in_quiz:
+                        i.delete()
+                Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=answer)
             else:
                 all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz, question=question)
                 if len(all_answer_in_quiz) > 0:
@@ -277,4 +286,10 @@ def check_quiz(request, pk):
 def check_student(request, pk, id):
     this_quiz = Quiz.objects.get(pk=pk)
     this_user = Account.objects.get(pk=id)
-    return render(request, 'KUIZ/checking_per_student.html', {'this_quiz': this_quiz, 'this_user': this_user})
+    all_question= this_quiz.question_set.all()
+    last_n_answer = []
+    for i in all_question:
+        last_n_answer.append(list(Answer.objects.filter(user=this_user, question=i))[-1])
+    return render(request, 'KUIZ/checking_per_student.html', {'this_quiz': this_quiz, 'this_user': this_user,
+                                                              'all_question': all_question,
+                                                              'last_n_answer': last_n_answer})

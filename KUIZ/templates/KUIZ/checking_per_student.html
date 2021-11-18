@@ -1,3 +1,11 @@
-{{this_quiz}} : {{this_user.username}}
+<h1>List of Answer ( {{this_quiz.quiz_topic}} : {{this_user.username}} )</h1>
+{% for answer in last_n_answer %}
+{% if answer.answer == "" %}
+{{answer.question.question_text}} : answer ( None )
+{% else %}
+{{answer.question.question_text}} : answer ( {{answer.answer}} )
+{% endif %}
+<br>
+{% endfor %}
 <br>
 <button type="button"><a href="{%url 'check_per_quiz' this_quiz.id %}">Back</a></button>
