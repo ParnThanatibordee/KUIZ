@@ -1,0 +1,7 @@
+<h1>List of Student</h1>
+{% for user, id in all_user.items %}
+<a href="{%url 'check_per_student' this_quiz.pk id %}">{{user}}</a>
+<br>
+{% endfor %}
+<br>
+<button type="button"><a href="{%url 'check' %}">Back</a></button>

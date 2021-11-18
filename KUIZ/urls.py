@@ -12,4 +12,7 @@ urlpatterns = [
     path('exam/<int:pk>/question/result', views.result, name='result'),
     path('create/', views.new_quiz, name='new_quiz'),
     path('edit/<int:pk>', views.edit_quiz, name='edit_quiz'),
+    path('check/', views.check, name='check'),
+    path('check/<int:pk>/', views.check_quiz, name='check_per_quiz'),
+    path('check/<int:pk>/user/<int:id>', views.check_student, name='check_per_student'),
 ]

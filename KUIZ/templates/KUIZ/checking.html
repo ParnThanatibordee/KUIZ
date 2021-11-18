@@ -1,0 +1,11 @@
+<h1>Checking</h1>
+{% for quiz in owner_quiz %}
+{% if quiz.automate %}
+<a href="{%url 'check_per_quiz' quiz.pk %}">{{quiz.quiz_topic}} : (automate)</a>
+{% else %}
+<a href="{%url 'check_per_quiz' quiz.pk %}">{{quiz.quiz_topic}} : (hand-check)</a>
+{% endif %}
+<br>
+{% endfor %}
+<br>
+<button type="button"><a href="{%url 'index' %}">Back</a></button>

@@ -3,8 +3,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
 from .forms import FeedbackForm, NewQuizForm
+from account.models import Account
 from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
 from django.contrib.auth.decorators import login_required
+
 
 def index(request):
     """Index homepage."""
@@ -88,11 +90,12 @@ def question(request, pk, question_id):
             lastest_answer_in_question = None
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
-                                                                'num': num_of_question + 1, 'max_num': len(all_question),
-                                                                'choices': all_choice, 'next_link': next_link,
-                                                                'next_question': next_question, 'back_link': back_link,
-                                                                'back_question': back_question, 'time': quiz.exam_duration,
-                                                                'lastest_answer_in_question': lastest_answer_in_question})
+                                                               'num': num_of_question + 1, 'max_num': len(all_question),
+                                                               'choices': all_choice, 'next_link': next_link,
+                                                               'next_question': next_question, 'back_link': back_link,
+                                                               'back_question': back_question,
+                                                               'time': quiz.exam_duration,
+                                                               'lastest_answer_in_question': lastest_answer_in_question})
         else:
             return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
                                                           'num': num_of_question + 1, 'max_num': len(all_question),
@@ -136,7 +139,8 @@ def answer(request, pk, question_id):
                 if len(all_answer_in_quiz) > 0:
                     for i in all_answer_in_quiz:
                         i.delete()
-                Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=selected_choice.choice_text)
+                Answer.objects.create(user=request.user, quiz=quiz, question=question,
+                                      answer=selected_choice.choice_text)
                 num_of_question = all_question.index(
                     Question.objects.get(pk=question_id))
                 try:
@@ -253,3 +257,24 @@ def edit_quiz(request, pk):
         return redirect('detail')
     return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
 
+
+def check(request):
+    all_owner_quiz = Quiz.objects.filter(user=request.user)
+    return render(request, 'KUIZ/checking.html', {'owner_quiz': all_owner_quiz})
+
+
+def check_quiz(request, pk):
+    this_quiz = Quiz.objects.get(pk=pk)
+    all_student_attendee = Attendee.objects.filter(quiz=this_quiz)
+    unique_list_student = {}
+    for i in all_student_attendee:
+        this_user = i.user.username
+        if not (this_user in unique_list_student):
+            unique_list_student[this_user] = i.user.id
+    return render(request, 'KUIZ/checking_per_quiz.html', {"this_quiz": this_quiz, "all_user": unique_list_student})
+
+
+def check_student(request, pk, id):
+    this_quiz = Quiz.objects.get(pk=pk)
+    this_user = Account.objects.get(pk=id)
+    return render(request, 'KUIZ/checking_per_student.html', {'this_quiz': this_quiz, 'this_user': this_user})
