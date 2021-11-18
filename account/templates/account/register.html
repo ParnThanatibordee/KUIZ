@@ -83,6 +83,16 @@
                     <h2>Teacher</h2><br>
                 </div>
                 <button type="submit" style="background-color: #3AB1BE;color:white">Register</button>
+                <div class="space">
+                    <span>or Sign in with Google</span>
+                    <div class="line"></div>
+                </div>
+                <div class="oauth">
+                    <a href="{% url "social:begin" "google-oauth2" %}">
+                        <img src="{% static 'account/images/google-icon.svg' %}" alt="google logo">
+                        <span>Sign in with Google</span>
+                    </a>
+                </div>
             </form>
             <div id="formFooter">
                 <span>Already have an account ? 
