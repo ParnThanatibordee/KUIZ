@@ -41,7 +41,6 @@ class Quiz(models.Model):
                             blank=True,
                             on_delete=models.CASCADE)
 
-
     def was_published_recently(self):
         """Check that the question was published recently."""
         now = timezone.now()
@@ -93,11 +92,10 @@ class Type(models.Model):
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200, default="")
-    correct = models.CharField(max_length=200)
 
     def __str__(self):
         """Display choice_text."""
-        return f"answer: {self.correct}"
+        return f"answer: {self.pk}"
 
 
 class Score(models.Model):
