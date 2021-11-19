@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'account/css/profile.css' %}">
 {% endblock css %}
-{% block title %}<title>Profile | {{ user.username }}</title>{% endblock %}
+{% block title %}{% endblock %}
 {% block nav %}
     {% include 'components/navbar.html' %}
 {% endblock %}
@@ -15,13 +15,8 @@
             <img src="{{ user.profile_pic.url }}" alt="profile picture">
             <div class="d-flex flex-column">
                 <h1>{{ user.first_name }} {{ user.last_name }}</h1>
-                <span class="d-flex info"><i class="fas fa-user-circle"></i>{{ user.username }}</span>
-                <span class="d-flex info"><i class="far fa-envelope"></i>{{ user.email }}</span>
-                {% if user.is_teacher %}
-                    <span class="d-flex info"><i class="fas fa-chalkboard-teacher"></i>Teacher</span>
-                {% else %}
-                    <span class="d-flex info"><i class="fas fa-user-graduate"></i>Student</span>
-                {% endif %}
+                <span class="d-flex"><i class="fas fa-user-circle"></i>{{ user.username }}</span>
+                <span class="d-flex"><i class="far fa-envelope"></i>{{ user.email }}</span>
             </div>
             <button class="btn btn-info position-absolute d-flex"><a href="{% url 'profile_edit' %}"><i
                     class="fas fa-user-cog"></i><span>Edit Profile</span></a></button>

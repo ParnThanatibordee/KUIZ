@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}"/>
 {% endblock css %}
 {% block title %}
-    <title>Profile Edit | {{ user.username }}</title>
+    <title>KUIZ</title>
 {% endblock %}
 {% block nav %}
     {% include 'components/navbar.html' %}
@@ -19,12 +19,10 @@
             {% csrf_token %}
             <label for="username">Username:</label>
             {{ profile_form.username }}
-            <label for="first_name">First Name:</label>
+            <label for="username">First Name:</label>
             {{ profile_form.first_name }}
-            <label for="last_name">Last Name:</label>
+            <label for="username">Last Name:</label>
             {{ profile_form.last_name }}
-            <label for="last_name">Roles:</label>
-            {{ profile_form.is_teacher }}
             <div class="">
                 <label for="username">Profile Picture:</label>
                 {{ profile_form.profile_pic }}
@@ -33,4 +31,11 @@
         </form>
     </div>
 </div>
+
+    <!-- <form method="post" enctype='multipart/form-data'>
+        {% csrf_token %}
+        {{ profile_form.as_p }}
+        <button type="submit">Submit</button>
+        {{ success_message }}
+    </form> -->
 {% endblock %}
