@@ -74,6 +74,17 @@ class Quiz(models.Model):
         return f"{self.quiz_topic} : {self.detail}"
 
 
+class ClassroomUser(models.Model):
+    """User in classroom model."""
+
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+    def __str__(self):
+        """Display user.username."""
+        return f"{self.user.username} in {self.quiz.quiz_topic}"
+
+
 class Question(models.Model):
     """Question model."""
 
