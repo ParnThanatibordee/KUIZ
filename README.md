@@ -24,6 +24,19 @@ As the era changes, Technology keeps developing themself little bit per second t
 | Django | 3.2.9 or Higher |
 | Pillow | 8.4.0 or Higher |
 
+### Getting Start
+
+1. Clone the respository to your machine or personal computer.
+
+    ```
+   git clone https://github.com/ParnThanatibordee/KUIZ.git
+    ```
+2. Change directory to the repository by typing this command.
+
+    ```
+   cd KUIZ
+    ```
+
 ## Iterations
 
 [Iteration1](../../wiki/Iteration-1)
