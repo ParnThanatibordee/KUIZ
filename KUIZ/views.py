@@ -32,16 +32,18 @@ def detail_by_topic(request, topic):
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
+    remaining_message = ""
+    global all_question
+    all_question = list(quiz.question_set.all())
 
     if quiz.can_vote():
         user_attendee = Attendee.objects.filter(user=request.user, quiz=quiz)
-        remaining_message = ""
         if quiz.limit_attempt_or_not and (request.user != quiz.user):
             remaining_message = f" (remaining attempt: {quiz.attempt - len(user_attendee)})"
             if len(user_attendee) >= quiz.attempt:
-                return HttpResponse("out of attempt")
-        global all_question
-        all_question = list(quiz.question_set.all())
+                return render(request, 'KUIZ/out_of_attempt.html', {'quiz': quiz, 'num_of_question': len(all_question),
+                                                                    'time': quiz.exam_duration,
+                                                                    'remain_message': remaining_message})
         all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz)
         if len(all_answer_in_quiz) > 0:
             for i in all_answer_in_quiz:
@@ -51,13 +53,16 @@ def exam(request, pk):
         try:
             question1 = all_question[0]
         except:
-            return HttpResponse("There no question here.")
+            return render(request, 'KUIZ/no_question.html', {'quiz': quiz, 'num_of_question': len(all_question),
+                                                             'time': quiz.exam_duration,
+                                                             'remain_message': remaining_message})
         return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question),
                                                   'time': quiz.exam_duration,
                                                   'remain_message': remaining_message})
     else:
-        error_message = "quiz is not allow to at this time."
-        return HttpResponse(error_message)
+        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(all_question),
+                                                         'time': quiz.exam_duration,
+                                                         'remain_message': remaining_message})
 
 
 def question(request, pk, question_id):
