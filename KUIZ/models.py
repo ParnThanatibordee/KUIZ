@@ -22,6 +22,15 @@ YES_OR_NO = [
     (False, 'No'),
 ]
 
+CHECK_STRATEGY = [
+    ('static', 'Static'),
+    ('flexible', 'Flexible'),
+    ('white_space_order', 'Split (white space) order'),
+    ('white_space_no_order', 'Split (white space) no order'),
+    ('comma_order', 'Split (comma) order'),
+    ('comma_no_order', 'Split (comma) no order'),
+]
+
 
 class Quiz(models.Model):
     """Quiz model."""
@@ -71,6 +80,7 @@ class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=200)
     correct = models.CharField(max_length=200)
+    check_strategy = models.CharField(max_length=40, choices=CHECK_STRATEGY, default='static')
     point = models.IntegerField(default=1)
 
     def __str__(self):
@@ -118,7 +128,42 @@ class Answer(models.Model):
     answer = models.CharField(max_length=200)
 
     def check_answer(self, correct):
-        if correct.lower() == str(self.answer).lower():
+        strategy = self.question.check_strategy
+        if strategy == 'static':
+            if str(correct) == str(self.answer):
+                return True
+        elif strategy == 'flexible':
+            if str(correct).lower() == str(self.answer).lower():
+                return True
+        elif strategy == 'white_space_order':
+            correct_list = str(correct).split(' ')
+            answer_list = str(self.answer).split(' ')
+            if correct_list == answer_list:
+                return True
+        elif strategy == 'white_space_no_order':
+            correct_list = str(correct).split(' ')
+            answer_list = str(self.answer).split(' ')
+            try:
+                for i in range(len(correct_list)):
+                    if answer_list[i] not in correct_list:
+                        return False
+            except:
+                return False
+            return True
+        elif strategy == 'comma_order':
+            correct_list = [x.strip() for x in str(correct).split(' ')]
+            answer_list = [x.strip() for x in str(self.answer).split(' ')]
+            if correct_list == answer_list:
+                return True
+        elif strategy == 'comma_no_order':
+            correct_list = [x.strip() for x in str(correct).split(' ')]
+            answer_list = [x.strip() for x in str(self.answer).split(' ')]
+            try:
+                for i in range(len(correct_list)):
+                    if answer_list[i] not in correct_list:
+                        return False
+            except:
+                return False
             return True
         return False
 
