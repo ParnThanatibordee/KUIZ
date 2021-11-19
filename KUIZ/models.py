@@ -29,6 +29,8 @@ class Quiz(models.Model):
     # owner
     private = models.BooleanField(default=False)
     password = models.CharField(max_length=200, default="0000")
+    limit_attempt_or_not = models.BooleanField(choices=YES_OR_NO, default=False)
+    attempt = models.IntegerField(default=1)
     detail = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published', default=timezone.now)
     end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=365))

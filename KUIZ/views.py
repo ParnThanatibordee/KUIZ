@@ -34,7 +34,12 @@ def exam(request, pk):
     quiz = Quiz.objects.get(pk=pk)
 
     if quiz.can_vote():
-        # add shuffle ถ้าจะ random order คำถาม quiz.question_set.all()
+        user_attendee = Attendee.objects.filter(user=request.user, quiz=quiz)
+        remaining_message = ""
+        if quiz.limit_attempt_or_not and (request.user != quiz.user):
+            remaining_message = f" (remaining attempt: {quiz.attempt - len(user_attendee)})"
+            if len(user_attendee) >= quiz.attempt:
+                return HttpResponse("out of attempt")
         global all_question
         all_question = list(quiz.question_set.all())
         all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz)
@@ -48,7 +53,8 @@ def exam(request, pk):
         except:
             return HttpResponse("There no question here.")
         return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question),
-                                                  'time': quiz.exam_duration})
+                                                  'time': quiz.exam_duration,
+                                                  'remain_message': remaining_message})
     else:
         error_message = "quiz is not allow to at this time."
         return HttpResponse(error_message)
