@@ -136,13 +136,13 @@ class Answer(models.Model):
             if str(correct).lower() == str(self.answer).lower():
                 return True
         elif strategy == 'white_space_order':
-            correct_list = str(correct).split(' ')
-            answer_list = str(self.answer).split(' ')
+            correct_list = str(correct).split()
+            answer_list = str(self.answer).split()
             if correct_list == answer_list:
                 return True
         elif strategy == 'white_space_no_order':
-            correct_list = str(correct).split(' ')
-            answer_list = str(self.answer).split(' ')
+            correct_list = str(correct).split()
+            answer_list = str(self.answer).split()
             try:
                 for i in range(len(correct_list)):
                     if answer_list[i] not in correct_list:
@@ -151,13 +151,13 @@ class Answer(models.Model):
                 return False
             return True
         elif strategy == 'comma_order':
-            correct_list = [x.strip() for x in str(correct).split(' ')]
-            answer_list = [x.strip() for x in str(self.answer).split(' ')]
+            correct_list = [x.strip() for x in str(correct).split(',')]
+            answer_list = [x.strip() for x in str(self.answer).split(',')]
             if correct_list == answer_list:
                 return True
         elif strategy == 'comma_no_order':
-            correct_list = [x.strip() for x in str(correct).split(' ')]
-            answer_list = [x.strip() for x in str(self.answer).split(' ')]
+            correct_list = [x.strip() for x in str(correct).split(',')]
+            answer_list = [x.strip() for x in str(self.answer).split(',')]
             try:
                 for i in range(len(correct_list)):
                     if answer_list[i] not in correct_list:
