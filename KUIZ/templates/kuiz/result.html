@@ -20,13 +20,23 @@
         <div class="body">
             <div>
                 <h1>{{ quiz.detail }}</h1>
-                <div class="card-score">
-                    <span>Your score: {{ score }}/{{ max }}</span>
-                    <div class="buttons">
-                        <button type="button" class="btn btn-home"><i class="fas fa-home"></i><a href="{% url 'index' %}">Home</a></button>
-                        <button type="button" class="btn btn-feeback"><a href="{% url 'feedback' %}">Feedback</a></button>
+                {% if automate %}
+                    <div class="card-score">
+                        <span>Your score: {{ score }}/{{ max }}</span>
+                        <div class="buttons">
+                            <button type="button" class="btn btn-home"><i class="fas fa-home"></i><a href="{% url 'index' %}">Home</a></button>
+                            <button type="button" class="btn btn-feeback"><a href="{% url 'feedback' %}">Feedback</a></button>
+                        </div>
                     </div>
-                </div>
+                {% else %}
+                    <div class="card-score">
+                        <span>Wait Teacher to check</span>
+                        <div class="buttons">
+                            <button type="button" class="btn btn-home"><i class="fas fa-home"></i><a href="{% url 'index' %}">Home</a></button>
+                            <button type="button" class="btn btn-feeback"><a href="{% url 'feedback' %}">Feedback</a></button>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
             <br>
         </div>

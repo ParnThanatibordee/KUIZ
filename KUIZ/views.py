@@ -204,12 +204,9 @@ def result(request, pk):
                 score += answer.question.point
         for question in all_question:
             max_score += question.point
-        Score.objects.create(user=user, quiz=quiz, score=score, max_score=max_score)
-        return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': score, 'max': max_score})
-    else:
-        #  will implement later
-        # return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': score, 'max': max_score})
-        return HttpResponse("Wait Teacher to check your quiz.")
+    Score.objects.create(user=user, quiz=quiz, score=score, max_score=max_score)
+    return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': score, 'max': max_score,
+                                                'automate': quiz.automate})
 
 
 def get_feedback(request):
@@ -286,10 +283,29 @@ def check_quiz(request, pk):
 def check_student(request, pk, id):
     this_quiz = Quiz.objects.get(pk=pk)
     this_user = Account.objects.get(pk=id)
-    all_question= this_quiz.question_set.all()
+    all_question = this_quiz.question_set.all()
     last_n_answer = []
     for i in all_question:
         last_n_answer.append(list(Answer.objects.filter(user=this_user, question=i))[-1])
     return render(request, 'KUIZ/checking_per_student.html', {'this_quiz': this_quiz, 'this_user': this_user,
                                                               'all_question': all_question,
                                                               'last_n_answer': last_n_answer})
+
+
+def update_answer(request, pk, id):
+    this_quiz = Quiz.objects.get(pk=pk)
+    this_user = Account.objects.get(pk=id)
+    all_question = this_quiz.question_set.all()
+    score = 0
+    max_score = 0
+    for i in all_question:
+        try:
+            answer = request.POST[f"{i.pk}"]
+        except:
+            pass
+        else:
+            score += i.point
+    for question in all_question:
+        max_score += question.point
+    Score.objects.create(user=this_user, quiz=this_quiz, score=score, max_score=max_score)
+    return HttpResponseRedirect(reverse('check_per_quiz', args=(pk, )))

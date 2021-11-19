@@ -64,8 +64,11 @@ def profile_page(request):
 
     lastest_dict = {}
     for k in attend_quiz:
-        lastest_score = list(Score.objects.filter(user=request.user, quiz=k))[-1]
-        lastest_dict[k.quiz_topic] = lastest_score
+        try:
+            lastest_score = list(Score.objects.filter(user=request.user, quiz=k))[-1]
+            lastest_dict[k.quiz_topic] = lastest_score
+        except:
+            pass
 
     if not request.user.is_authenticated:
         return redirect("login")

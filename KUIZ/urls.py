@@ -15,4 +15,5 @@ urlpatterns = [
     path('check/', views.check, name='check'),
     path('check/<int:pk>/', views.check_quiz, name='check_per_quiz'),
     path('check/<int:pk>/user/<int:id>', views.check_student, name='check_per_student'),
+    path('check/<int:pk>/user/<int:id>/answer', views.update_answer, name='update_answer'),
 ]

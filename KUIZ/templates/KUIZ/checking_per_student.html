@@ -1,11 +1,22 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/check_per_student.css' %}">
+
 <h1>List of Answer ( {{this_quiz.quiz_topic}} : {{this_user.username}} )</h1>
+<form action="{% url 'update_answer' this_quiz.pk this_user.id %}" method="post">
+{% csrf_token %}
 {% for answer in last_n_answer %}
 {% if answer.answer == "" %}
 {{answer.question.question_text}} : answer ( None )
 {% else %}
 {{answer.question.question_text}} : answer ( {{answer.answer}} )
 {% endif %}
+<label class="switch">
+  <input type="checkbox" value="True" name="{{ answer.question.pk }}">
+  <span class="slider round"></span>
+</label>
 <br>
 {% endfor %}
 <br>
 <button type="button"><a href="{%url 'check_per_quiz' this_quiz.id %}">Back</a></button>
+<input type="submit" value="Save">
+</form>
