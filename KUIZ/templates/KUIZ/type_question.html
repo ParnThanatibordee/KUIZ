@@ -23,13 +23,11 @@
             <form action="{% url 'answer' quiz.pk question.id %}" method="post">
             {% csrf_token %}
             <br>
-            {% for choice in choices %}
-            {% if choice.question == lastest_answer_in_question.question %}
+            {% if choices.question == lastest_answer_in_question.question %}
             <input type="text" id="type" name="type" value="{{lastest_answer_in_question.answer}}"><br><br>
             {% else %}
             <input type="text" id="type" name="type" class="answer_input"><br><br>
             {% endif %}
-            {% endfor %}
             <br>
             {% if back_link %}
             <button type="button" class="back-btn"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
