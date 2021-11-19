@@ -35,7 +35,7 @@
     font-weight: 500;
 }
 
-.right-menu button {
+.navbar button {
     margin: 0 30px 0 10px;
     border-radius: 25px;
     font-size: 20px;
@@ -43,7 +43,7 @@
     border: 1px solid #000;
 }
 
-.right-menu button:hover {
+.navbar button:hover {
     background-color: #66A695;
     color: #fff;
 }
@@ -66,10 +66,9 @@
     display: none;
     flex-direction: column;
     position: absolute;
-    right: 95px;
+    right: 70px;
     background-color: rgb(73, 73, 73);
     border-radius: 5px;
-    margin-top: 10px;
 }
 
 .options span {
@@ -97,47 +96,11 @@
     margin: 0 10px;
 }
 
-.show {
+.profile:hover .options {
     display: flex;
-}
-
-.profile img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 1px solid gray;
-    margin: 0;
 }
 
 .fa-caret-down {
     margin-top: 5px;
     font-size: 20px;
-}
-
-.dropdown button {
-    font-size: 20px;
-    font-weight: 500;
-}
-
-.dropdown-menu {
-    top: 50px;
-    left: 7px;
-    background-color: rgb(73, 73, 73);
-}
-
-.dropdown-menu a {
-    color: white;
-}
-
-.dropdown-menu a:last-child {
-    margin: 0;
-}
-
-.dropdown-menu a:hover {
-    background-color: rgb(100, 100, 100);
-    color: white;
-}
-
-.btn-check:focus+.btn, .btn:focus {
-    box-shadow: none;
 }

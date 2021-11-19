@@ -9,8 +9,14 @@ class MyAccountManager(BaseUserManager):
             raise ValueError("Users must have an Email")
         if not username:
             raise ValueError("Users must have a Username")
+        if not first_name:
+            raise ValueError("Users must have Firstname")
+        if not last_name:
+            raise ValueError("Users must have Lastname")
+        if not password:
+            raise ValueError("Users must have a Password")
 
-    def create_user(self, email, username, first_name='', last_name='', password=None):
+    def create_user(self, email, username, first_name, last_name, password=None):
         self.check_no_input(email, username, first_name, last_name, password)
         user = self.model(
             email=self.normalize_email(email),
@@ -55,7 +61,7 @@ class Account(AbstractBaseUser):
     objects = MyAccountManager()
 
     def __str__(self):
-        return F"{self.username}"
+        return self.email
 
     def has_perm(self, perm, obj=None):
         return self.is_admin

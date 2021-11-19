@@ -28,26 +28,3 @@
 h5 {
   color:rgb(114, 114, 114);
 }
-
-.dropdown-menu {
-  background-color: rgb(73, 73, 73);
-}
-
-.dropdown-menu.show {
-  display: flex;
-  flex-direction: column;
-  width: max-content;
-  margin-left: 5px;
-}
-
-.edit .dropdown-menu a {
-  margin: 5px 10px;
-}
-
-.edit a {
-  margin: 0 10px;
-}
-
-.btn-group {
-  margin-left: 10px;
-}
