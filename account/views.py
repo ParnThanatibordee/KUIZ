@@ -4,6 +4,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from KUIZ.models import Attendee, Score, Quiz
 from account.forms import RegistrationForm, AccountAuthenticationForm, ProfileForm
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 # Create your views here.
 def registration_view(request):
@@ -16,6 +20,7 @@ def registration_view(request):
             # raw_password = form.cleaned_data.get('password1')
             # account = authenticate(email=email, password=raw_password)
             login(request, user)
+            logger.info(f"User {user} has registered")
             return redirect('index')
         else:
             context['registration_form'] = form
@@ -26,7 +31,9 @@ def registration_view(request):
 
 
 def logout_view(request):
-    logout(request)
+    if request.user.is_authenticated:
+        logger.info(f"User {request.user} has logged out")
+        logout(request)
     return redirect('index')
 
 
@@ -45,6 +52,7 @@ def login_view(request):
 
             if user:
                 login(request, user)
+                logger.info(f"User {request.user} has logged in")
                 return redirect('index')
     else:
         form = AccountAuthenticationForm()
@@ -86,6 +94,7 @@ def profile_edit_view(request):
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
+            logger.info(f"User {request.user} has edited their profile")
             return redirect("profile")
     context['profile_form'] = profile_form
     return render(request, 'account/profile_edit.html', {'profile_form': profile_form, 'user': request.user})
