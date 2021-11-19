@@ -222,7 +222,7 @@ def new_quiz(request):
                 quiz = quiz_form.save()
             except:
                 return redirect('detail')
-            quiz.user = request.user
+            quiz.owner = request.user
             quiz.save()
             return redirect('detail')
     else:

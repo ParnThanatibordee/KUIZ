@@ -11,6 +11,7 @@ TOPIC = [
     ('physics', 'Physics'),
     ('chemistry', 'Chemistry'),
     ('biology', 'Biology'),
+    ('english', 'English'),
     ('astronomy', 'Astronomy'),
     ('social', 'Social'),
     ('sport', 'Sport'),
@@ -26,7 +27,6 @@ YES_OR_NO = [
 class Quiz(models.Model):
     """Quiz model."""
     quiz_topic = models.CharField(max_length=200)
-    # owner
     private = models.BooleanField(default=False)
     password = models.CharField(max_length=200, default="0000")
     detail = models.CharField(max_length=200)
@@ -36,7 +36,7 @@ class Quiz(models.Model):
     exam_duration = models.IntegerField(default=0)
     random_order = models.BooleanField(choices=YES_OR_NO, default=False)
     automate = models.BooleanField(choices=YES_OR_NO, default=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                             null=True,
                             blank=True,
                             on_delete=models.CASCADE)
