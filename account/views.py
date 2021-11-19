@@ -20,7 +20,7 @@ def registration_view(request):
             # raw_password = form.cleaned_data.get('password1')
             # account = authenticate(email=email, password=raw_password)
             login(request, user)
-            logger.info(f"User {user} has registered")
+            logger.info(f"User {user.username} has registered({request.user})")
             return redirect('index')
         else:
             context['registration_form'] = form
@@ -32,7 +32,7 @@ def registration_view(request):
 
 def logout_view(request):
     if request.user.is_authenticated:
-        logger.info(f"User {request.user} has logged out")
+        logger.info(f"User {request.user.username} has logged out ({request.user})")
         logout(request)
     return redirect('index')
 
@@ -52,7 +52,7 @@ def login_view(request):
 
             if user:
                 login(request, user)
-                logger.info(f"User {request.user} has logged in")
+                logger.info(f"User {request.user.username} has logged in ({request.user})")
                 return redirect('index')
     else:
         form = AccountAuthenticationForm()
@@ -94,7 +94,7 @@ def profile_edit_view(request):
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            logger.info(f"User {request.user} has edited their profile")
+            logger.info(f"User {request.user.username} has edited their profile ({request.user})")
             return redirect("profile")
     context['profile_form'] = profile_form
     return render(request, 'account/profile_edit.html', {'profile_form': profile_form, 'user': request.user})
