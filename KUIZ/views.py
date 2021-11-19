@@ -115,8 +115,9 @@ def question(request, pk, question_id):
                                                           'back_question': back_question, 'time': quiz.exam_duration,
                                                           'lastest_answer_in_question': lastest_answer_in_question})
     else:
-        error_message = "quiz is not allow to at this time."
-        return HttpResponse(error_message)
+        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(all_question),
+                                                         'time': quiz.exam_duration,
+                                                         'remain_message': ""})
 
 
 def answer(request, pk, question_id):
