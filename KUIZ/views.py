@@ -7,6 +7,9 @@ from account.models import Account
 from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
 from django.contrib.auth.decorators import login_required
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 def index(request):
     """Index homepage."""
@@ -69,7 +72,6 @@ def question(request, pk, question_id):
     """Question view."""
     # เพิ่มปุ่ม clear choice กับ mark
     quiz = Quiz.objects.get(pk=pk)
-
     if quiz.can_vote():
         num_of_question = all_question.index(
             Question.objects.get(pk=question_id))
@@ -218,6 +220,7 @@ def result(request, pk):
     max_score = 0  # should in model
     all_answer_in_quiz = Answer.objects.filter(user=user, quiz=quiz)
     Attendee.objects.create(user=user, quiz=quiz)
+    logger.info(f"User {request.user.username} ({request.user}) has finished quiz {quiz.quiz_topic}.")
     if quiz.automate:
         for answer in all_answer_in_quiz:
             if answer.check_answer(answer.question.correct):
@@ -235,6 +238,7 @@ def get_feedback(request):
         form = FeedbackForm(request.POST)
         if form.is_valid():
             form.save()
+            logger.info(f"User {request.user.username} ({request.user}) has sent feedback to their student")
             return redirect('index')
     else:
         form = FeedbackForm()
@@ -253,6 +257,7 @@ def new_quiz(request):
             except:
                 return redirect('detail')
             quiz.user = request.user
+            logger.info(f"User {request.user.username} ({request.user}) has created a new quiz ({quiz_title}).")
             quiz.save()
             return redirect('detail')
     else:
