@@ -21,22 +21,67 @@ As the era changes, Technology keeps developing themself little bit per second t
 | Name | Required version(s) |
 |------|---------------------|
 | Python | 3.7 or Higher |
-| Django | 3.2.9 or Higher |
+| Django | 3.2.7 or Higher |
 | Pillow | 8.4.0 or Higher |
 
 ### Getting Start
 
-1. Clone the respository to your machine or personal computer.
+1. Clone the respository to your machine or PC.
 
     ```
    git clone https://github.com/ParnThanatibordee/KUIZ.git
     ```
-2. Change directory to the repository by typing this command.
+2. Change directory to the local repository by typing this command.
 
     ```
    cd KUIZ
     ```
+3. Install virtualenv to your machine or PC by this command.
 
+    ```
+   py -m pip install virtualenv
+    ```
+4. Create virtual environment for KUIZ directory.
+
+    ```
+   py -m venv venv
+    ```
+5. Activate virtual environment.
+
+    For Mac OS / Linux
+    ```
+   source venv\Scripts\activate
+    ```
+    
+    For Window
+    ```
+   venv\Scripts\activate
+    ```
+6. Install all require packages by this command.
+
+    ```
+   pip install -r requirement.txt
+   pip install django
+   pip install social-auth-app-django
+   pip install django-environ
+   pip install django-static-fontawesome
+   pip install pillow
+    ```
+7. Create .env file inside KUIZ (same level as settings.py) and change the debug=True.
+
+    ```
+   DEBUG=True
+    ```
+8. Type this command to migrate the KUIZ database.
+
+    ```
+   py manage.py migrate
+    ```
+9. Running the server by this command.
+    ```
+   py manage.py runserver
+    ```
+    
 ## Iterations
 
 [Iteration1](../../wiki/Iteration-1)
