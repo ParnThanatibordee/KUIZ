@@ -1,19 +1,43 @@
+{% extends 'KUIZ/main.html' %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/check_per_student.css' %}">
 
-<h1>List of Answer ( {{this_quiz.quiz_topic}} : {{this_user.username}} )</h1>
-<form action="{% url 'update_answer' this_quiz.pk this_user.id %}" method="post">
-{% csrf_token %}
-{% for answer in last_n_answer %}
-{% if answer.answer == "" %}
-{{answer.question.question_text}} : answer ( None )
-{% else %}
-{{answer.question.question_text}} : answer ( {{answer.answer}} )
-{% endif %}
-  <input type="checkbox" value="True" name="{{ answer.question.pk }}">
-<br>
-{% endfor %}
-<br>
-<button type="button"><a href="{%url 'check_per_quiz' this_quiz.id %}">Back</a></button>
-<input type="submit" value="Save">
-</form>
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/card_quiz.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/check_per_student.css' %}">
+{% endblock css %}
+{% block title %}{% endblock %}
+
+{% block nav %}
+    {% include 'components/navbar.html' %}
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-md-center">
+      <div class="col-md-8 col-12">
+        <h1 class="mb-5">List of Answer ( {{this_quiz.quiz_topic}} : {{this_user.username}} )</h1>
+        <form action="{% url 'update_answer' this_quiz.pk this_user.id %}" method="post">
+          {% csrf_token %}
+          <div class="d-flex align-items-center head-table">
+            <h3>Question</h3>
+            <h3>Answer</h3>
+          </div>
+          <div class="d-flex align-items-center">
+            {% for answer in last_n_answer %}
+            <h4 style="flex: 7;">{{ answer.question.question_text }}</h4>
+            <ul class="ks-cboxtags" style="flex: 3;">
+              <li>
+                <input type="checkbox" id="checkboxOne" value="True" name="{{ answer.question.pk }}">
+                <label for="checkboxOne">{% if answer.answer != "" %}{{ answer.answer }}{% else %}None{% endif %}</label>
+              </li>
+            </ul>
+            {% endfor %}
+          </div>
+          <br>
+          <a href="{%url 'check_per_quiz' this_quiz.id %}" class="btn btn-outline-danger">Back</a>
+          <input type="submit" value="Save" class="btn btn-success">
+        </form>
+      </div>
+    </div>
+</div>
+{% endblock %}
