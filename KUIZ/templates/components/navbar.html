@@ -27,9 +27,12 @@
           <a class="nav-link active" aria-current="page" href="{% url 'check' %}">Check</a>
         </li>
         {% endif %}
+        {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'feedback' %}">Feedback</a>
         </li>
+        {% endif %}
+        {% if user.is_teacher %}
         <li>
           <div class="dropdown">
             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,6 +46,7 @@
             </div>
           </div>
         </li>
+        {% endif %}
       </ul>
       <div class="navbar-nav ml-auto right-menu">
         {% if user.is_authenticated %}

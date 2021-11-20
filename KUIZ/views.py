@@ -321,7 +321,7 @@ def new_quiz(request):
             except:
                 return redirect('detail')
             quiz.owner = request.user
-            logger.info(f"User {request.user.username} ({request.user}) has created a new quiz ({quiz.quiz_title}).")
+            logger.info(f"User {request.user.username} ({request.user}) has created a new quiz ({quiz.quiz_topic}).")
             quiz.save()
             return redirect('detail')
     else:
