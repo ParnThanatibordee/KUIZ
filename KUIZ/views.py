@@ -4,7 +4,7 @@ from django.urls import reverse
 import random
 from .forms import FeedbackForm, NewQuizForm
 from account.models import Account
-from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
+from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score, ClassroomUser
 from django.contrib.auth.decorators import login_required
 
 
@@ -35,6 +35,13 @@ def exam(request, pk):
     remaining_message = ""
     global all_question
     all_question = list(quiz.question_set.all())
+    user_contain = list(ClassroomUser.objects.filter(quiz=quiz))
+
+    if quiz.private and (request.user not in user_contain):
+        pass
+    # not in classroom
+    # return enter password page
+    # add user to classroom
 
     if quiz.can_vote():
         user_attendee = Attendee.objects.filter(user=request.user, quiz=quiz)
@@ -65,14 +72,22 @@ def exam(request, pk):
                                                          'remain_message': remaining_message})
 
 
+def password(request, pk):
+    """Password view"""
+    pass
+
+
 def question(request, pk, question_id):
     """Question view."""
     # เพิ่มปุ่ม clear choice กับ mark
     quiz = Quiz.objects.get(pk=pk)
 
     if quiz.can_vote():
-        num_of_question = all_question.index(
-            Question.objects.get(pk=question_id))
+        try:
+            num_of_question = all_question.index(
+                Question.objects.get(pk=question_id))
+        except:
+            return HttpResponseRedirect(reverse('exam', args=(pk, )))
         this_question = all_question[num_of_question]
         type_or_not = False
         all_choice = this_question.choice_set.all()
@@ -139,8 +154,11 @@ def answer(request, pk, question_id):
                         i.delete()
                 Answer.objects.create(user=request.user, quiz=quiz, question=question,
                                       answer="")
-                num_of_question = all_question.index(
-                    Question.objects.get(pk=question_id))
+                try:
+                    num_of_question = all_question.index(
+                        Question.objects.get(pk=question_id))
+                except:
+                    return HttpResponseRedirect(reverse('exam', args=(pk, )))
                 try:
                     next_question = all_question[num_of_question + 1].id
                     next_link = True
@@ -157,8 +175,11 @@ def answer(request, pk, question_id):
                         i.delete()
                 Answer.objects.create(user=request.user, quiz=quiz, question=question,
                                       answer=selected_choice.choice_text)
-                num_of_question = all_question.index(
-                    Question.objects.get(pk=question_id))
+                try:
+                    num_of_question = all_question.index(
+                        Question.objects.get(pk=question_id))
+                except:
+                    return HttpResponseRedirect(reverse('exam', args=(pk,)))
                 try:
                     next_question = all_question[num_of_question + 1].id
                     next_link = True
@@ -196,8 +217,11 @@ def answer(request, pk, question_id):
                 else:
                     return HttpResponseRedirect(reverse('result', args=(pk,)))
     except:
-        num_of_question = all_question.index(
-            Question.objects.get(pk=question_id))
+        try:
+            num_of_question = all_question.index(
+                Question.objects.get(pk=question_id))
+        except:
+            return HttpResponseRedirect(reverse('exam', args=(pk,)))
         try:
             next_question = all_question[num_of_question + 1].id
             next_link = True
@@ -222,7 +246,7 @@ def result(request, pk):
         for answer in all_answer_in_quiz:
             if answer.check_answer(answer.question.correct):
                 score += answer.question.point
-        for question in all_question:
+        for question in list(quiz.question_set.all()):
             max_score += question.point
     Score.objects.create(user=user, quiz=quiz, score=score, max_score=max_score)
     return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': score, 'max': max_score,

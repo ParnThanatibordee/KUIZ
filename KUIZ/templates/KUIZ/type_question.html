@@ -24,7 +24,7 @@
             {% csrf_token %}
             <br>
             {% if choices.question == lastest_answer_in_question.question %}
-            <input type="text" id="type" name="type" value="{{lastest_answer_in_question.answer}}"><br><br>
+            <input type="text" id="type" name="type" class="answer_input" value="{{lastest_answer_in_question.answer}}"><br><br>
             {% else %}
             <input type="text" id="type" name="type" class="answer_input"><br><br>
             {% endif %}
