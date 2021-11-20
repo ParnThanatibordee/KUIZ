@@ -16,7 +16,6 @@ import environ
 import logging.config
 import django_heroku
 
-django_heroku.settings(locals())
 
 env = environ.Env()
 env.read_env()
@@ -219,3 +218,5 @@ LOGOUT_REDIRECT_URL = '/'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('GOOGLE_OAUTH2_KEY', default='missing-key')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('GOOGLE_OAUTH2_SECRET', default='missing-secret')
+
+django_heroku.settings(locals())
