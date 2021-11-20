@@ -34,8 +34,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'ku-kuiz.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = [
-    'KUIZ.apps.KuizConfig',
-    'account.apps.AccountConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_static_fontawesome',
     'social_django',
+    'KUIZ',
+    'account',
 ]
 
 AUTHENTICATION_BACKENDS = (
