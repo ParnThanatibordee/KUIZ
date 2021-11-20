@@ -132,6 +132,8 @@ def question(request, pk, question_id):
         all_choice = this_question.choice_set.all()
         if len(all_choice) == 0:
             all_choice = this_question.type_set.all()
+            if len(all_choice) > 1:
+                all_choice = all_choice[0]
             type_or_not = True
         else:
             choices = {}
@@ -156,7 +158,7 @@ def question(request, pk, question_id):
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
                                                                'num': num_of_question + 1, 'max_num': len(list(quiz.question_set.all())),
-                                                               'choices': all_choice[0], 'next_link': next_link,
+                                                               'choices': all_choice, 'next_link': next_link,
                                                                'next_question': next_question, 'back_link': back_link,
                                                                'back_question': back_question,
                                                                'time': quiz.exam_duration,

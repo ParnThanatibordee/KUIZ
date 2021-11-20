@@ -48,11 +48,12 @@ class NewQuestionForm(ModelForm):
 
     class Meta:
         model = Question
-        fields = ['quiz', 'question_text', 'correct', 'point']
+        fields = ['quiz', 'question_text', 'correct', 'check_strategy', 'point']
         widgets = {
             'quiz': forms.Select(attrs={'class': 'form-control'}),
             'question_text': forms.TextInput(attrs={'class': 'form-control'}),
             'correct': forms.TextInput(attrs={'class': 'form-control'}),
+            'check_strategy': forms.Select(attrs={'class': 'form-control'}),
             'point': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
