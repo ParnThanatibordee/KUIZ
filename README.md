@@ -15,6 +15,7 @@ As the era changes, Technology keeps developing themself little bit per second t
 | [Wiki Home](../../wiki/Home) |
 | [Vision Statement](../../wiki/Vision%20Statement) |
 | [Features list](../../wiki/Requirements) |
+| [Installation Instruction](../../wiki/Installation%20Instruction) |
 
 
 ## Requirement before starting KUIZ
