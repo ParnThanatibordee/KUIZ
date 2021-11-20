@@ -17,4 +17,5 @@ urlpatterns = [
     path('check/<int:pk>/user/<int:id>', views.check_student, name='check_per_student'),
     path('check/<int:pk>/user/<int:id>/answer', views.update_answer, name='update_answer'),
     path('exam/<int:pk>/password', views.password, name='password'),
+    path('exam/<int:pk>/question/<int:question_id>/clear', views.clear_answer, name='clear'),
 ]

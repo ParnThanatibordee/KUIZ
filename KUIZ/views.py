@@ -102,12 +102,16 @@ def password(request, pk):
 
 def clear_answer(request, pk, question_id):
     """Clear answer view"""
-    pass
+    question = Question.objects.get(pk=question_id)
+    all_answer_in_question = Answer.objects.filter(user=request.user, question=question)
+    if len(all_answer_in_question) > 0:
+        for i in all_answer_in_question:
+            i.delete()
+    return HttpResponseRedirect(reverse('question', args=(pk, question_id)))
 
 
 def question(request, pk, question_id):
     """Question view."""
-    # เพิ่มปุ่ม clear choice กับ mark
     quiz = Quiz.objects.get(pk=pk)
 
     if quiz.can_vote():
