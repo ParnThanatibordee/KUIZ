@@ -18,10 +18,6 @@ def index(request):
     return render(request, 'KUIZ/index.html')
 
 
-def home(request):
-    return render(request, "KUIZ/home.html", {})
-
-
 def detail(request):
     """List of exam view."""
     all_quiz = Quiz.objects.all()
