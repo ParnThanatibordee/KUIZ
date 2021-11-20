@@ -39,7 +39,7 @@ def exam(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     global all_question
     all_question = list(quiz.question_set.all())
-    user_contain = [i.owner for i in list(ClassroomUser.objects.filter(quiz=quiz))]
+    user_contain = [i.user for i in list(ClassroomUser.objects.filter(quiz=quiz))]
     remaining_message = ""
     error_message = ""
 

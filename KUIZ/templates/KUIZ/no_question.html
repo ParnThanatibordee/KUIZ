@@ -14,7 +14,7 @@
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex w-100 justify-content-between">
                         <h1>KUIZ : {{quiz.quiz_topic}}</h1>
-                        {% if user == quiz.user %}
+                        {% if user == quiz.owner %}
                             <a href="{% url 'edit_quiz' quiz.id %}" class="btn btn-secondary edit-btn">Edit quiz</a>
                         {% endif %}
                     </div>
