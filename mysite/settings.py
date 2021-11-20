@@ -15,7 +15,7 @@ from pathlib import Path
 import environ
 import logging.config
 import django_heroku
-
+import dj_database_url
 
 env = environ.Env()
 env.read_env()
@@ -30,7 +30,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 SECRET_KEY = env('SECRET_KEY', default='dumb-secret-key')
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'kuiz-thailand.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'ku-kuiz.herokuapp.com']
 
 # Application definition
 
@@ -101,6 +101,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
