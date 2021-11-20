@@ -33,7 +33,7 @@ def detail_by_topic(request, topic):
     return render(request, 'KUIZ/detail_by_topic.html', {'quiz_in_topic': quiz_in_topic, 'topic': topic.title()})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
@@ -78,7 +78,7 @@ def exam(request, pk):
                                                          'remain_message': remaining_message})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def password(request, pk):
     """Password view"""
     quiz = Quiz.objects.get(pk=pk)
@@ -106,7 +106,7 @@ def password(request, pk):
                                                           'error_message': error_message})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def clear_answer(request, pk, question_id):
     """Clear answer view"""
     question = Question.objects.get(pk=question_id)
@@ -117,7 +117,7 @@ def clear_answer(request, pk, question_id):
     return HttpResponseRedirect(reverse('question', args=(pk, question_id)))
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def question(request, pk, question_id):
     """Question view."""
     quiz = Quiz.objects.get(pk=pk)
@@ -174,7 +174,7 @@ def question(request, pk, question_id):
                                                          'remain_message': ""})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def answer(request, pk, question_id):
     """Answer for choice or type."""
     quiz = Quiz.objects.get(pk=pk)
@@ -273,7 +273,7 @@ def answer(request, pk, question_id):
             return HttpResponseRedirect(reverse('result', args=(pk,)))
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def result(request, pk):
     """Report of score of user."""
     # automate or hand-check
@@ -295,7 +295,7 @@ def result(request, pk):
                                                 'automate': quiz.automate})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def get_feedback(request):
     feedback = Feedback.objects.all()
     if request.method == "POST":
@@ -310,7 +310,7 @@ def get_feedback(request):
     return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def new_quiz(request):
     """Create a new quiz by teacher."""
     if request.method == "POST":
@@ -329,7 +329,7 @@ def new_quiz(request):
     return render(request, "KUIZ/new_quiz.html", {"quiz_form": quiz_form})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def edit_quiz(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     if quiz.owner == request.user:
@@ -356,13 +356,13 @@ def edit_quiz(request, pk):
     return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def check(request):
     all_owner_quiz = Quiz.objects.filter(user=request.user)
     return render(request, 'KUIZ/checking.html', {'owner_quiz': all_owner_quiz})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def check_quiz(request, pk):
     this_quiz = Quiz.objects.get(pk=pk)
     all_student_attendee = Attendee.objects.filter(quiz=this_quiz)
@@ -374,7 +374,7 @@ def check_quiz(request, pk):
     return render(request, 'KUIZ/checking_per_quiz.html', {"this_quiz": this_quiz, "all_user": unique_list_student})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def check_student(request, pk, id):
     this_quiz = Quiz.objects.get(pk=pk)
     this_user = Account.objects.get(pk=id)
@@ -387,7 +387,7 @@ def check_student(request, pk, id):
                                                               'last_n_answer': last_n_answer})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def update_answer(request, pk, id):
     this_quiz = Quiz.objects.get(pk=pk)
     this_user = Account.objects.get(pk=id)
@@ -407,7 +407,7 @@ def update_answer(request, pk, id):
     return HttpResponseRedirect(reverse('check_per_quiz', args=(pk, )))
   
   
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def new_question(request):
     """Create a new question by teacher."""
     if request.method == "POST":
@@ -425,14 +425,14 @@ def new_question(request):
     return render(request, "KUIZ/new_question.html", {"question_form": question_form})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='/')
 def select_question(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     questions = quiz.question_set.all()
     return render(request, "KUIZ/select_question.html", {"questions": questions})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def edit_question(request, question_id):
     question = Question.objects.get(pk=question_id)
     question_form = NewQuestionForm(initial={
@@ -453,7 +453,7 @@ def edit_question(request, question_id):
     return render(request, "KUIZ/edit_question.html", {"question": question, 'question_form': question_form})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def new_multiple_choice(request):
     """Create a new multiple choice by teacher."""
     if request.method == "POST":
@@ -478,7 +478,7 @@ def new_multiple_choice(request):
     choice_form.fields['question'].queryset = questions
     return render(request, "KUIZ/new_multiple_choice.html", {"choice_form": choice_form})
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def new_typing_choice(request):
     """Create a new typing choice by teacher."""
     if request.method == "POST":
@@ -503,20 +503,20 @@ def new_typing_choice(request):
     choice_form.fields['question'].queryset = questions
     return render(request, "KUIZ/new_typing_choice.html", {"choice_form": choice_form})
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def select_question_to_edit_choice(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     questions = quiz.question_set.all()
     return render(request, "KUIZ/select_question.html", {"questions": questions, 'choice': True})
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def select_choice(request, question_id):
     question = Question.objects.get(pk=question_id)
     multiple_choices = question.choice_set.all()
     typing_choices = question.type_set.all()
     return render(request, "KUIZ/select_choice.html", {'multiple_choices': multiple_choices, 'typing_choices': typing_choices})
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def edit_multiple_choice(request, choice_id):
     choice = Choice.objects.get(pk=choice_id)
     choice_form = NewMultipleChoiceForm(initial={
@@ -534,7 +534,7 @@ def edit_multiple_choice(request, choice_id):
             return redirect('detail')
     return render(request, "KUIZ/edit_multiple_choice.html", {"choice": choice, 'choice_form': choice_form})
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def edit_typing_choice(request, choice_id):
     typing_choice = Type.objects.get(pk=choice_id)
     choice_form = NewTypingChoiceForm(initial={
