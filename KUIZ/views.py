@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import random
-from .forms import FeedbackForm, NewQuizForm
+
+from .forms import FeedbackForm, NewQuizForm, NewQuestionForm, NewMultipleChoiceForm, NewTypingChoiceForm
 from account.models import Account
 from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score, ClassroomUser
 from django.contrib.auth.decorators import login_required
@@ -10,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 def index(request):
     """Index homepage."""
@@ -304,6 +306,7 @@ def get_feedback(request):
             return redirect('index')
     else:
         form = FeedbackForm()
+        form.fields['quiz'].queryset = Quiz.objects.filter(user=request.user)
     return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
 
 
@@ -313,7 +316,6 @@ def new_quiz(request):
     if request.method == "POST":
         quiz_form = NewQuizForm(request.POST)
         if quiz_form.is_valid():
-            quiz_title = quiz_form.cleaned_data['quiz_topic']
             try:
                 quiz = quiz_form.save()
             except:
@@ -333,9 +335,12 @@ def edit_quiz(request, pk):
     if quiz.user == request.user:
         quiz_form = NewQuizForm(initial={
             'quiz_topic': quiz.quiz_topic,
+            'private': quiz.private,
+            'password': quiz.password,
             'detail': quiz.detail,
             'topic': quiz.topic,
             'exam_duration': quiz.exam_duration,
+            'random_order': quiz.random_order
         })
         if request.method == "POST":
             quiz_form = NewQuizForm(request.POST, instance=quiz)
@@ -400,3 +405,149 @@ def update_answer(request, pk, id):
         max_score += question.point
     Score.objects.create(user=this_user, quiz=this_quiz, score=score, max_score=max_score)
     return HttpResponseRedirect(reverse('check_per_quiz', args=(pk, )))
+  
+  
+@login_required(login_url='/login')
+def new_question(request):
+    """Create a new question by teacher."""
+    if request.method == "POST":
+        question_form = NewQuestionForm(request.POST)
+        if question_form.is_valid():
+            try:
+                question = question_form.save()
+            except:
+                return redirect('detail')
+            question.save()
+            return redirect('detail')
+    else:
+        question_form = NewQuestionForm()
+    question_form.fields['quiz'].queryset = Quiz.objects.filter(user=request.user)
+    return render(request, "KUIZ/new_question.html", {"question_form": question_form})
+
+
+@login_required(login_url='/login')
+def select_question(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    questions = quiz.question_set.all()
+    return render(request, "KUIZ/select_question.html", {"questions": questions})
+
+
+@login_required(login_url='/login')
+def edit_question(request, question_id):
+    question = Question.objects.get(pk=question_id)
+    question_form = NewQuestionForm(initial={
+        'quiz': question.quiz,
+        'question_text': question.question_text,
+        'correct': question.correct,
+        'point': question.point
+    })
+    if request.method == "POST":
+        question_form = NewQuestionForm(request.POST, instance=question)
+        if question_form.is_valid():
+            try:
+                question = question_form.save()
+            except:
+                return redirect('detail')
+            question.save()
+            return redirect('detail')
+    return render(request, "KUIZ/edit_question.html", {"question": question, 'question_form': question_form})
+
+
+@login_required(login_url='/login')
+def new_multiple_choice(request):
+    """Create a new multiple choice by teacher."""
+    if request.method == "POST":
+        choice_form = NewMultipleChoiceForm(request.POST)
+        if choice_form.is_valid():
+            try:
+                choice = choice_form.save()
+            except:
+                return redirect('detail')
+            choice.save()
+            return redirect('detail')
+    else:
+        choice_form = NewMultipleChoiceForm()
+    quizzes = Quiz.objects.filter(user=request.user)
+    pk_list = [obj.pk for obj in quizzes]
+    quizzes = Quiz.objects.filter(pk__in=pk_list)
+    pk_question_list = []
+    for pk in pk_list:
+        for question in Quiz.objects.get(pk=pk).question_set.all():
+            pk_question_list.append(question.pk)
+    questions = Question.objects.filter(pk__in=pk_question_list)
+    choice_form.fields['question'].queryset = questions
+    return render(request, "KUIZ/new_multiple_choice.html", {"choice_form": choice_form})
+
+@login_required(login_url='/login')
+def new_typing_choice(request):
+    """Create a new typing choice by teacher."""
+    if request.method == "POST":
+        choice_form = NewTypingChoiceForm(request.POST)
+        if choice_form.is_valid():
+            try:
+                choice = choice_form.save()
+            except:
+                return redirect('detail')
+            choice.save()
+            return redirect('detail')
+    else:
+        choice_form = NewTypingChoiceForm()
+        quizzes = Quiz.objects.filter(user=request.user)
+    pk_list = [obj.pk for obj in quizzes]
+    quizzes = Quiz.objects.filter(pk__in=pk_list)
+    pk_question_list = []
+    for pk in pk_list:
+        for question in Quiz.objects.get(pk=pk).question_set.all():
+            pk_question_list.append(question.pk)
+    questions = Question.objects.filter(pk__in=pk_question_list)
+    choice_form.fields['question'].queryset = questions
+    return render(request, "KUIZ/new_typing_choice.html", {"choice_form": choice_form})
+
+@login_required(login_url='/login')
+def select_question_to_edit_choice(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    questions = quiz.question_set.all()
+    return render(request, "KUIZ/select_question.html", {"questions": questions, 'choice': True})
+
+@login_required(login_url='/login')
+def select_choice(request, question_id):
+    question = Question.objects.get(pk=question_id)
+    multiple_choices = question.choice_set.all()
+    typing_choices = question.type_set.all()
+    return render(request, "KUIZ/select_choice.html", {'multiple_choices': multiple_choices, 'typing_choices': typing_choices})
+
+@login_required(login_url='/login')
+def edit_multiple_choice(request, choice_id):
+    choice = Choice.objects.get(pk=choice_id)
+    choice_form = NewMultipleChoiceForm(initial={
+        'question': choice.question,
+        'choice_text': choice.choice_text
+    })
+    if request.method == "POST":
+        choice_form = NewMultipleChoiceForm(request.POST, instance=choice)
+        if choice_form.is_valid():
+            try:
+                choice = choice_form.save()
+            except:
+                return redirect('detail')
+            choice.save()
+            return redirect('detail')
+    return render(request, "KUIZ/edit_multiple_choice.html", {"choice": choice, 'choice_form': choice_form})
+
+@login_required(login_url='/login')
+def edit_typing_choice(request, choice_id):
+    typing_choice = Type.objects.get(pk=choice_id)
+    choice_form = NewTypingChoiceForm(initial={
+        'question': typing_choice.question,
+        'correct': typing_choice.correct
+    })
+    if request.method == "POST":
+        choice_form = NewTypingChoiceForm(request.POST, instance=typing_choice)
+        if choice_form.is_valid():
+            try:
+                typing_choice = choice_form.save()
+            except:
+                return redirect('detail')
+            typing_choice.save()
+            return redirect('detail')
+    return render(request, "KUIZ/edit_typing_choice.html", {"choice": typing_choice, 'choice_form': choice_form})

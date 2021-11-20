@@ -6,16 +6,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'KUIZ/images/favicon.ico' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'account/css/account.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>KUIZ | Register</title>
     <style>
         html, body {
             margin: 0;
             font-family: 'Rubik', sans-serif;
         }
     </style>
-    <title>Register</title>
 </head>
 <body>
     <div class="wrapper fadeInDown">
@@ -84,6 +84,16 @@
                     <h2>Teacher</h2><br>
                 </div>
                 <button type="submit" style="background-color: #3AB1BE;color:white">Register</button>
+                <div class="space">
+                    <span>or Sign in with Google</span>
+                    <div class="line"></div>
+                </div>
+                <div class="oauth">
+                    <a href="{% url "social:begin" "google-oauth2" %}">
+                        <img src="{% static 'account/images/google-icon.svg' %}" alt="google logo">
+                        <span>Sign in with Google</span>
+                    </a>
+                </div>
             </form>
             <div id="formFooter">
                 <span>Already have an account ? 

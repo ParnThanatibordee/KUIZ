@@ -92,6 +92,7 @@ def profile_edit_view(request):
         'username': request.user.username,
         'first_name': request.user.first_name,
         'last_name': request.user.last_name,
+        'is_teacher': request.user.is_teacher
     })
     if request.POST:
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
