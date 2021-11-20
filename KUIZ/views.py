@@ -32,22 +32,24 @@ def detail_by_topic(request, topic):
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
-    remaining_message = ""
     global all_question
     all_question = list(quiz.question_set.all())
-    user_contain = list(ClassroomUser.objects.filter(quiz=quiz))
+    user_contain = [i.user for i in list(ClassroomUser.objects.filter(quiz=quiz))]
+    remaining_message = ""
+    error_message = ""
 
     if quiz.private and (request.user not in user_contain) and (request.user != quiz.user):
-        return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(all_question),
+        return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                                                       'time': quiz.exam_duration,
-                                                      'remain_message': remaining_message})
+                                                      'remain_message': remaining_message,
+                                                      'error_message': error_message})
 
     if quiz.can_vote():
         user_attendee = Attendee.objects.filter(user=request.user, quiz=quiz)
         if quiz.limit_attempt_or_not and (request.user != quiz.user):
             remaining_message = f" (remaining attempt: {quiz.attempt - len(user_attendee)})"
             if len(user_attendee) >= quiz.attempt:
-                return render(request, 'KUIZ/out_of_attempt.html', {'quiz': quiz, 'num_of_question': len(all_question),
+                return render(request, 'KUIZ/out_of_attempt.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                                                                     'time': quiz.exam_duration,
                                                                     'remain_message': remaining_message})
         all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz)
@@ -59,21 +61,43 @@ def exam(request, pk):
         try:
             question1 = all_question[0]
         except:
-            return render(request, 'KUIZ/no_question.html', {'quiz': quiz, 'num_of_question': len(all_question),
+            return render(request, 'KUIZ/no_question.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                                                              'time': quiz.exam_duration,
                                                              'remain_message': remaining_message})
-        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question),
+        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(list(quiz.question_set.all())),
                                                   'time': quiz.exam_duration,
                                                   'remain_message': remaining_message})
     else:
-        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(all_question),
+        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                                                          'time': quiz.exam_duration,
                                                          'remain_message': remaining_message})
 
 
 def password(request, pk):
     """Password view"""
-    pass
+    quiz = Quiz.objects.get(pk=pk)
+
+    try:
+        input_password = request.POST['password']
+    except:
+        input_password = ""
+    remaining_message = ""
+    if input_password == "":
+        error_message = "* please enter your password!"
+        return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                                                      'time': quiz.exam_duration,
+                                                      'remain_message': remaining_message,
+                                                      'error_message': error_message})
+    else:
+        if input_password == quiz.password:
+            ClassroomUser.objects.create(quiz=quiz, user=request.user)
+            return HttpResponseRedirect(reverse('exam', args=(pk, )))
+        else:
+            error_message = "* wrong password!"
+            return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                                                          'time': quiz.exam_duration,
+                                                          'remain_message': remaining_message,
+                                                          'error_message': error_message})
 
 
 def clear_answer(request, pk, question_id):
@@ -120,7 +144,7 @@ def question(request, pk, question_id):
             lastest_answer_in_question = None
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
-                                                               'num': num_of_question + 1, 'max_num': len(all_question),
+                                                               'num': num_of_question + 1, 'max_num': len(list(quiz.question_set.all())),
                                                                'choices': all_choice[0], 'next_link': next_link,
                                                                'next_question': next_question, 'back_link': back_link,
                                                                'back_question': back_question,
@@ -128,13 +152,13 @@ def question(request, pk, question_id):
                                                                'lastest_answer_in_question': lastest_answer_in_question})
         else:
             return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
-                                                          'num': num_of_question + 1, 'max_num': len(all_question),
+                                                          'num': num_of_question + 1, 'max_num': len(list(quiz.question_set.all())),
                                                           'choices': choices, 'next_link': next_link,
                                                           'next_question': next_question, 'back_link': back_link,
                                                           'back_question': back_question, 'time': quiz.exam_duration,
                                                           'lastest_answer_in_question': lastest_answer_in_question})
     else:
-        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(all_question),
+        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                                                          'time': quiz.exam_duration,
                                                          'remain_message': ""})
 
