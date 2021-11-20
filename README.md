@@ -60,12 +60,7 @@ As the era changes, Technology keeps developing themself little bit per second t
 6. Install all require packages by this command.
 
     ```
-   pip install -r requirement.txt
-   pip install django
-   pip install social-auth-app-django
-   pip install django-environ
-   pip install django-static-fontawesome
-   pip install pillow
+   pip install -r requirements.txt
     ```
 7. Create .env file inside KUIZ (same level as settings.py) and change the debug=True.
 
