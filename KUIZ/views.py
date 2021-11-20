@@ -37,11 +37,10 @@ def exam(request, pk):
     all_question = list(quiz.question_set.all())
     user_contain = list(ClassroomUser.objects.filter(quiz=quiz))
 
-    if quiz.private and (request.user not in user_contain):
-        pass
-    # not in classroom
-    # return enter password page
-    # add user to classroom
+    if quiz.private and (request.user not in user_contain) and (request.user != quiz.user):
+        return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(all_question),
+                                                      'time': quiz.exam_duration,
+                                                      'remain_message': remaining_message})
 
     if quiz.can_vote():
         user_attendee = Attendee.objects.filter(user=request.user, quiz=quiz)
@@ -74,6 +73,11 @@ def exam(request, pk):
 
 def password(request, pk):
     """Password view"""
+    pass
+
+
+def clear_answer(request, pk, question_id):
+    """Clear answer view"""
     pass
 
 
