@@ -73,6 +73,7 @@ def exam(request, pk):
                                                          'remain_message': remaining_message})
 
 
+@login_required(login_url='/login')
 def password(request, pk):
     """Password view"""
     quiz = Quiz.objects.get(pk=pk)
@@ -100,6 +101,7 @@ def password(request, pk):
                                                           'error_message': error_message})
 
 
+@login_required(login_url='/login')
 def clear_answer(request, pk, question_id):
     """Clear answer view"""
     question = Question.objects.get(pk=question_id)
@@ -110,6 +112,7 @@ def clear_answer(request, pk, question_id):
     return HttpResponseRedirect(reverse('question', args=(pk, question_id)))
 
 
+@login_required(login_url='/login')
 def question(request, pk, question_id):
     """Question view."""
     quiz = Quiz.objects.get(pk=pk)
@@ -167,6 +170,7 @@ def question(request, pk, question_id):
                                                          'remain_message': ""})
 
 
+@login_required(login_url='/login')
 def answer(request, pk, question_id):
     """Answer for choice or type."""
     quiz = Quiz.objects.get(pk=pk)
@@ -265,6 +269,7 @@ def answer(request, pk, question_id):
             return HttpResponseRedirect(reverse('result', args=(pk,)))
 
 
+@login_required(login_url='/login')
 def result(request, pk):
     """Report of score of user."""
     # automate or hand-check
@@ -285,6 +290,7 @@ def result(request, pk):
                                                 'automate': quiz.automate})
 
 
+@login_required(login_url='/login')
 def get_feedback(request):
     feedback = Feedback.objects.all()
     if request.method == "POST":
@@ -340,11 +346,13 @@ def edit_quiz(request, pk):
     return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
 
 
+@login_required(login_url='/login')
 def check(request):
     all_owner_quiz = Quiz.objects.filter(user=request.user)
     return render(request, 'KUIZ/checking.html', {'owner_quiz': all_owner_quiz})
 
 
+@login_required(login_url='/login')
 def check_quiz(request, pk):
     this_quiz = Quiz.objects.get(pk=pk)
     all_student_attendee = Attendee.objects.filter(quiz=this_quiz)
@@ -356,6 +364,7 @@ def check_quiz(request, pk):
     return render(request, 'KUIZ/checking_per_quiz.html', {"this_quiz": this_quiz, "all_user": unique_list_student})
 
 
+@login_required(login_url='/login')
 def check_student(request, pk, id):
     this_quiz = Quiz.objects.get(pk=pk)
     this_user = Account.objects.get(pk=id)
@@ -368,6 +377,7 @@ def check_student(request, pk, id):
                                                               'last_n_answer': last_n_answer})
 
 
+@login_required(login_url='/login')
 def update_answer(request, pk, id):
     this_quiz = Quiz.objects.get(pk=pk)
     this_user = Account.objects.get(pk=id)
