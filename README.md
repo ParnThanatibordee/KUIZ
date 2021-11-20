@@ -66,7 +66,10 @@ As the era changes, Technology keeps developing themself little bit per second t
 7. Create .env file inside KUIZ (same level as settings.py) and change the debug=True.
 
     ```
+   SECRET_KEY=YOUR_SECRET_KEY
    DEBUG=True
+   GOOGLE_OAUTH2_KEY=YOUR_GOOGLE_OAUTH2_KEY
+   GOOGLE_OAUTH2_SECRET=YOUR_GOOGLE_OAUTH2_SECRET
     ```
 8. Type this command to migrate the KUIZ database.
 
