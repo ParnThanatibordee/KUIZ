@@ -53,7 +53,11 @@
           <a class="nav-link" aria-current="page" href="{% url 'profile' %}">{{ user.username }}</a>
           <div class="profile">
             <!-- <i class="fas fa-caret-down"></i> -->
+            {% if user.profile_pic %}
             <img src="{{ user.profile_pic.url }}" alt="profile picture" id="profile-picture">
+            {% else %}
+            <img src="{% static 'KUIZ/images/profile-pic.png' %}" alt="profile picture" id="profile-picture">
+            {% endif %}
             <div class="options">
                 <span><a href="{% url 'profile' %}">Profile</a></span>
                 <span><a href="{% url 'logout' %}">Logout</a></span>
