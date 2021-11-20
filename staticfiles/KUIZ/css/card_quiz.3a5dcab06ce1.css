@@ -1,0 +1,22 @@
+a {
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+a .card:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+.card-body h4 {
+    color: rgb(56, 56, 56);
+}
+
+.card-body p {
+    color: rgb(136, 136, 136);
+}
+
+.fa-long-arrow-alt-right {
+    font-size: 30px;
+    margin-right: 40px;
+    color: rgb(56, 56, 56);
+}

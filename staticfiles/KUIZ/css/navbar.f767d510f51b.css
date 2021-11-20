@@ -1,0 +1,143 @@
+.navbar {
+    height: 100px;
+    background-color: rgb(182, 216, 207)!important;
+}
+
+.navbar-collapse ul {
+    height: 100px;
+}
+
+.navbar-nav li {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-active  {
+    border-bottom: 3px solid #66A695;
+}
+
+.navbar-active a {
+    color: #000 !important;
+}
+
+.navbar img {
+    width: 135px;
+    height: 75px;
+    margin: 0 30px;
+}
+
+.nav-item a, .right-menu a {
+    font-size: 20px;
+    margin: 0 22px;
+    display: inline-block;
+    position: relative;
+    font-weight: 500;
+}
+
+.right-menu button {
+    margin: 0 30px 0 10px;
+    border-radius: 25px;
+    font-size: 20px;
+    font-weight: 500;
+    border: 1px solid #000;
+}
+
+.right-menu button:hover {
+    background-color: #66A695;
+    color: #fff;
+}
+
+.navbar li:hover {
+    color: #000;
+}
+
+.right-menu {
+    align-items: center;
+}
+
+.profile {
+    margin-right: 100px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.options {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    right: 95px;
+    background-color: rgb(73, 73, 73);
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.options span {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.options span:hover {
+    background-color: rgb(100, 100, 100);
+}
+
+.options span:first-child:hover {
+    border-radius: 5px 5px 0 0;
+}
+
+.options span:last-child:hover {
+    border-radius: 0 0 5px 5px;
+}
+
+.options span a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 10px;
+}
+
+.show {
+    display: flex;
+}
+
+.profile img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 1px solid gray;
+    margin: 0;
+}
+
+.fa-caret-down {
+    margin-top: 5px;
+    font-size: 20px;
+}
+
+.dropdown button {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.dropdown-menu {
+    top: 50px;
+    left: 7px;
+    background-color: rgb(73, 73, 73);
+}
+
+.dropdown-menu a {
+    color: white;
+}
+
+.dropdown-menu a:last-child {
+    margin: 0;
+}
+
+.dropdown-menu a:hover {
+    background-color: rgb(100, 100, 100);
+    color: white;
+}
+
+.btn-check:focus+.btn, .btn:focus {
+    box-shadow: none;
+}

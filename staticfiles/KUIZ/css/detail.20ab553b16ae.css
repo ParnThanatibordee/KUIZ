@@ -1,0 +1,44 @@
+.dropdown-menu.show {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    margin-left: 5px;
+}
+
+.edit .dropdown-menu a {
+    margin: 5px 10px;
+}
+
+.show>.btn-secondary.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
+.dropright button {
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}
+
+.dropright button i {
+    margin: 0 0 0 5px;
+    transform: rotate(-90deg);
+}
+
+.create {
+    display: flex;
+    align-items: center;
+}
+
+.create a {
+    margin: 0 10px;
+}
+
+.create .dropdown-menu a {
+    margin: 5px 10px;
+}
+
+.btn-group {
+    margin-left: 10px;
+}
