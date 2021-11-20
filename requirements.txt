@@ -2,3 +2,8 @@
 # required packages
 coverage
 Django==3.2.7
+social-auth-app-django==3.3.0
+social-auth-core==3.3.0
+django-environ==0.8.1
+django-static-fontawesome==5.14.0.0
+Pillow==8.4.0
