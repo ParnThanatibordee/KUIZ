@@ -14,6 +14,9 @@ from pathlib import Path
 
 import environ
 import logging.config
+import django_heroku
+
+django_heroku.settings(locals())
 
 env = environ.Env()
 env.read_env()
