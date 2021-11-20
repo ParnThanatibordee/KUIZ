@@ -1,0 +1,46 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light left-sidebar">
+  <div class="d-flex justify-content-around">
+    <img src="{{ user.profile_pic.url }}" alt="profile picture">
+    <a
+      href="/"
+      class="
+      d-flex
+      align-items-center
+      mb-3 mb-md-0
+      me-md-0
+      link-dark
+      text-decoration-none
+      "
+    >
+      <span class="fs-4">{{ user.first_name }} {{ user.last_name.0 }}.</span>
+    </a>
+  </div>
+  <hr />
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a href="{% url 'index' %}" class="nav-link link-dark fs-5" aria-current="page">
+        <i class="fas fa-home"></i>
+        Home
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'detail' %}" class="nav-link link-dark fs-5">
+        <i class="fas fa-list-alt"></i>
+        Topics
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'profile' %}" class="nav-link link-dark fs-5">
+        <i class="fas fa-user"></i>
+        Profile
+      </a>
+    </li>
+  </ul>
+  <hr />
+  <div class="dropdown">
+    <a href="{% url 'detail' %}" class="nav-link link-dark fs-5">
+        <i class="fas fa-sign-out-alt"></i>
+        Exit
+    </a>
+  </div>
+</div>

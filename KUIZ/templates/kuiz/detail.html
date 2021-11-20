@@ -4,11 +4,12 @@
 <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/sidebar.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/card_quiz.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/detail.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
 {% endblock css %}
-{% block title %}<title>Quiz | All Quizzes</title>{% endblock %}
+{% block title %}<title>KUIZ | All Quizzes</title>{% endblock %}
 {% block nav %}
     {% include 'components/navbar.html' %}
-    <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
 {% endblock %}
 {% block content %}
 
@@ -18,14 +19,40 @@
             {% include 'components/sidebar.html' %}
         </div>
         <div class="col-md-9 col-12">
-            <h1 class="d-inline">All Quizzes</h1>
+            <div class="d-flex align-items-center justify-content-between">
+                <h1 class="d-inline">All Quizzes</h1>
+                {% if user.is_teacher %}
+                <div class="create">
+                    <a href="{% url 'new_quiz' %}" class="btn btn-secondary active" role="button" aria-pressed="true">Add Quiz</a>
+                    <a href="{% url 'new_question' %}" class="btn btn-warning active" role="button" aria-pressed="true">Add Question</a>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Choices
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right mt-1">
+                            <a href="{% url 'new_multiple_choice' %}" class="btn btn-secondary active">Add Multiple Choice</a>
+                            <a href="{% url 'new_typing_choice' %}" class="btn btn-secondary active">Add Typing Choice</a>
+                        </div>
+                    </div>
+                    <!-- <div class="btn-group dropright" style="height: max-content;">
+                        <button type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Choices
+                          <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+
+                        </div>
+                    </div> -->
+                </div>
+                {% endif %}
+            </div>
             <div class="row mt-4">
                 {% if quizzes %}
                     {% for quiz in quizzes %}
                         {% include 'components/card_quiz.html' %}
                     {% endfor %}
                 {% else %}
-                    <p>No quiz.</p>
+                    <h3>No quiz.</h3>
                 {% endif %}
             </div>
         </div>

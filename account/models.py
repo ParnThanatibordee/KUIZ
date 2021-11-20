@@ -9,14 +9,8 @@ class MyAccountManager(BaseUserManager):
             raise ValueError("Users must have an Email")
         if not username:
             raise ValueError("Users must have a Username")
-        if not first_name:
-            raise ValueError("Users must have Firstname")
-        if not last_name:
-            raise ValueError("Users must have Lastname")
-        if not password:
-            raise ValueError("Users must have a Password")
 
-    def create_user(self, email, username, first_name, last_name, password=None):
+    def create_user(self, email, username, first_name='', last_name='', password=None):
         self.check_no_input(email, username, first_name, last_name, password)
         user = self.model(
             email=self.normalize_email(email),
@@ -54,13 +48,14 @@ class Account(AbstractBaseUser):
     is_teacher = models.BooleanField(default=False)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    profile_pic = models.ImageField(upload_to='profiles', default='profile-pic.png', blank=True)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'password']
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'password', 'is_teacher']
     objects = MyAccountManager()
 
     def __str__(self):
-        return self.email
+        return F"{self.username}"
 
     def has_perm(self, perm, obj=None):
         return self.is_admin

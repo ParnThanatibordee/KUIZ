@@ -16,6 +16,7 @@ As the era changes, Technology keeps developing themself little bit per second t
 | [Vision Statement](../../wiki/Vision%20Statement) |
 | [Features list](../../wiki/Requirements) |
 
+
 ## Requirement before starting KUIZ
 
 | Name | Required version(s) |
@@ -47,6 +48,7 @@ As the era changes, Technology keeps developing themself little bit per second t
     ```
 5. Activate virtual environment.
 
+
     For Mac OS / Linux
     ```
    source venv\Scripts\activate
@@ -77,6 +79,7 @@ As the era changes, Technology keeps developing themself little bit per second t
     ```
     
 ## Iterations
+
 
 [Iteration1](../../wiki/Iteration-1)
 

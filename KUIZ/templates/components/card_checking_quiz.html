@@ -1,0 +1,14 @@
+<a href="{%url 'check_per_quiz' quiz.pk %}">
+    <div class="card w-90 mb-3">
+      <div class="d-flex justify-content-between align-items-center">
+          <div class="card-body">
+              <h4 class="card-title">{{quiz.quiz_topic}} : {% if quiz.automate %}(automate){% else %}(hand-check){% endif %}</h4>
+              <p class="card-text">{{quiz.detail}}</p>
+          </div>
+          <div>
+              <i class="fas fa-long-arrow-alt-right"></i>
+          </div>
+      </div>
+    </div>
+  </a>
+  

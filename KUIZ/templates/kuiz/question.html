@@ -1,12 +1,40 @@
-<h1>Question{{num}} : {{question.question_text}}</h1>
-# เลือก choice
-<br>
-{% for choice in choices %}
-    <INPUT TYPE="Radio" Name="Choice" Value="{{ choice.correct }}">{{ choice.choice_text }}<br>
-{% endfor %}
-<br>
-{% if back_link != None %}
-<button type="button" class="btn btn-primary"><a href={{back_link}}>Back</a></button>
-{% endif %}
-<button type="button" class="btn btn-primary"><a href={{link}}>{{text}}</a></button>
-<br>
+{% extends 'KUIZ/main.html' %} 
+{% load static %} 
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/left_sidebar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/right_sidebar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/card_choice.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/question.css' %}">
+{% endblock css %} 
+{% block title %}
+<title>{{ quiz.quiz_topic }} | Question : {{ num }}</title>
+{% endblock %}
+    {% block nav %}
+        {% include 'components/left_sidebar.html' %} 
+    {% endblock %} 
+    {% block content %}
+    <div class="content d-flex flex-column">
+        <div class="header">
+            <h1>Question: {{ num }} / {{ max_num }}</h1>
+        </div>
+        <div class="body">
+            <h1>{{question.question_text}} ({{question.point}} pts.)</h1>
+            {% include 'components/card_choice.html' %}
+        </div>
+    </div>
+    {% include 'components/right_sidebar.html' %}
+    <script>
+        const content = document.querySelector(".content");
+        const nextButton = document.querySelector(".next-btn");
+        const timer = document.getElementById("timer");
+        var intervalId = window.setInterval(() => {
+            if (timer.innerHTML == "00:00") {
+                timer.innerHTML = "Time's Up!"
+                content.style.opacity = 0.3;
+                nextButton.disabled = true;
+                clearInterval(intervalId);
+            }
+        }, 1000);
+    </script>
+{% endblock %}

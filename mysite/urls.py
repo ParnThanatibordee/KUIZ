@@ -13,21 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from django.shortcuts import redirect
 from KUIZ.views import (
     index, home, get_feedback
 )
-from account.views import (
-    registration_view, logout_view, login_view,
-)
 
 urlpatterns = [
+    path('', lambda request: redirect('kuiz/')),
     path('kuiz/', include('KUIZ.urls')),
     path('admin/', admin.site.urls),
-    path('', home, name="index"),
-    path('register/', registration_view, name='register'),
-    path('logout/', logout_view, name='logout'),
-    path('login/', login_view, name='login'),
-    path('feedback/', get_feedback, name='feedback')
-]
+    path('user/', include('account.urls')),
+    path('', include('social_django.urls', namespace='social')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

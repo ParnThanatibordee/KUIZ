@@ -1,0 +1,27 @@
+
+
+{% extends 'KUIZ/main.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/card_quiz.css' %}">
+{% endblock css %}
+{% block title %}{% endblock %}
+
+{% block nav %}
+    {% include 'components/navbar.html' %}
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-md-center">
+        <div class="col-md-8 col-12">
+            <h1>List of Student</h1>
+            {% for user, id in all_user.items %}
+                {% include 'components/card_student.html' %}
+            {% endfor %}
+            <a class="btn btn-outline-danger" href="{%url 'check' %}">Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
