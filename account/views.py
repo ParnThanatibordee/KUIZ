@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from KUIZ.models import Attendee, Score, Quiz
 from account.forms import RegistrationForm, AccountAuthenticationForm, ProfileForm
+from django.contrib.auth.decorators import login_required
 
 import logging
 
@@ -60,6 +61,7 @@ def login_view(request):
     return render(request, 'account/login.html', context)
 
 
+@login_required(login_url='/login')
 def profile_page(request):
     all_quiz = Quiz.objects.all()
     attendee = Attendee.objects.filter(user=request.user)
@@ -83,6 +85,7 @@ def profile_page(request):
     return render(request, 'account/profile.html', {'score': lastest_dict, 'length_score': len(lastest_dict)})
 
 
+@login_required(login_url='/login')
 def profile_edit_view(request):
     context = {}
     profile_form = ProfileForm(initial={

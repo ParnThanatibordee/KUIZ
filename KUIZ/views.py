@@ -4,7 +4,7 @@ from django.urls import reverse
 import random
 from .forms import FeedbackForm, NewQuizForm
 from account.models import Account
-from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score
+from KUIZ.models import Quiz, Feedback, Question, Attendee, Choice, Type, Answer, Score, ClassroomUser
 from django.contrib.auth.decorators import login_required
 
 import logging
@@ -35,16 +35,24 @@ def detail_by_topic(request, topic):
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
-    remaining_message = ""
     global all_question
     all_question = list(quiz.question_set.all())
+    user_contain = [i.user for i in list(ClassroomUser.objects.filter(quiz=quiz))]
+    remaining_message = ""
+    error_message = ""
+
+    if quiz.private and (request.user not in user_contain) and (request.user != quiz.user):
+        return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                                                      'time': quiz.exam_duration,
+                                                      'remain_message': remaining_message,
+                                                      'error_message': error_message})
 
     if quiz.can_vote():
         user_attendee = Attendee.objects.filter(user=request.user, quiz=quiz)
         if quiz.limit_attempt_or_not and (request.user != quiz.user):
             remaining_message = f" (remaining attempt: {quiz.attempt - len(user_attendee)})"
             if len(user_attendee) >= quiz.attempt:
-                return render(request, 'KUIZ/out_of_attempt.html', {'quiz': quiz, 'num_of_question': len(all_question),
+                return render(request, 'KUIZ/out_of_attempt.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                                                                     'time': quiz.exam_duration,
                                                                     'remain_message': remaining_message})
         all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz)
@@ -56,25 +64,67 @@ def exam(request, pk):
         try:
             question1 = all_question[0]
         except:
-            return render(request, 'KUIZ/no_question.html', {'quiz': quiz, 'num_of_question': len(all_question),
+            return render(request, 'KUIZ/no_question.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                                                              'time': quiz.exam_duration,
                                                              'remain_message': remaining_message})
-        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(all_question),
+        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(list(quiz.question_set.all())),
                                                   'time': quiz.exam_duration,
                                                   'remain_message': remaining_message})
     else:
-        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(all_question),
+        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                                                          'time': quiz.exam_duration,
                                                          'remain_message': remaining_message})
 
 
+@login_required(login_url='/login')
+def password(request, pk):
+    """Password view"""
+    quiz = Quiz.objects.get(pk=pk)
+
+    try:
+        input_password = request.POST['password']
+    except:
+        input_password = ""
+    remaining_message = ""
+    if input_password == "":
+        error_message = "* please enter your password!"
+        return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                                                      'time': quiz.exam_duration,
+                                                      'remain_message': remaining_message,
+                                                      'error_message': error_message})
+    else:
+        if input_password == quiz.password:
+            ClassroomUser.objects.create(quiz=quiz, user=request.user)
+            return HttpResponseRedirect(reverse('exam', args=(pk, )))
+        else:
+            error_message = "* wrong password!"
+            return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                                                          'time': quiz.exam_duration,
+                                                          'remain_message': remaining_message,
+                                                          'error_message': error_message})
+
+
+@login_required(login_url='/login')
+def clear_answer(request, pk, question_id):
+    """Clear answer view"""
+    question = Question.objects.get(pk=question_id)
+    all_answer_in_question = Answer.objects.filter(user=request.user, question=question)
+    if len(all_answer_in_question) > 0:
+        for i in all_answer_in_question:
+            i.delete()
+    return HttpResponseRedirect(reverse('question', args=(pk, question_id)))
+
+
+@login_required(login_url='/login')
 def question(request, pk, question_id):
     """Question view."""
-    # เพิ่มปุ่ม clear choice กับ mark
     quiz = Quiz.objects.get(pk=pk)
     if quiz.can_vote():
-        num_of_question = all_question.index(
-            Question.objects.get(pk=question_id))
+        try:
+            num_of_question = all_question.index(
+                Question.objects.get(pk=question_id))
+        except:
+            return HttpResponseRedirect(reverse('exam', args=(pk, )))
         this_question = all_question[num_of_question]
         type_or_not = False
         all_choice = this_question.choice_set.all()
@@ -103,25 +153,26 @@ def question(request, pk, question_id):
             lastest_answer_in_question = None
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
-                                                               'num': num_of_question + 1, 'max_num': len(all_question),
-                                                               'choices': all_choice, 'next_link': next_link,
+                                                               'num': num_of_question + 1, 'max_num': len(list(quiz.question_set.all())),
+                                                               'choices': all_choice[0], 'next_link': next_link,
                                                                'next_question': next_question, 'back_link': back_link,
                                                                'back_question': back_question,
                                                                'time': quiz.exam_duration,
                                                                'lastest_answer_in_question': lastest_answer_in_question})
         else:
             return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
-                                                          'num': num_of_question + 1, 'max_num': len(all_question),
+                                                          'num': num_of_question + 1, 'max_num': len(list(quiz.question_set.all())),
                                                           'choices': choices, 'next_link': next_link,
                                                           'next_question': next_question, 'back_link': back_link,
                                                           'back_question': back_question, 'time': quiz.exam_duration,
                                                           'lastest_answer_in_question': lastest_answer_in_question})
     else:
-        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(all_question),
+        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                                                          'time': quiz.exam_duration,
                                                          'remain_message': ""})
 
 
+@login_required(login_url='/login')
 def answer(request, pk, question_id):
     """Answer for choice or type."""
     quiz = Quiz.objects.get(pk=pk)
@@ -141,8 +192,11 @@ def answer(request, pk, question_id):
                         i.delete()
                 Answer.objects.create(user=request.user, quiz=quiz, question=question,
                                       answer="")
-                num_of_question = all_question.index(
-                    Question.objects.get(pk=question_id))
+                try:
+                    num_of_question = all_question.index(
+                        Question.objects.get(pk=question_id))
+                except:
+                    return HttpResponseRedirect(reverse('exam', args=(pk, )))
                 try:
                     next_question = all_question[num_of_question + 1].id
                     next_link = True
@@ -159,8 +213,11 @@ def answer(request, pk, question_id):
                         i.delete()
                 Answer.objects.create(user=request.user, quiz=quiz, question=question,
                                       answer=selected_choice.choice_text)
-                num_of_question = all_question.index(
-                    Question.objects.get(pk=question_id))
+                try:
+                    num_of_question = all_question.index(
+                        Question.objects.get(pk=question_id))
+                except:
+                    return HttpResponseRedirect(reverse('exam', args=(pk,)))
                 try:
                     next_question = all_question[num_of_question + 1].id
                     next_link = True
@@ -198,8 +255,11 @@ def answer(request, pk, question_id):
                 else:
                     return HttpResponseRedirect(reverse('result', args=(pk,)))
     except:
-        num_of_question = all_question.index(
-            Question.objects.get(pk=question_id))
+        try:
+            num_of_question = all_question.index(
+                Question.objects.get(pk=question_id))
+        except:
+            return HttpResponseRedirect(reverse('exam', args=(pk,)))
         try:
             next_question = all_question[num_of_question + 1].id
             next_link = True
@@ -211,6 +271,7 @@ def answer(request, pk, question_id):
             return HttpResponseRedirect(reverse('result', args=(pk,)))
 
 
+@login_required(login_url='/login')
 def result(request, pk):
     """Report of score of user."""
     # automate or hand-check
@@ -225,13 +286,14 @@ def result(request, pk):
         for answer in all_answer_in_quiz:
             if answer.check_answer(answer.question.correct):
                 score += answer.question.point
-        for question in all_question:
+        for question in list(quiz.question_set.all()):
             max_score += question.point
     Score.objects.create(user=user, quiz=quiz, score=score, max_score=max_score)
     return render(request, 'KUIZ/result.html', {'quiz': quiz, 'score': score, 'max': max_score,
                                                 'automate': quiz.automate})
 
 
+@login_required(login_url='/login')
 def get_feedback(request):
     feedback = Feedback.objects.all()
     if request.method == "POST":
@@ -289,11 +351,13 @@ def edit_quiz(request, pk):
     return render(request, 'KUIZ/edit_quiz.html', {'quiz': quiz, 'quiz_form': quiz_form})
 
 
+@login_required(login_url='/login')
 def check(request):
     all_owner_quiz = Quiz.objects.filter(user=request.user)
     return render(request, 'KUIZ/checking.html', {'owner_quiz': all_owner_quiz})
 
 
+@login_required(login_url='/login')
 def check_quiz(request, pk):
     this_quiz = Quiz.objects.get(pk=pk)
     all_student_attendee = Attendee.objects.filter(quiz=this_quiz)
@@ -305,6 +369,7 @@ def check_quiz(request, pk):
     return render(request, 'KUIZ/checking_per_quiz.html', {"this_quiz": this_quiz, "all_user": unique_list_student})
 
 
+@login_required(login_url='/login')
 def check_student(request, pk, id):
     this_quiz = Quiz.objects.get(pk=pk)
     this_user = Account.objects.get(pk=id)
@@ -317,6 +382,7 @@ def check_student(request, pk, id):
                                                               'last_n_answer': last_n_answer})
 
 
+@login_required(login_url='/login')
 def update_answer(request, pk, id):
     this_quiz = Quiz.objects.get(pk=pk)
     this_user = Account.objects.get(pk=id)
