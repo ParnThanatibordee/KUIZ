@@ -22,7 +22,6 @@ As the era changes, Technology keeps developing themself little bit per second t
 |------|---------------------|
 | Python | 3.7 or Higher |
 | Django | 3.2.7 or Higher |
-| Pillow | 8.4.0 or Higher |
 
 ### Getting Start
 
