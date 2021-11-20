@@ -1,11 +1,26 @@
-<h1>Checking</h1>
-{% for quiz in owner_quiz %}
-{% if quiz.automate %}
-<a href="{%url 'check_per_quiz' quiz.pk %}">{{quiz.quiz_topic}} : (automate)</a>
-{% else %}
-<a href="{%url 'check_per_quiz' quiz.pk %}">{{quiz.quiz_topic}} : (hand-check)</a>
-{% endif %}
-<br>
-{% endfor %}
-<br>
-<button type="button"><a href="{%url 'index' %}">Back</a></button>
+{% extends 'KUIZ/main.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/card_quiz.css' %}">
+{% endblock css %}
+{% block title %}{% endblock %}
+
+{% block nav %}
+    {% include 'components/navbar.html' %}
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-md-center">
+      <div class="col-md-8 col-12">
+            <h1 style="margin-bottom: 2rem">Checking</h1>
+            {% for quiz in owner_quiz %}
+                {% include 'components/card_checking_quiz.html' %}
+            {% endfor %}
+            <br>
+            <a class="btn btn-outline-danger" href="{%url 'index' %}">Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
