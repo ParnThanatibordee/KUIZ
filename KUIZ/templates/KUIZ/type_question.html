@@ -24,6 +24,7 @@
             {% csrf_token %}
             <br>
             {% for choice in choices %}
+            {{ choice.choice_text }}
             {% if choice.question == lastest_answer_in_question.question %}
             <input type="text" id="type" name="type" class="answer_input" value="{{lastest_answer_in_question.answer}}"><br><br>
             {% else %}

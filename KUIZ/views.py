@@ -259,6 +259,7 @@ def answer(request, pk, question_id):
                 else:
                     return HttpResponseRedirect(reverse('result', args=(pk,)))
     except:
+        Answer.objects.create(user=request.user, quiz=quiz, question=question, answer="")
         try:
             num_of_question = all_question.index(
                 Question.objects.get(pk=question_id))
@@ -342,7 +343,9 @@ def edit_quiz(request, pk):
             'detail': quiz.detail,
             'topic': quiz.topic,
             'exam_duration': quiz.exam_duration,
-            'random_order': quiz.random_order
+            'random_order': quiz.random_order,
+            'limit_attempt_or_not': quiz.limit_attempt_or_not,
+            'attempt': quiz.attempt,
         })
         if request.method == "POST":
             quiz_form = NewQuizForm(request.POST, instance=quiz)
@@ -541,7 +544,7 @@ def edit_typing_choice(request, choice_id):
     typing_choice = Type.objects.get(pk=choice_id)
     choice_form = NewTypingChoiceForm(initial={
         'question': typing_choice.question,
-        'correct': typing_choice.correct
+        'choice_text': typing_choice.choice_text,
     })
     if request.method == "POST":
         choice_form = NewTypingChoiceForm(request.POST, instance=typing_choice)

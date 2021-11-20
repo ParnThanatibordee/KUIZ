@@ -36,12 +36,14 @@ class NewQuizForm(ModelForm):
 
     class Meta:
         model = Quiz
-        fields = ['quiz_topic', 'detail', 'private', 'password', 'topic', 'exam_duration', 'random_order', 'automate']
+        fields = ['quiz_topic', 'detail', 'private', 'password', 'limit_attempt_or_not', 'attempt', 'topic', 'exam_duration', 'random_order', 'automate']
         widgets = {
             'quiz_topic': forms.TextInput(attrs={'class': 'form-control'}),
             'detail': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'topic': forms.Select(attrs={'class': 'form-control'}),
             'random_order': forms.Select(attrs={'class': 'form-control'}),
+            'limit_attempt_or_not': forms.Select(attrs={'class': 'form-control'}),
+            'attempt': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 class NewQuestionForm(ModelForm):
@@ -69,14 +71,14 @@ class NewMultipleChoiceForm(ModelForm):
         }
 
 class NewTypingChoiceForm(ModelForm):
-    correct = forms.CharField(
-        label='Correct Answer:',
+    choice_text = forms.CharField(
+        label='Choice Title:',
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
     class Meta:
         model = Type
-        fields = ['question', 'correct']
+        fields = ['question', 'choice_text']
         widgets = {
             'question': forms.Select(attrs={'class': 'form-control'}),
         }
