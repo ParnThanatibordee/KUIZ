@@ -306,7 +306,7 @@ def get_feedback(request):
             return redirect('index')
     else:
         form = FeedbackForm()
-        form.fields['quiz'].queryset = Quiz.objects.filter(user=request.user)
+        form.fields['quiz'].queryset = Quiz.objects.filter(owner=request.user)
     return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
 
 
@@ -358,7 +358,7 @@ def edit_quiz(request, pk):
 
 @login_required(login_url='login')
 def check(request):
-    all_owner_quiz = Quiz.objects.filter(user=request.user)
+    all_owner_quiz = Quiz.objects.filter(owner=request.user)
     return render(request, 'KUIZ/checking.html', {'owner_quiz': all_owner_quiz})
 
 
@@ -421,7 +421,7 @@ def new_question(request):
             return redirect('detail')
     else:
         question_form = NewQuestionForm()
-    question_form.fields['quiz'].queryset = Quiz.objects.filter(user=request.user)
+    question_form.fields['quiz'].queryset = Quiz.objects.filter(owner=request.user)
     return render(request, "KUIZ/new_question.html", {"question_form": question_form})
 
 
@@ -467,7 +467,7 @@ def new_multiple_choice(request):
             return redirect('detail')
     else:
         choice_form = NewMultipleChoiceForm()
-    quizzes = Quiz.objects.filter(user=request.user)
+    quizzes = Quiz.objects.filter(owner=request.user)
     pk_list = [obj.pk for obj in quizzes]
     quizzes = Quiz.objects.filter(pk__in=pk_list)
     pk_question_list = []
@@ -492,7 +492,7 @@ def new_typing_choice(request):
             return redirect('detail')
     else:
         choice_form = NewTypingChoiceForm()
-        quizzes = Quiz.objects.filter(user=request.user)
+        quizzes = Quiz.objects.filter(owner=request.user)
     pk_list = [obj.pk for obj in quizzes]
     quizzes = Quiz.objects.filter(pk__in=pk_list)
     pk_question_list = []

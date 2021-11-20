@@ -20,7 +20,7 @@ def registration_view(request):
             # email = form.cleaned_data.get('email')
             # raw_password = form.cleaned_data.get('password1')
             # account = authenticate(email=email, password=raw_password)
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             logger.info(f"User {user.username} has registered({request.user})")
             return redirect('index')
         else:
