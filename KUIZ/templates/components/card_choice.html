@@ -18,6 +18,8 @@
     </div>
   {% endfor %}
 
+  <button type="button"><a href="{%url 'clear' quiz.id question.id%}">Clear</a></button>
+
   {% if back_link %}
   <button type="button" class="back-btn"><a href="{%url 'question' quiz.id back_question.id%}">Back</a></button>
   {% endif %}

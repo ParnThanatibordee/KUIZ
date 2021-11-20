@@ -22,6 +22,15 @@ YES_OR_NO = [
     (False, 'No'),
 ]
 
+CHECK_STRATEGY = [
+    ('static', 'Static'),
+    ('flexible', 'Flexible'),
+    ('white_space_order', 'Split (white space) order'),
+    ('white_space_no_order', 'Split (white space) no order'),
+    ('comma_order', 'Split (comma) order'),
+    ('comma_no_order', 'Split (comma) no order'),
+]
+
 
 class Quiz(models.Model):
     """Quiz model."""
@@ -29,6 +38,8 @@ class Quiz(models.Model):
     # owner
     private = models.BooleanField(default=False)
     password = models.CharField(max_length=200, default="0000")
+    limit_attempt_or_not = models.BooleanField(choices=YES_OR_NO, default=False)
+    attempt = models.IntegerField(default=1)
     detail = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published', default=timezone.now)
     end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=365))
@@ -40,7 +51,6 @@ class Quiz(models.Model):
                             null=True,
                             blank=True,
                             on_delete=models.CASCADE)
-
 
     def was_published_recently(self):
         """Check that the question was published recently."""
@@ -64,12 +74,24 @@ class Quiz(models.Model):
         return f"{self.quiz_topic} : {self.detail}"
 
 
+class ClassroomUser(models.Model):
+    """User in classroom model."""
+
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+    def __str__(self):
+        """Display user.username."""
+        return f"{self.user.username} in {self.quiz.quiz_topic}"
+
+
 class Question(models.Model):
     """Question model."""
 
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=200)
     correct = models.CharField(max_length=200)
+    check_strategy = models.CharField(max_length=40, choices=CHECK_STRATEGY, default='static')
     point = models.IntegerField(default=1)
 
     def __str__(self):
@@ -92,12 +114,11 @@ class Type(models.Model):
     """Choice model."""
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200, blank=True)
-    correct = models.CharField(max_length=200)
+    choice_text = models.CharField(max_length=200, default="")
 
     def __str__(self):
         """Display choice_text."""
-        return self.correct
+        return f"answer: {self.pk}"
 
 
 class Score(models.Model):
@@ -118,7 +139,42 @@ class Answer(models.Model):
     answer = models.CharField(max_length=200)
 
     def check_answer(self, correct):
-        if correct.lower() == str(self.answer).lower():
+        strategy = self.question.check_strategy
+        if strategy == 'static':
+            if str(correct) == str(self.answer):
+                return True
+        elif strategy == 'flexible':
+            if str(correct).lower() == str(self.answer).lower():
+                return True
+        elif strategy == 'white_space_order':
+            correct_list = str(correct).split()
+            answer_list = str(self.answer).split()
+            if correct_list == answer_list:
+                return True
+        elif strategy == 'white_space_no_order':
+            correct_list = str(correct).split()
+            answer_list = str(self.answer).split()
+            try:
+                for i in range(len(correct_list)):
+                    if answer_list[i] not in correct_list:
+                        return False
+            except:
+                return False
+            return True
+        elif strategy == 'comma_order':
+            correct_list = [x.strip() for x in str(correct).split(',')]
+            answer_list = [x.strip() for x in str(self.answer).split(',')]
+            if correct_list == answer_list:
+                return True
+        elif strategy == 'comma_no_order':
+            correct_list = [x.strip() for x in str(correct).split(',')]
+            answer_list = [x.strip() for x in str(self.answer).split(',')]
+            try:
+                for i in range(len(correct_list)):
+                    if answer_list[i] not in correct_list:
+                        return False
+            except:
+                return False
             return True
         return False
 

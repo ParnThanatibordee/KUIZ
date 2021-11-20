@@ -3,6 +3,11 @@ from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from KUIZ.models import Attendee, Score, Quiz
 from account.forms import RegistrationForm, AccountAuthenticationForm, ProfileForm
+from django.contrib.auth.decorators import login_required
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -16,6 +21,7 @@ def registration_view(request):
             # raw_password = form.cleaned_data.get('password1')
             # account = authenticate(email=email, password=raw_password)
             login(request, user)
+            logger.info(f"User {user.username} has registered({request.user})")
             return redirect('index')
         else:
             context['registration_form'] = form
@@ -26,7 +32,9 @@ def registration_view(request):
 
 
 def logout_view(request):
-    logout(request)
+    if request.user.is_authenticated:
+        logger.info(f"User {request.user.username} has logged out ({request.user})")
+        logout(request)
     return redirect('index')
 
 
@@ -45,6 +53,7 @@ def login_view(request):
 
             if user:
                 login(request, user)
+                logger.info(f"User {request.user.username} has logged in ({request.user})")
                 return redirect('index')
     else:
         form = AccountAuthenticationForm()
@@ -52,6 +61,7 @@ def login_view(request):
     return render(request, 'account/login.html', context)
 
 
+@login_required(login_url='/login')
 def profile_page(request):
     all_quiz = Quiz.objects.all()
     attendee = Attendee.objects.filter(user=request.user)
@@ -64,14 +74,18 @@ def profile_page(request):
 
     lastest_dict = {}
     for k in attend_quiz:
-        lastest_score = list(Score.objects.filter(user=request.user, quiz=k))[-1]
-        lastest_dict[k.quiz_topic] = lastest_score
+        try:
+            lastest_score = list(Score.objects.filter(user=request.user, quiz=k))[-1]
+            lastest_dict[k.quiz_topic] = lastest_score
+        except:
+            pass
 
     if not request.user.is_authenticated:
         return redirect("login")
     return render(request, 'account/profile.html', {'score': lastest_dict, 'length_score': len(lastest_dict)})
 
 
+@login_required(login_url='/login')
 def profile_edit_view(request):
     context = {}
     profile_form = ProfileForm(initial={
@@ -84,6 +98,7 @@ def profile_edit_view(request):
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
+            logger.info(f"User {request.user.username} has edited their profile ({request.user})")
             return redirect("profile")
     context['profile_form'] = profile_form
     return render(request, 'account/profile_edit.html', {'profile_form': profile_form, 'user': request.user})

@@ -22,6 +22,11 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'detail' %}">Quiz</a>
         </li>
+        {% if user.is_teacher %}
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'check' %}">Check</a>
+        </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'feedback' %}">Feedback</a>
         </li>
