@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.shortcuts import redirect
 from KUIZ.views import (
-    index, home, get_feedback
+    index, get_feedback
 )
 
 urlpatterns = [
