@@ -18,20 +18,24 @@
         <h1 class="mb-5">List of Answer ( {{this_quiz.quiz_topic}} : {{this_user.username}} )</h1>
         <form action="{% url 'update_answer' this_quiz.pk this_user.id %}" method="post">
           {% csrf_token %}
-          <div class="d-flex align-items-center head-table">
-            <h3>Question</h3>
-            <h3>Answer</h3>
-          </div>
-          <div class="d-flex align-items-center">
-            {% for answer in last_n_answer %}
-            <h4 style="flex: 7;">{{ answer.question.question_text }}</h4>
-            <ul class="ks-cboxtags" style="flex: 3;">
-              <li>
-                <input type="checkbox" id="checkboxOne" value="True" name="{{ answer.question.pk }}">
-                <label for="checkboxOne">{% if answer.answer != "" %}{{ answer.answer }}{% else %}None{% endif %}</label>
-              </li>
-            </ul>
-            {% endfor %}
+          <div class="d-flex">
+            <div class="d-flex flex-column head-table">
+              <h3>Question</h3>
+              {% for answer in last_n_answer %}
+              <h4 style="flex: 7;">{{ answer.question.question_text }}</h4>
+              {% endfor %}
+            </div>
+            <div class="d-flex flex-column align-items-center">
+              <h3>Answer</h3>
+              <ul class="ks-cboxtags d-flex flex-column" style="flex: 3;">
+                {% for answer in last_n_answer %}
+                <li>
+                  <input type="checkbox" id="{{ answer.question.pk }}" value="True" name="{{ answer.question.pk }}">
+                  <label for="{{ answer.question.pk }}">{% if answer.answer != "" %}{{ answer.answer }}{% else %}None{% endif %}</label>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
           </div>
           <br>
           <a href="{%url 'check_per_quiz' this_quiz.id %}" class="btn btn-outline-danger">Back</a>
