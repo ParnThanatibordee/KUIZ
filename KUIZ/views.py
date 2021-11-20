@@ -274,6 +274,7 @@ def new_question(request):
             return redirect('detail')
     else:
         question_form = NewQuestionForm()
+    question_form.fields['quiz'].queryset = Quiz.objects.filter(user=request.user)
     return render(request, "KUIZ/new_question.html", {"question_form": question_form})
 
 
@@ -319,6 +320,15 @@ def new_multiple_choice(request):
             return redirect('detail')
     else:
         choice_form = NewMultipleChoiceForm()
+    quizzes = Quiz.objects.filter(user=request.user)
+    pk_list = [obj.pk for obj in quizzes]
+    quizzes = Quiz.objects.filter(pk__in=pk_list)
+    pk_question_list = []
+    for pk in pk_list:
+        for question in Quiz.objects.get(pk=pk).question_set.all():
+            pk_question_list.append(question.pk)
+    questions = Question.objects.filter(pk__in=pk_question_list)
+    choice_form.fields['question'].queryset = questions
     return render(request, "KUIZ/new_multiple_choice.html", {"choice_form": choice_form})
 
 @login_required(login_url='/login')
@@ -335,6 +345,15 @@ def new_typing_choice(request):
             return redirect('detail')
     else:
         choice_form = NewTypingChoiceForm()
+        quizzes = Quiz.objects.filter(user=request.user)
+    pk_list = [obj.pk for obj in quizzes]
+    quizzes = Quiz.objects.filter(pk__in=pk_list)
+    pk_question_list = []
+    for pk in pk_list:
+        for question in Quiz.objects.get(pk=pk).question_set.all():
+            pk_question_list.append(question.pk)
+    questions = Question.objects.filter(pk__in=pk_question_list)
+    choice_form.fields['question'].queryset = questions
     return render(request, "KUIZ/new_typing_choice.html", {"choice_form": choice_form})
 
 @login_required(login_url='/login')
