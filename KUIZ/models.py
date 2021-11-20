@@ -12,6 +12,7 @@ TOPIC = [
     ('chemistry', 'Chemistry'),
     ('biology', 'Biology'),
     ('astronomy', 'Astronomy'),
+    ('english', 'English'),
     ('social', 'Social'),
     ('sport', 'Sport'),
     ('others', 'Others'),
@@ -35,7 +36,6 @@ CHECK_STRATEGY = [
 class Quiz(models.Model):
     """Quiz model."""
     quiz_topic = models.CharField(max_length=200)
-    # owner
     private = models.BooleanField(default=False)
     password = models.CharField(max_length=200, default="0000")
     limit_attempt_or_not = models.BooleanField(choices=YES_OR_NO, default=False)
@@ -47,7 +47,7 @@ class Quiz(models.Model):
     exam_duration = models.IntegerField(default=0)
     random_order = models.BooleanField(choices=YES_OR_NO, default=False)
     automate = models.BooleanField(choices=YES_OR_NO, default=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                             null=True,
                             blank=True,
                             on_delete=models.CASCADE)

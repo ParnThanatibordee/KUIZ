@@ -39,11 +39,11 @@ def exam(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     global all_question
     all_question = list(quiz.question_set.all())
-    user_contain = [i.user for i in list(ClassroomUser.objects.filter(quiz=quiz))]
+    user_contain = [i.owner for i in list(ClassroomUser.objects.filter(quiz=quiz))]
     remaining_message = ""
     error_message = ""
 
-    if quiz.private and (request.user not in user_contain) and (request.user != quiz.user):
+    if quiz.private and (request.user not in user_contain) and (request.user != quiz.owner):
         return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                                                       'time': quiz.exam_duration,
                                                       'remain_message': remaining_message,
@@ -51,7 +51,7 @@ def exam(request, pk):
 
     if quiz.can_vote():
         user_attendee = Attendee.objects.filter(user=request.user, quiz=quiz)
-        if quiz.limit_attempt_or_not and (request.user != quiz.user):
+        if quiz.limit_attempt_or_not and (request.user != quiz.owner):
             remaining_message = f" (remaining attempt: {quiz.attempt - len(user_attendee)})"
             if len(user_attendee) >= quiz.attempt:
                 return render(request, 'KUIZ/out_of_attempt.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
@@ -320,8 +320,8 @@ def new_quiz(request):
                 quiz = quiz_form.save()
             except:
                 return redirect('detail')
-            quiz.user = request.user
-            logger.info(f"User {request.user.username} ({request.user}) has created a new quiz ({quiz_title}).")
+            quiz.owner = request.user
+            logger.info(f"User {request.user.username} ({request.user}) has created a new quiz ({quiz.quiz_title}).")
             quiz.save()
             return redirect('detail')
     else:
@@ -332,7 +332,7 @@ def new_quiz(request):
 @login_required(login_url='/login')
 def edit_quiz(request, pk):
     quiz = Quiz.objects.get(pk=pk)
-    if quiz.user == request.user:
+    if quiz.owner == request.user:
         quiz_form = NewQuizForm(initial={
             'quiz_topic': quiz.quiz_topic,
             'private': quiz.private,
