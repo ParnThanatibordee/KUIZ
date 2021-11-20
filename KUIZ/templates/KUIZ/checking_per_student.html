@@ -10,10 +10,7 @@
 {% else %}
 {{answer.question.question_text}} : answer ( {{answer.answer}} )
 {% endif %}
-<label class="switch">
   <input type="checkbox" value="True" name="{{ answer.question.pk }}">
-  <span class="slider round"></span>
-</label>
 <br>
 {% endfor %}
 <br>
