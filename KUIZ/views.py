@@ -237,14 +237,31 @@ def answer(request, pk, question_id):
                     for i in all_answer_in_quiz:
                         i.delete()
                 Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=answer)
+                try:
+                    num_of_question = all_question.index(
+                        Question.objects.get(pk=question_id))
+                except:
+                    return HttpResponseRedirect(reverse('exam', args=(pk,)))
+                try:
+                    next_question = all_question[num_of_question + 1].id
+                    next_link = True
+                except:
+                    next_link = False
+                if next_link:
+                    return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+                else:
+                    return HttpResponseRedirect(reverse('result', args=(pk,)))
             else:
                 all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz, question=question)
                 if len(all_answer_in_quiz) > 0:
                     for i in all_answer_in_quiz:
                         i.delete()
                 Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=answer)
-                num_of_question = all_question.index(
-                    Question.objects.get(pk=question_id))
+                try:
+                    num_of_question = all_question.index(
+                        Question.objects.get(pk=question_id))
+                except:
+                    return HttpResponseRedirect(reverse('exam', args=(pk,)))
                 try:
                     next_question = all_question[num_of_question + 1].id
                     next_link = True
