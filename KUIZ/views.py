@@ -346,16 +346,6 @@ def send_feedback(request, pk):
     return render(request, "KUIZ/send_feedback.html", {"form": form, "user": request.user})
 
 
-# def check_quiz(request, pk):
-#     this_quiz = Quiz.objects.get(pk=pk)
-#     all_student_attendee = Attendee.objects.filter(quiz=this_quiz)
-#     unique_list_student = {}
-#     for i in all_student_attendee:
-#         this_user = i.user.username
-#         if not (this_user in unique_list_student):
-#             unique_list_student[this_user] = i.user.id
-#     return render(request, 'KUIZ/checking_per_quiz.html', {"this_quiz": this_quiz, "all_user": unique_list_student})
-
 @login_required(login_url='login')
 def new_quiz(request):
     """Create a new quiz by teacher."""
