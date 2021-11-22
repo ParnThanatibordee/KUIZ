@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY', default='dumb-secret-key')
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'ku-kuiz.herokuapp.com']
+ALLOWED_HOSTS = ['www.ku-kuiz.herokuapp.com']
 
 # Application definition
 
