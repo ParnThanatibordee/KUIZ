@@ -44,3 +44,15 @@
 #             url_lists.append(pages_index)
 #         profile_index = "https://ku-kuiz.herokuapp.com/user/profile/" in url_lists
 #         self.assertFalse(profile_index)
+#
+#     def test_login(self):
+#         username = "wasd1234"
+#         password = "1234"
+#         url = "https://ku-kuiz.herokuapp.com/user/login/"
+#         self.browser.get(url)
+#         username_box = self.browser.find_element_by_xpath('//*[@id="id_login"]')
+#         username_box.send_keys(username)
+#         password_box = self.browser.find_element_by_xpath('//*[@id="id_password"]')
+#         password_box.send_keys(password)
+#         self.browser.find_element_by_xpath('/html/body/div/div[1]/div/div/div/div[2]/form/div[3]/button').click()
+#         self.assertIs(self.browser, webdriver)
