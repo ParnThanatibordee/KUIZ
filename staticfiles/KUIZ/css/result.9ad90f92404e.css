@@ -1,0 +1,91 @@
+.content {
+    width: calc(100vw - 560px);
+    height: 100vh;
+    margin: 0 auto;
+}
+
+.content .header {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    border-bottom: 2px solid #A7A7A7;
+}
+
+.content .header h1 {
+    font-size: 3rem;
+}
+
+.content .body {
+    flex: 9;
+    background-color: whitesmoke;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 5rem;
+}
+
+.content .body div {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.content .body div h1 {
+    font-size: 48px;
+    font-weight: 400;
+}
+
+.content .body div .card-score {
+    width: 50%;
+    height: 70%;
+    position: relative;
+}
+
+.content .body div .card-score span {
+    background-color: white;
+    font-size: 48px;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    border-radius: 25px;
+}
+
+.content .body div .card-score .btn {
+    position: absolute;
+    bottom: 20%;
+    border: 1px solid #2890A3;
+}
+
+.content .body div .card-score .btn i {
+    font-size: 24px;
+    padding-left: 10px;
+}
+
+.content .body div .card-score .btn-feeback {
+    right: 0;
+    background-color: #2890A3;
+}
+
+.content .body div .card-score .btn-home {
+    right: 200px;
+}
+
+.content .body div .card-score .btn a {
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.content .body div .card-score .btn-feeback a {
+    color: white;
+    padding: 0 20px;
+}
+
+.content .body div .card-score .btn-home a {
+    color: #2890A3;
+    padding-right: 10px;
+}
+

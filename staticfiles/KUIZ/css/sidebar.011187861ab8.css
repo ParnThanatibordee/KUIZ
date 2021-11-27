@@ -1,0 +1,15 @@
+.list-group a {
+    margin: 0;
+    padding: 20px 20px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.topic-active {
+    background-color: #92CABB;
+}
+
+.topic-active:hover {
+    background-color: #92CABB;
+    color: #212529;
+}

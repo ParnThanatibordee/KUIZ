@@ -1,0 +1,27 @@
+h2 {
+    letter-spacing: 3px;
+    margin: 50px 0;
+}
+
+label {
+    margin: 20px 0 5px;
+}
+
+form button {
+    margin-top: 40px;
+    background-color: teal !important;
+    border-color: teal;
+    color: white !important;
+}
+
+input:not(input:last-child) {
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 5px 10px;
+}
+
+select {
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 5px;
+}
