@@ -1,0 +1,29 @@
+{% extends 'KUIZ/main.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/card_quiz.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/check_per_student.css' %}">
+{% endblock css %}
+{% block title %}{% endblock %}
+
+{% block nav %}
+    {% include 'components/navbar.html' %}
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-md-center">
+      <div class="col-md-8 col-12">
+            <h1 style="margin-bottom: 2rem">List of Member</h1>
+            {% for user in member %}
+                <li>{{user.user.username}}</li>
+            {% endfor %}
+            <br>
+            <a class="btn btn-outline-danger" href="{%url 'member' %}">Back</a>
+            <a class="btn btn-success" href="{%url 'add_member_per_quiz' quiz.id%}">Add</a>
+            <a class="btn btn-success" href="{%url 'remove_member_per_quiz' quiz.id%}">Remove</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
