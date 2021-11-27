@@ -21,6 +21,11 @@
               class="form-group"
               enctype="multipart/form-data">
               {% csrf_token %}
+              <hr>
+              <h5>details</h5>
+              publish date: {{quiz.pub_date}}<br>
+              end date: {{quiz.end_date}}
+              <hr>
               {{ quiz_form.as_p }}
               <div class="d-flex">
                 <a
