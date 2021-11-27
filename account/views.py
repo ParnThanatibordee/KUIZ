@@ -16,6 +16,16 @@ def registration_view(request):
     if request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
+            input_username = form.cleaned_data['username']
+            pass_username = True
+            for i in input_username:
+                if not (i.isnumeric() or i.isalpha() or i == '_' or i == '-'):
+                    pass_username = False
+            if not pass_username:
+                error_message = 'username must contain only -, _, a-z, A-Z, or 0-9'
+                context['registration_form'] = form
+                context['error_message'] = error_message
+                return render(request, 'account/register.html', context)
             user = form.save()
             # email = form.cleaned_data.get('email')
             # raw_password = form.cleaned_data.get('password1')
@@ -97,6 +107,14 @@ def profile_edit_view(request):
     if request.POST:
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
+            input_username = form.cleaned_data['username']
+            pass_username = True
+            for i in input_username:
+                if not (i.isnumeric() or i.isalpha() or i == '_' or i == '-'):
+                    pass_username = False
+            if not pass_username:
+                error_message = 'username must contain only -, _, a-z, A-Z, or 0-9'
+                return render(request, 'account/profile_edit.html', {'profile_form': profile_form, 'user': request.user, 'error_message': error_message})
             form.save()
             logger.info(f"User {request.user.username} has edited their profile ({request.user})")
             return redirect("profile")
