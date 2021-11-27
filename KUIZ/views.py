@@ -355,6 +355,8 @@ def edit_quiz(request, pk):
             'password': quiz.password,
             'detail': quiz.detail,
             'topic': quiz.topic,
+            'pub_date': quiz.pub_date,
+            'end_date': quiz.end_date,
             'exam_duration': quiz.exam_duration,
             'random_order': quiz.random_order,
             'limit_attempt_or_not': quiz.limit_attempt_or_not,
