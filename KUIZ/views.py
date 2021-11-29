@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.utils import timezone
+import datetime
 import random
 
 from .forms import FeedbackForm, NewQuizForm, NewQuestionForm, NewMultipleChoiceForm, NewTypingChoiceForm
@@ -38,6 +40,8 @@ def exam(request, pk):
     user_contain = [i.user for i in list(ClassroomUser.objects.filter(quiz=quiz))]
     remaining_message = ""
     error_message = ""
+    global start_time
+    start_time = None
 
     if quiz.private and (request.user not in user_contain) and (request.user != quiz.owner):
         return render(request, 'KUIZ/password.html',
@@ -148,6 +152,10 @@ def question(request, pk, question_id):
         if num_of_question > 0:
             back_question = all_question[num_of_question - 1]
             back_link = True
+        if not back_link:
+            global start_time
+            if start_time == None:
+                start_time = datetime.datetime.now()
         try:
             next_question = all_question[num_of_question + 1]
             next_link = True
@@ -158,6 +166,13 @@ def question(request, pk, question_id):
             lastest_answer_in_question = answer_in_question[-1]
         else:
             lastest_answer_in_question = None
+        now = datetime.datetime.now()
+        current_time = (now - start_time).total_seconds()
+        time_diff = (quiz.exam_duration * 60) - current_time
+        if (int(time_diff // 60)//10) == 0:
+            result_time = f"0{int(time_diff // 60)}:{int(time_diff % 60)}"
+        else:
+            result_time = f"{int(time_diff // 60)}:{int(time_diff % 60)}"
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
                                                                'num': num_of_question + 1,
@@ -165,7 +180,7 @@ def question(request, pk, question_id):
                                                                'choices': all_choice, 'next_link': next_link,
                                                                'next_question': next_question, 'back_link': back_link,
                                                                'back_question': back_question,
-                                                               'time': quiz.exam_duration,
+                                                               'time': quiz.exam_duration, 'remaining_time': result_time,
                                                                'lastest_answer_in_question': lastest_answer_in_question})
         else:
             return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
@@ -174,6 +189,7 @@ def question(request, pk, question_id):
                                                           'choices': choices, 'next_link': next_link,
                                                           'next_question': next_question, 'back_link': back_link,
                                                           'back_question': back_question, 'time': quiz.exam_duration,
+                                                          'remaining_time': result_time,
                                                           'lastest_answer_in_question': lastest_answer_in_question})
     else:
         return render(request, 'KUIZ/cannot_vote.html',
