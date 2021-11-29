@@ -375,6 +375,8 @@ def edit_quiz(request, pk):
             'password': quiz.password,
             'detail': quiz.detail,
             'topic': quiz.topic,
+            'pub_date': quiz.pub_date,
+            'end_date': quiz.end_date,
             'exam_duration': quiz.exam_duration,
             'random_order': quiz.random_order,
             'limit_attempt_or_not': quiz.limit_attempt_or_not,
@@ -595,3 +597,63 @@ def edit_typing_choice(request, choice_id):
             typing_choice.save()
             return redirect('detail')
     return render(request, "KUIZ/edit_typing_choice.html", {"choice": typing_choice, 'choice_form': choice_form})
+
+
+@login_required(login_url='login')
+def member(request):
+    all_owner_quiz = Quiz.objects.filter(owner=request.user)
+    return render(request, 'KUIZ/member.html', {'owner_quiz': all_owner_quiz})
+
+
+@login_required(login_url='login')
+def member_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    classroom_user = ClassroomUser.objects.filter(quiz=quiz)
+    return render(request, 'KUIZ/member_quiz.html', {'quiz': quiz, 'member': classroom_user})
+
+
+@login_required(login_url='login')
+def add_member_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    not_classroom_user = []
+    classroom_user = [i.user.username for i in list(ClassroomUser.objects.filter(quiz=quiz))]
+    all_user = list(Account.objects.all())
+    for i in all_user:
+        if not(i.username in classroom_user) and i.username != quiz.owner.username:
+            not_classroom_user.append(i)
+    return render(request, 'KUIZ/add_member_quiz.html', {'quiz': quiz, 'not_member': not_classroom_user})
+
+
+@login_required(login_url='login')
+def update_add_member_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    all_user = list(Account.objects.all())
+    for i in all_user:
+        try:
+            add_user = request.POST[f"{i.id}"]
+        except:
+            pass
+        else:
+            ClassroomUser.objects.create(quiz=quiz, user=i)
+    return HttpResponseRedirect(reverse('member_per_quiz', args=(pk,)))
+
+
+@login_required(login_url='login')
+def remove_member_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    classroom_user = ClassroomUser.objects.filter(quiz=quiz)
+    return render(request, 'KUIZ/remove_member_quiz.html', {'quiz': quiz, 'member': classroom_user})
+
+
+@login_required(login_url='login')
+def update_remove_member_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    classroom_user = ClassroomUser.objects.filter(quiz=quiz)
+    for i in classroom_user:
+        try:
+            remove_user = request.POST[f"{i.user.id}"]
+        except:
+            pass
+        else:
+            i.delete()
+    return HttpResponseRedirect(reverse('member_per_quiz', args=(pk, )))

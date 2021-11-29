@@ -29,6 +29,9 @@
                 <label for="username">Profile Picture:</label>
                 {{ profile_form.profile_pic }}
             </div>
+            {% if error_message %}
+            <p style="color:red;">{{ error_message }}</p>
+            {% endif %}
             <button type="submit" class="btn">Submit</button>
         </form>
     </div>

@@ -28,5 +28,12 @@ urlpatterns = [
     path('edit/multiple/choice/<int:choice_id>', views.edit_multiple_choice, name='edit_multiple_choice'),
     path('edit/typing/choice/<int:choice_id>', views.edit_typing_choice, name='edit_typing_choice'),
     path('feedback/', views.get_feedback, name='feedback'),
+    path('member/', views.member, name='member'),
+    path('member/<int:pk>/', views.member_quiz, name='member_per_quiz'),
+    path('member/<int:pk>/add/', views.add_member_quiz, name='add_member_per_quiz'),
+    path('member/<int:pk>/add/process', views.update_add_member_quiz, name='update_add_member'),
+    path('member/<int:pk>/remove/', views.remove_member_quiz, name='remove_member_per_quiz'),
+    path('member/<int:pk>/remove/process', views.update_remove_member_quiz, name='update_remove_member'),
     path('feedback/<int:pk>/', views.send_feedback, name='send_feedback'),
+
 ]

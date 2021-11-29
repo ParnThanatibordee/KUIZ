@@ -29,6 +29,9 @@
                         {% endfor %}
                     </p>
                 {% endfor %}
+                {% if error_message %}
+                <p style="color:red;">{{ error_message }}</p>
+                {% endif %}
                 <table class="table table-borderless">
 
                     <tbody>

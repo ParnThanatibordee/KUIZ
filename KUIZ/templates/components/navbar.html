@@ -24,6 +24,7 @@
         </li>
         {% if user.is_teacher %}
         <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'member' %}">Member</a>
           <a class="nav-link active" aria-current="page" href="{% url 'check' %}">Check</a>
         </li>
         {% endif %}
