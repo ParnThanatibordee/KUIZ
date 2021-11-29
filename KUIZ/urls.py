@@ -34,4 +34,6 @@ urlpatterns = [
     path('member/<int:pk>/add/process', views.update_add_member_quiz, name='update_add_member'),
     path('member/<int:pk>/remove/', views.remove_member_quiz, name='remove_member_per_quiz'),
     path('member/<int:pk>/remove/process', views.update_remove_member_quiz, name='update_remove_member'),
+    path('feedback/<int:pk>/', views.send_feedback, name='send_feedback'),
+
 ]
