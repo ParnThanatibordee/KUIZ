@@ -35,7 +35,6 @@ def detail_by_topic(request, topic):
 def exam(request, pk):
     """Exam view."""
     quiz = Quiz.objects.get(pk=pk)
-    global all_question
     all_question = list(quiz.question_set.all())
     user_contain = [i.user for i in list(ClassroomUser.objects.filter(quiz=quiz))]
     remaining_message = ""
@@ -63,8 +62,6 @@ def exam(request, pk):
         if len(all_answer_in_quiz) > 0:
             for i in all_answer_in_quiz:
                 i.delete()
-        if quiz.random_order:
-            random.shuffle(all_question)
         try:
             question1_id = all_question[0].pk
         except:
@@ -128,6 +125,7 @@ def clear_answer(request, pk, question_id):
 def question(request, pk, question_id):
     """Question view."""
     quiz = Quiz.objects.get(pk=pk)
+    all_question = list(quiz.question_set.all())
     if quiz.can_vote():
         try:
             num_of_question = all_question.index(
@@ -208,6 +206,7 @@ def question(request, pk, question_id):
 def answer(request, pk, question_id):
     """Answer for choice or type."""
     quiz = Quiz.objects.get(pk=pk)
+    all_question = list(quiz.question_set.all())
     question = get_object_or_404(Question, pk=question_id)
     all_choice = question.choice_set.all()
     if len(all_choice) == 0:
