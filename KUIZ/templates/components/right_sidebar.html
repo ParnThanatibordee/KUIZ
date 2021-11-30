@@ -59,7 +59,7 @@
     }
 
     window.onload = function () {
-        const timer = localStorage.getItem("timer");
+        const timer = "{{remaining_time}}";
         const minutes = parseInt(timer.split(":")[0]);
         const seconds = parseInt(timer.split(":")[1]);
         const time = (60 * minutes) + seconds;
