@@ -36,7 +36,7 @@ class NewQuizForm(ModelForm):
 
     class Meta:
         model = Quiz
-        fields = ['quiz_topic', 'detail', 'private', 'password', 'pub_date', 'end_date', 'limit_attempt_or_not', 'attempt', 'topic', 'exam_duration', 'random_order', 'automate']
+        fields = ['quiz_topic', 'detail', 'private', 'password', 'pub_date', 'end_date', 'limit_attempt_or_not', 'attempt', 'topic', 'exam_duration', 'automate']
         widgets = {
             'quiz_topic': forms.TextInput(attrs={'class': 'form-control'}),
             'detail': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
