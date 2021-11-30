@@ -14,8 +14,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-start_time = None
-
 
 def index(request):
     """Index homepage."""
@@ -41,8 +39,6 @@ def exam(request, pk):
     user_contain = [i.user for i in list(ClassroomUser.objects.filter(quiz=quiz))]
     remaining_message = ""
     error_message = ""
-    global start_time
-    start_time = None
 
     if quiz.private and (request.user not in user_contain) and (request.user != quiz.owner):
         return render(request, 'KUIZ/password.html',
@@ -153,9 +149,7 @@ def question(request, pk, question_id):
             back_question = all_question[num_of_question - 1]
             back_link = True
         if not back_link:
-            global start_time
-            if start_time == None:
-                start_time = datetime.datetime.now()
+            Attendee.objects.create(user=request.user, quiz=quiz)
         try:
             next_question = all_question[num_of_question + 1]
             next_link = True
@@ -167,7 +161,8 @@ def question(request, pk, question_id):
         else:
             lastest_answer_in_question = None
         now = datetime.datetime.now()
-        current_time = (now - start_time).total_seconds()
+        start_time = list(Attendee.objects.filter(user=request.user, quiz=quiz))[-1].start_time
+        current_time = (now - start_time.replace(tzinfo=None)).total_seconds()
         time_diff = (quiz.exam_duration * 60) - current_time
         if (int(time_diff // 60)//10) == 0:
             if (int(time_diff % 60))//10 == 0:
@@ -331,7 +326,7 @@ def result(request, pk):
     score = 0
     max_score = 0  # should in model
     all_answer_in_quiz = Answer.objects.filter(user=user, quiz=quiz)
-    Attendee.objects.create(user=user, quiz=quiz)
+    # Attendee.objects.create(user=user, quiz=quiz)
     logger.info(f"User {request.user.username} ({request.user}) has finished quiz {quiz.quiz_topic}.")
     if quiz.automate:
         for answer in all_answer_in_quiz:

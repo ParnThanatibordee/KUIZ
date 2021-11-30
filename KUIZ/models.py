@@ -187,6 +187,7 @@ class Answer(models.Model):
 class Attendee(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    start_time = models.DateTimeField('start time', default=datetime.datetime.now())
 
     def __str__(self):
         return self.user.username
