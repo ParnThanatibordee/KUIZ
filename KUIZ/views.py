@@ -39,8 +39,6 @@ def exam(request, pk):
     user_contain = [i.user for i in list(ClassroomUser.objects.filter(quiz=quiz))]
     remaining_message = ""
     error_message = ""
-    global start_time
-    start_time = None
 
     if quiz.private and (request.user not in user_contain) and (request.user != quiz.owner):
         return render(request, 'KUIZ/password.html',
@@ -69,6 +67,7 @@ def exam(request, pk):
                           {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                            'time': quiz.exam_duration,
                            'remain_message': remaining_message})
+        Attendee.objects.create(user=request.user, quiz=quiz, start_time=datetime.datetime.now())
         return render(request, 'KUIZ/exam.html',
                       {'quiz': quiz, 'q1_id': question1_id, 'num_of_question': len(list(quiz.question_set.all())),
                        'time': quiz.exam_duration,
@@ -126,7 +125,6 @@ def question(request, pk, question_id):
     """Question view."""
     quiz = Quiz.objects.get(pk=pk)
     all_question = list(quiz.question_set.all())
-    global start_time
     if quiz.can_vote():
         try:
             num_of_question = all_question.index(
@@ -151,9 +149,6 @@ def question(request, pk, question_id):
         if num_of_question > 0:
             back_question = all_question[num_of_question - 1]
             back_link = True
-        if not back_link:
-            if start_time == None:
-                start_time = datetime.datetime.now()
         try:
             next_question = all_question[num_of_question + 1]
             next_link = True
@@ -165,7 +160,8 @@ def question(request, pk, question_id):
         else:
             lastest_answer_in_question = None
         now = datetime.datetime.now()
-        current_time = (now - start_time).total_seconds()
+        start_time = list(Attendee.objects.filter(user=request.user, quiz=quiz))[-1].start_time
+        current_time = (now - start_time.replace(tzinfo=None)).total_seconds()
         time_diff = (quiz.exam_duration * 60) - current_time
         if (int(time_diff // 60)//10) == 0:
             if (int(time_diff % 60))//10 == 0:
@@ -329,7 +325,7 @@ def result(request, pk):
     score = 0
     max_score = 0  # should in model
     all_answer_in_quiz = Answer.objects.filter(user=user, quiz=quiz)
-    Attendee.objects.create(user=user, quiz=quiz)
+    # Attendee.objects.create(user=user, quiz=quiz)
     logger.info(f"User {request.user.username} ({request.user}) has finished quiz {quiz.quiz_topic}.")
     if quiz.automate:
         for answer in all_answer_in_quiz:
