@@ -32,6 +32,10 @@ a {
   font-weight: 400;
 }
 
+a:not(a:last-child) {
+  width: 100%;
+}
+
 h2 {
   text-align: center;
   font-size: 16px;
@@ -121,7 +125,7 @@ input[type=button], input[type=submit], input[type=reset]  {
 }
 
 input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover ,button {
-  background-color: #39ace7;
+  background-color: inherit;
 }
 
 input[type=button]:active, input[type=submit]:active, input[type=reset]:active ,button {
