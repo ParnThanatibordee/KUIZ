@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from account.models import Account
+from django.core.validators import MinValueValidator
 import datetime
 from django.conf import settings
 
@@ -39,18 +40,18 @@ class Quiz(models.Model):
     private = models.BooleanField(default=False)
     password = models.CharField(max_length=200, default="0000")
     limit_attempt_or_not = models.BooleanField(choices=YES_OR_NO, default=False)
-    attempt = models.IntegerField(default=1)
+    attempt = models.PositiveIntegerField(default=1, validators=[MinValueValidator(0)])
     detail = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published', default=timezone.now)
     end_date = models.DateTimeField('date end', default=timezone.now() + datetime.timedelta(days=365))
     topic = models.CharField(max_length=20, choices=TOPIC, default='others')
-    exam_duration = models.IntegerField(default=0)
+    exam_duration = models.PositiveIntegerField(default=0, validators=[MinValueValidator(1)])
     random_order = models.BooleanField(choices=YES_OR_NO, default=False)
     automate = models.BooleanField(choices=YES_OR_NO, default=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                            null=True,
-                            blank=True,
-                            on_delete=models.CASCADE)
+                              null=True,
+                              blank=True,
+                              on_delete=models.CASCADE)
 
     def was_published_recently(self):
         """Check that the question was published recently."""
@@ -183,11 +184,19 @@ class Answer(models.Model):
         return self.answer
 
 
+class Attendee(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
 class Feedback(models.Model):
     """Feedback model."""
 
-    user = models.ForeignKey(Account, on_delete=models.CASCADE, default=0)
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, default=0)
+    user = models.ForeignKey(Attendee, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, default=1)
     feedback_text = models.TextField(max_length=5000)
 
     def quiz_name(self):
@@ -199,8 +208,3 @@ class Feedback(models.Model):
     def __str__(self):
         """Display feedback_text"""
         return self.feedback_text
-
-
-class Attendee(models.Model):
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)

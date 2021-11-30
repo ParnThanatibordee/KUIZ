@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.utils import timezone
+import datetime
 import random
 
 from .forms import FeedbackForm, NewQuizForm, NewQuestionForm, NewMultipleChoiceForm, NewTypingChoiceForm
@@ -38,21 +40,25 @@ def exam(request, pk):
     user_contain = [i.user for i in list(ClassroomUser.objects.filter(quiz=quiz))]
     remaining_message = ""
     error_message = ""
+    global start_time
+    start_time = None
 
     if quiz.private and (request.user not in user_contain) and (request.user != quiz.owner):
-        return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
-                                                      'time': quiz.exam_duration,
-                                                      'remain_message': remaining_message,
-                                                      'error_message': error_message})
+        return render(request, 'KUIZ/password.html',
+                      {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                       'time': quiz.exam_duration,
+                       'remain_message': remaining_message,
+                       'error_message': error_message})
 
     if quiz.can_vote():
         user_attendee = Attendee.objects.filter(user=request.user, quiz=quiz)
         if quiz.limit_attempt_or_not and (request.user != quiz.owner):
             remaining_message = f" (remaining attempt: {quiz.attempt - len(user_attendee)})"
             if len(user_attendee) >= quiz.attempt:
-                return render(request, 'KUIZ/out_of_attempt.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
-                                                                    'time': quiz.exam_duration,
-                                                                    'remain_message': remaining_message})
+                return render(request, 'KUIZ/out_of_attempt.html',
+                              {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                               'time': quiz.exam_duration,
+                               'remain_message': remaining_message})
         all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz)
         if len(all_answer_in_quiz) > 0:
             for i in all_answer_in_quiz:
@@ -60,18 +66,21 @@ def exam(request, pk):
         if quiz.random_order:
             random.shuffle(all_question)
         try:
-            question1 = all_question[0]
+            question1_id = all_question[0].pk
         except:
-            return render(request, 'KUIZ/no_question.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
-                                                             'time': quiz.exam_duration,
-                                                             'remain_message': remaining_message})
-        return render(request, 'KUIZ/exam.html', {'quiz': quiz, 'q1': question1, 'num_of_question': len(list(quiz.question_set.all())),
-                                                  'time': quiz.exam_duration,
-                                                  'remain_message': remaining_message})
+            return render(request, 'KUIZ/no_question.html',
+                          {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                           'time': quiz.exam_duration,
+                           'remain_message': remaining_message})
+        return render(request, 'KUIZ/exam.html',
+                      {'quiz': quiz, 'q1_id': question1_id, 'num_of_question': len(list(quiz.question_set.all())),
+                       'time': quiz.exam_duration,
+                       'remain_message': remaining_message})
     else:
-        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
-                                                         'time': quiz.exam_duration,
-                                                         'remain_message': remaining_message})
+        return render(request, 'KUIZ/cannot_vote.html',
+                      {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                       'time': quiz.exam_duration,
+                       'remain_message': remaining_message})
 
 
 @login_required(login_url='login')
@@ -86,20 +95,22 @@ def password(request, pk):
     remaining_message = ""
     if input_password == "":
         error_message = "* please enter your password!"
-        return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
-                                                      'time': quiz.exam_duration,
-                                                      'remain_message': remaining_message,
-                                                      'error_message': error_message})
+        return render(request, 'KUIZ/password.html',
+                      {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                       'time': quiz.exam_duration,
+                       'remain_message': remaining_message,
+                       'error_message': error_message})
     else:
         if input_password == quiz.password:
             ClassroomUser.objects.create(quiz=quiz, user=request.user)
-            return HttpResponseRedirect(reverse('exam', args=(pk, )))
+            return HttpResponseRedirect(reverse('exam', args=(pk,)))
         else:
             error_message = "* wrong password!"
-            return render(request, 'KUIZ/password.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
-                                                          'time': quiz.exam_duration,
-                                                          'remain_message': remaining_message,
-                                                          'error_message': error_message})
+            return render(request, 'KUIZ/password.html',
+                          {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                           'time': quiz.exam_duration,
+                           'remain_message': remaining_message,
+                           'error_message': error_message})
 
 
 @login_required(login_url='login')
@@ -122,7 +133,7 @@ def question(request, pk, question_id):
             num_of_question = all_question.index(
                 Question.objects.get(pk=question_id))
         except:
-            return HttpResponseRedirect(reverse('exam', args=(pk, )))
+            return HttpResponseRedirect(reverse('exam', args=(pk,)))
         this_question = all_question[num_of_question]
         type_or_not = False
         all_choice = this_question.choice_set.all()
@@ -141,6 +152,10 @@ def question(request, pk, question_id):
         if num_of_question > 0:
             back_question = all_question[num_of_question - 1]
             back_link = True
+        if not back_link:
+            global start_time
+            if start_time == None:
+                start_time = datetime.datetime.now()
         try:
             next_question = all_question[num_of_question + 1]
             next_link = True
@@ -151,25 +166,42 @@ def question(request, pk, question_id):
             lastest_answer_in_question = answer_in_question[-1]
         else:
             lastest_answer_in_question = None
+        now = datetime.datetime.now()
+        current_time = (now - start_time).total_seconds()
+        time_diff = (quiz.exam_duration * 60) - current_time
+        if (int(time_diff // 60)//10) == 0:
+            if (int(time_diff % 60))//10 == 0:
+                result_time = f"0{int(time_diff // 60)}:0{int(time_diff % 60)}"
+            else:
+                result_time = f"0{int(time_diff // 60)}:{int(time_diff % 60)}"
+        else:
+            if (int(time_diff % 60))//10 == 0:
+                result_time = f"{int(time_diff // 60)}:0{int(time_diff % 60)}"
+            else:
+                result_time = f"{int(time_diff // 60)}:{int(time_diff % 60)}"
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
-                                                               'num': num_of_question + 1, 'max_num': len(list(quiz.question_set.all())),
+                                                               'num': num_of_question + 1,
+                                                               'max_num': len(list(quiz.question_set.all())),
                                                                'choices': all_choice, 'next_link': next_link,
                                                                'next_question': next_question, 'back_link': back_link,
                                                                'back_question': back_question,
-                                                               'time': quiz.exam_duration,
+                                                               'time': quiz.exam_duration, 'remaining_time': result_time,
                                                                'lastest_answer_in_question': lastest_answer_in_question})
         else:
             return render(request, 'KUIZ/question.html', {'quiz': quiz, 'question': this_question,
-                                                          'num': num_of_question + 1, 'max_num': len(list(quiz.question_set.all())),
+                                                          'num': num_of_question + 1,
+                                                          'max_num': len(list(quiz.question_set.all())),
                                                           'choices': choices, 'next_link': next_link,
                                                           'next_question': next_question, 'back_link': back_link,
                                                           'back_question': back_question, 'time': quiz.exam_duration,
+                                                          'remaining_time': result_time,
                                                           'lastest_answer_in_question': lastest_answer_in_question})
     else:
-        return render(request, 'KUIZ/cannot_vote.html', {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
-                                                         'time': quiz.exam_duration,
-                                                         'remain_message': ""})
+        return render(request, 'KUIZ/cannot_vote.html',
+                      {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
+                       'time': quiz.exam_duration,
+                       'remain_message': ""})
 
 
 @login_required(login_url='login')
@@ -196,9 +228,9 @@ def answer(request, pk, question_id):
                     num_of_question = all_question.index(
                         Question.objects.get(pk=question_id))
                 except:
-                    return HttpResponseRedirect(reverse('exam', args=(pk, )))
+                    return HttpResponseRedirect(reverse('exam', args=(pk,)))
                 try:
-                    next_question = all_question[num_of_question + 1].id
+                    next_question = all_question[num_of_question + 1].pk
                     next_link = True
                 except:
                     next_link = False
@@ -219,7 +251,7 @@ def answer(request, pk, question_id):
                 except:
                     return HttpResponseRedirect(reverse('exam', args=(pk,)))
                 try:
-                    next_question = all_question[num_of_question + 1].id
+                    next_question = all_question[num_of_question + 1].pk
                     next_link = True
                 except:
                     next_link = False
@@ -237,16 +269,33 @@ def answer(request, pk, question_id):
                     for i in all_answer_in_quiz:
                         i.delete()
                 Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=answer)
+                try:
+                    num_of_question = all_question.index(
+                        Question.objects.get(pk=question_id))
+                except:
+                    return HttpResponseRedirect(reverse('exam', args=(pk,)))
+                try:
+                    next_question = all_question[num_of_question + 1].pk
+                    next_link = True
+                except:
+                    next_link = False
+                if next_link:
+                    return HttpResponseRedirect(reverse('question', args=(pk, next_question)))
+                else:
+                    return HttpResponseRedirect(reverse('result', args=(pk,)))
             else:
                 all_answer_in_quiz = Answer.objects.filter(user=request.user, quiz=quiz, question=question)
                 if len(all_answer_in_quiz) > 0:
                     for i in all_answer_in_quiz:
                         i.delete()
                 Answer.objects.create(user=request.user, quiz=quiz, question=question, answer=answer)
-                num_of_question = all_question.index(
-                    Question.objects.get(pk=question_id))
                 try:
-                    next_question = all_question[num_of_question + 1].id
+                    num_of_question = all_question.index(
+                        Question.objects.get(pk=question_id))
+                except:
+                    return HttpResponseRedirect(reverse('exam', args=(pk,)))
+                try:
+                    next_question = all_question[num_of_question + 1].pk
                     next_link = True
                 except:
                     next_link = False
@@ -262,7 +311,7 @@ def answer(request, pk, question_id):
         except:
             return HttpResponseRedirect(reverse('exam', args=(pk,)))
         try:
-            next_question = all_question[num_of_question + 1].id
+            next_question = all_question[num_of_question + 1].pk
             next_link = True
         except:
             next_link = False
@@ -296,7 +345,16 @@ def result(request, pk):
 
 @login_required(login_url='login')
 def get_feedback(request):
+    quiz = Quiz.objects.filter(owner=request.user)
     feedback = Feedback.objects.all()
+    return render(request, "KUIZ/feedback.html", {"all_quiz": quiz, "feedback": feedback, "user": request.user})
+
+
+@login_required(login_url='login')
+def send_feedback(request, pk):
+    quiz_filter = Quiz.objects.get(pk=pk)
+    quiz = Quiz.objects.filter(pk=pk)
+    student_attendee = Attendee.objects.filter(quiz=quiz_filter)
     if request.method == "POST":
         form = FeedbackForm(request.POST)
         if form.is_valid():
@@ -305,8 +363,9 @@ def get_feedback(request):
             return redirect('index')
     else:
         form = FeedbackForm()
-        form.fields['quiz'].queryset = Quiz.objects.filter(owner=request.user)
-    return render(request, "KUIZ/feedback.html", {"form": form, "feedback": feedback, "user": request.user})
+        form.fields['quiz'].queryset = quiz
+        form.fields['user'].queryset = student_attendee
+    return render(request, "KUIZ/send_feedback.html", {"form": form, "user": request.user})
 
 
 @login_required(login_url='login')
@@ -338,6 +397,8 @@ def edit_quiz(request, pk):
             'password': quiz.password,
             'detail': quiz.detail,
             'topic': quiz.topic,
+            'pub_date': quiz.pub_date,
+            'end_date': quiz.end_date,
             'exam_duration': quiz.exam_duration,
             'random_order': quiz.random_order,
             'limit_attempt_or_not': quiz.limit_attempt_or_not,
@@ -405,9 +466,9 @@ def update_answer(request, pk, id):
     for question in all_question:
         max_score += question.point
     Score.objects.create(user=this_user, quiz=this_quiz, score=score, max_score=max_score)
-    return HttpResponseRedirect(reverse('check_per_quiz', args=(pk, )))
-  
-  
+    return HttpResponseRedirect(reverse('check_per_quiz', args=(pk,)))
+
+
 @login_required(login_url='login')
 def new_question(request):
     """Create a new question by teacher."""
@@ -479,6 +540,7 @@ def new_multiple_choice(request):
     choice_form.fields['question'].queryset = questions
     return render(request, "KUIZ/new_multiple_choice.html", {"choice_form": choice_form})
 
+
 @login_required(login_url='login')
 def new_typing_choice(request):
     """Create a new typing choice by teacher."""
@@ -504,18 +566,22 @@ def new_typing_choice(request):
     choice_form.fields['question'].queryset = questions
     return render(request, "KUIZ/new_typing_choice.html", {"choice_form": choice_form})
 
+
 @login_required(login_url='login')
 def select_question_to_edit_choice(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     questions = quiz.question_set.all()
     return render(request, "KUIZ/select_question.html", {"questions": questions, 'choice': True})
 
+
 @login_required(login_url='login')
 def select_choice(request, question_id):
     question = Question.objects.get(pk=question_id)
     multiple_choices = question.choice_set.all()
     typing_choices = question.type_set.all()
-    return render(request, "KUIZ/select_choice.html", {'multiple_choices': multiple_choices, 'typing_choices': typing_choices})
+    return render(request, "KUIZ/select_choice.html",
+                  {'multiple_choices': multiple_choices, 'typing_choices': typing_choices})
+
 
 @login_required(login_url='login')
 def edit_multiple_choice(request, choice_id):
@@ -535,6 +601,7 @@ def edit_multiple_choice(request, choice_id):
             return redirect('detail')
     return render(request, "KUIZ/edit_multiple_choice.html", {"choice": choice, 'choice_form': choice_form})
 
+
 @login_required(login_url='login')
 def edit_typing_choice(request, choice_id):
     typing_choice = Type.objects.get(pk=choice_id)
@@ -552,3 +619,63 @@ def edit_typing_choice(request, choice_id):
             typing_choice.save()
             return redirect('detail')
     return render(request, "KUIZ/edit_typing_choice.html", {"choice": typing_choice, 'choice_form': choice_form})
+
+
+@login_required(login_url='login')
+def member(request):
+    all_owner_quiz = Quiz.objects.filter(owner=request.user)
+    return render(request, 'KUIZ/member.html', {'owner_quiz': all_owner_quiz})
+
+
+@login_required(login_url='login')
+def member_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    classroom_user = ClassroomUser.objects.filter(quiz=quiz)
+    return render(request, 'KUIZ/member_quiz.html', {'quiz': quiz, 'member': classroom_user})
+
+
+@login_required(login_url='login')
+def add_member_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    not_classroom_user = []
+    classroom_user = [i.user.username for i in list(ClassroomUser.objects.filter(quiz=quiz))]
+    all_user = list(Account.objects.all())
+    for i in all_user:
+        if not(i.username in classroom_user) and i.username != quiz.owner.username:
+            not_classroom_user.append(i)
+    return render(request, 'KUIZ/add_member_quiz.html', {'quiz': quiz, 'not_member': not_classroom_user})
+
+
+@login_required(login_url='login')
+def update_add_member_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    all_user = list(Account.objects.all())
+    for i in all_user:
+        try:
+            add_user = request.POST[f"{i.id}"]
+        except:
+            pass
+        else:
+            ClassroomUser.objects.create(quiz=quiz, user=i)
+    return HttpResponseRedirect(reverse('member_per_quiz', args=(pk,)))
+
+
+@login_required(login_url='login')
+def remove_member_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    classroom_user = ClassroomUser.objects.filter(quiz=quiz)
+    return render(request, 'KUIZ/remove_member_quiz.html', {'quiz': quiz, 'member': classroom_user})
+
+
+@login_required(login_url='login')
+def update_remove_member_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    classroom_user = ClassroomUser.objects.filter(quiz=quiz)
+    for i in classroom_user:
+        try:
+            remove_user = request.POST[f"{i.user.id}"]
+        except:
+            pass
+        else:
+            i.delete()
+    return HttpResponseRedirect(reverse('member_per_quiz', args=(pk, )))

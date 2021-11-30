@@ -1,0 +1,33 @@
+{% extends 'KUIZ/main.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/navbar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/card_quiz.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'KUIZ/css/check_per_student.css' %}">
+{% endblock css %}
+{% block title %}{% endblock %}
+
+{% block nav %}
+    {% include 'components/navbar.html' %}
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-md-center">
+      <div class="col-md-8 col-12">
+          <form action="{% url 'update_add_member' quiz.pk %}" method="post">
+          {% csrf_token %}
+            <h1 style="margin-bottom: 2rem">Add Member</h1>
+            {% for user in not_member %}
+                <input type="checkbox" id="{{ user.id }}" value="user.username" name="{{ user.id }}">
+                <label for="{{ user.id }}">{{user.username}}</label>
+                <br>
+            {% endfor %}
+            <br>
+            <a href="{%url 'member_per_quiz' quiz.id%}" class="btn btn-outline-danger">Back</a>
+            <input type="submit" value="Save" class="btn btn-success">
+          </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
