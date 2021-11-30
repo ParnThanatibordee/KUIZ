@@ -14,6 +14,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+start_time = None
+
 
 def index(request):
     """Index homepage."""
@@ -126,7 +128,6 @@ def question(request, pk, question_id):
     """Question view."""
     quiz = Quiz.objects.get(pk=pk)
     all_question = list(quiz.question_set.all())
-    global start_time
     if quiz.can_vote():
         try:
             num_of_question = all_question.index(
@@ -152,6 +153,7 @@ def question(request, pk, question_id):
             back_question = all_question[num_of_question - 1]
             back_link = True
         if not back_link:
+            global start_time
             if start_time == None:
                 start_time = datetime.datetime.now()
         try:
