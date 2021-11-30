@@ -67,7 +67,7 @@ def exam(request, pk):
                           {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                            'time': quiz.exam_duration,
                            'remain_message': remaining_message})
-        Attendee.objects.create(user=request.user, quiz=quiz)
+        Attendee.objects.create(user=request.user, quiz=quiz, start_time=datetime.datetime.now())
         return render(request, 'KUIZ/exam.html',
                       {'quiz': quiz, 'q1_id': question1_id, 'num_of_question': len(list(quiz.question_set.all())),
                        'time': quiz.exam_duration,
