@@ -19,7 +19,7 @@ def registration_view(request):
             input_username = form.cleaned_data['username']
             pass_username = True
             for i in input_username:
-                if not (i.isnumeric() or i.isalpha() or i == '_' or i == '-'):
+                if not (i.isnumeric() or i.isalpha() or i == '_' or i == '-' or i == '.'):
                     pass_username = False
             if not pass_username:
                 error_message = 'username must contain only -, _, a-z, A-Z, or 0-9'
@@ -110,7 +110,7 @@ def profile_edit_view(request):
             input_username = form.cleaned_data['username']
             pass_username = True
             for i in input_username:
-                if not (i.isnumeric() or i.isalpha() or i == '_' or i == '-'):
+                if not (i.isnumeric() or i.isalpha() or i == '_' or i == '-' or i == '.'):
                     pass_username = False
             if not pass_username:
                 error_message = 'username must contain only -, _, a-z, A-Z, or 0-9'
