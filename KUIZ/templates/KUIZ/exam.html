@@ -24,13 +24,13 @@
                         {% endif %}
                     </div>
                     <h5>{{quiz.detail}}</h5>
-                    <p>This quiz contains {{ num_of_question }} questions with {{ time }} minutes.{{remain_message}}</span>
+                    <p>This quiz contains {{ num_of_question }} questions with {{ time }} minutes.{{remain_message}}</p>
                     {% if user %}
                         <p>Created by {{ quiz.owner.username }}</p>
                     {% else %}
                         <p>Created by Admin</p>
                     {% endif %}
-                    <a href="{%url 'question' quiz.id q1.id %}" class="btn start-btn" onclick="setTimerStorage()">Start quiz</a>
+                    <a href="{%url 'question' quiz.id q1_id %}" class="btn start-btn" onclick="setTimerStorage()">Start quiz</a>
                 </div>
             </div>
         </div>
