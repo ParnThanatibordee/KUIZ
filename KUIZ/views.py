@@ -67,6 +67,7 @@ def exam(request, pk):
                           {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                            'time': quiz.exam_duration,
                            'remain_message': remaining_message})
+        Attendee.objects.create(user=request.user, quiz=quiz)
         return render(request, 'KUIZ/exam.html',
                       {'quiz': quiz, 'q1_id': question1_id, 'num_of_question': len(list(quiz.question_set.all())),
                        'time': quiz.exam_duration,
@@ -148,8 +149,6 @@ def question(request, pk, question_id):
         if num_of_question > 0:
             back_question = all_question[num_of_question - 1]
             back_link = True
-        if not back_link:
-            Attendee.objects.create(user=request.user, quiz=quiz)
         try:
             next_question = all_question[num_of_question + 1]
             next_link = True
