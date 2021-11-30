@@ -51,7 +51,7 @@ class Account(AbstractBaseUser):
     profile_pic = models.ImageField(upload_to='profiles', blank=True)
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'password', 'is_teacher']
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'password']
     objects = MyAccountManager()
 
     def __str__(self):
