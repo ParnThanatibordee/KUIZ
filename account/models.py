@@ -48,7 +48,7 @@ class Account(AbstractBaseUser):
     is_teacher = models.BooleanField(default=False)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    profile_pic = models.ImageField(upload_to='profiles', default='profile-pic.png', blank=True)
+    profile_pic = models.ImageField(upload_to='profiles', blank=True)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'password', 'is_teacher']

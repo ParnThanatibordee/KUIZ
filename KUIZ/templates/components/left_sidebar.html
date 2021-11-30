@@ -1,6 +1,12 @@
+{% load static %}
+
 <div class="d-flex flex-column flex-shrink-0 p-3 bg-light left-sidebar">
   <div class="d-flex justify-content-around">
+    {% if user.profile_pic %}
     <img src="{{ user.profile_pic.url }}" alt="profile picture">
+    {% else %}
+    <img src="{% static 'KUIZ/images/profile-pic.png' %}" alt="profile picture">
+    {% endif %}
     <a
       href="/"
       class="

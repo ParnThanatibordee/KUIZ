@@ -170,9 +170,15 @@ def question(request, pk, question_id):
         current_time = (now - start_time).total_seconds()
         time_diff = (quiz.exam_duration * 60) - current_time
         if (int(time_diff // 60)//10) == 0:
-            result_time = f"0{int(time_diff // 60)}:{int(time_diff % 60)}"
+            if (int(time_diff % 60))//10 == 0:
+                result_time = f"0{int(time_diff // 60)}:0{int(time_diff % 60)}"
+            else:
+                result_time = f"0{int(time_diff // 60)}:{int(time_diff % 60)}"
         else:
-            result_time = f"{int(time_diff // 60)}:{int(time_diff % 60)}"
+            if (int(time_diff % 60))//10 == 0:
+                result_time = f"{int(time_diff // 60)}:0{int(time_diff % 60)}"
+            else:
+                result_time = f"{int(time_diff // 60)}:{int(time_diff % 60)}"
         if type_or_not:
             return render(request, 'KUIZ/type_question.html', {'quiz': quiz, 'question': this_question,
                                                                'num': num_of_question + 1,

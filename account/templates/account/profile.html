@@ -12,7 +12,11 @@
 {% block content %}
     <div class="container d-flex justify-content-center">
         <div class="jumbotron align-items-center justify-content-center position-relative show-data">
+            {% if user.profile_pic %}
             <img src="{{ user.profile_pic.url }}" alt="profile picture">
+            {% else %}
+            <img src="{% static 'KUIZ/images/profile-pic.png' %}" alt="profile picture">
+            {% endif %}
             <div class="d-flex flex-column">
                 <h1>{{ user.first_name }} {{ user.last_name }}</h1>
                 <span class="d-flex info"><i class="fas fa-user-circle"></i>{{ user.username }}</span>
