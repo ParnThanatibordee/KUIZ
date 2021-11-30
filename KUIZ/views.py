@@ -66,14 +66,14 @@ def exam(request, pk):
         if quiz.random_order:
             random.shuffle(all_question)
         try:
-            question1 = all_question[0]
+            question1_id = all_question[0].pk
         except:
             return render(request, 'KUIZ/no_question.html',
                           {'quiz': quiz, 'num_of_question': len(list(quiz.question_set.all())),
                            'time': quiz.exam_duration,
                            'remain_message': remaining_message})
         return render(request, 'KUIZ/exam.html',
-                      {'quiz': quiz, 'q1': question1, 'num_of_question': len(list(quiz.question_set.all())),
+                      {'quiz': quiz, 'q1_id': question1_id, 'num_of_question': len(list(quiz.question_set.all())),
                        'time': quiz.exam_duration,
                        'remain_message': remaining_message})
     else:
@@ -224,7 +224,7 @@ def answer(request, pk, question_id):
                 except:
                     return HttpResponseRedirect(reverse('exam', args=(pk,)))
                 try:
-                    next_question = all_question[num_of_question + 1].id
+                    next_question = all_question[num_of_question + 1].pk
                     next_link = True
                 except:
                     next_link = False
@@ -245,7 +245,7 @@ def answer(request, pk, question_id):
                 except:
                     return HttpResponseRedirect(reverse('exam', args=(pk,)))
                 try:
-                    next_question = all_question[num_of_question + 1].id
+                    next_question = all_question[num_of_question + 1].pk
                     next_link = True
                 except:
                     next_link = False
@@ -269,7 +269,7 @@ def answer(request, pk, question_id):
                 except:
                     return HttpResponseRedirect(reverse('exam', args=(pk,)))
                 try:
-                    next_question = all_question[num_of_question + 1].id
+                    next_question = all_question[num_of_question + 1].pk
                     next_link = True
                 except:
                     next_link = False
@@ -289,7 +289,7 @@ def answer(request, pk, question_id):
                 except:
                     return HttpResponseRedirect(reverse('exam', args=(pk,)))
                 try:
-                    next_question = all_question[num_of_question + 1].id
+                    next_question = all_question[num_of_question + 1].pk
                     next_link = True
                 except:
                     next_link = False
@@ -305,7 +305,7 @@ def answer(request, pk, question_id):
         except:
             return HttpResponseRedirect(reverse('exam', args=(pk,)))
         try:
-            next_question = all_question[num_of_question + 1].id
+            next_question = all_question[num_of_question + 1].pk
             next_link = True
         except:
             next_link = False
